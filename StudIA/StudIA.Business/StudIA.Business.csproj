@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\StudIA.Data\StudIA.Data.csproj" />
+  </ItemGroup>
+
 </Project>

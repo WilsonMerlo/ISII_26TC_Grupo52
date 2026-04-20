@@ -16,6 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\StudIA.Business\StudIA.Business.csproj" />
 		<ProjectReference Include="..\StudIA.Data\StudIA.Data.csproj" />
 	</ItemGroup>
 

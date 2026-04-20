@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StudIA.Business;
 using StudIA.Data;
 
 
@@ -6,6 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<StudIAContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// --- REGISTRAR NUESTRO SERVICIO (NUEVO) ---
+builder.Services.AddScoped<MateriaService>();
+// ------------------------------------------
+
+
 
 // --- 1. CONFIGURACIÓN DE CORS (NUEVO) ---
 builder.Services.AddCors(options =>
