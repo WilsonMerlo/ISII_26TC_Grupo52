@@ -12,7 +12,6 @@ public class Progreso
     public int IdUsuario { get; set; }
     public int? IdMateria { get; set; } // Opcional para progreso general
     public float AvancePorcentual { get; set; }
-    public string? Comentarios { get; set; }
 
     // Relaciones
     public Usuario Usuario { get; set; } = null!;
