@@ -1,23 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using StudIA.Data.Entities;
 
-namespace StudIA.Data.Entities
+[Table("Materias")]
+public class Materia
 {
-    public class Materia
-    {
-        public int IdMateria { get; set; }
+    [Key]
+    [Column("id_materia")]
+    public int IdMateria { get; set; }
 
-        [ForeignKey("Usuario")] // Esto soluciona el error
-        public int IdUsuario { get; set; }
+    [Required]
+    [Column("id_usuario")]
+    public int IdUsuario { get; set; }
 
-        public string NombreMateria { get; set; } = null!;
-        public string? Descripcion { get; set; }
+    [Required]
+    [StringLength(100)]
+    [Column("nombre_materia")]
+    public string NombreMateria { get; set; } = null!;
 
-        public Usuario Usuario { get; set; } = null!;
-        public ICollection<Apunte> Apuntes { get; set; } = new List<Apunte>();
-    }
+    [Column("descripcion")]
+    public string? Descripcion { get; set; } // Tipo 'text' en SQL mapea a string
+
+    // Relaciones
+    [ForeignKey("IdUsuario")]
+    public Usuario Usuario { get; set; } = null!;
+    public ICollection<Apunte> Apuntes { get; set; } = new List<Apunte>();
 }

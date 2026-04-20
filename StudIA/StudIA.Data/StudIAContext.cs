@@ -15,20 +15,35 @@ public class StudIAContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Configuramos las PKs (Asegurate de que estén TODAS estas líneas)
-        modelBuilder.Entity<Usuario>().HasKey(u => u.IdUsuario);
-        modelBuilder.Entity<Materia>().HasKey(m => m.IdMateria);
-        modelBuilder.Entity<Apunte>().HasKey(a => a.IdApunte);
-        modelBuilder.Entity<Pomodoro>().HasKey(p => p.IdPomodoro);
-        modelBuilder.Entity<Progreso>().HasKey(p => p.IdProgreso);
+        base.OnModelCreating(modelBuilder);
 
-        // Relación Materia -> Usuario
+        // Relaciones existentes
         modelBuilder.Entity<Materia>()
             .HasOne(m => m.Usuario)
             .WithMany(u => u.Materias)
             .HasForeignKey(m => m.IdUsuario);
 
-        // --- SEED DATA ---
+        modelBuilder.Entity<Apunte>()
+            .HasOne(a => a.Materia)
+            .WithMany(m => m.Apuntes)
+            .HasForeignKey(a => a.IdMateria);
+
+        // --- SOLUCIÓN AL ERROR DE CASCADA ---
+        // Evitamos que SQL Server se confunda al borrar un Usuario
+        modelBuilder.Entity<Progreso>()
+            .HasOne(p => p.Usuario)
+            .WithMany()
+            .HasForeignKey(p => p.IdUsuario)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Pomodoro>()
+            .HasOne(p => p.Usuario)
+            .WithMany()
+            .HasForeignKey(p => p.IdUsuario)
+            .OnDelete(DeleteBehavior.Restrict);
+        // ------------------------------------
+
+        // Seed Data
         modelBuilder.Entity<Usuario>().HasData(
             new Usuario { IdUsuario = 1, Nombre = "Wilson Merlo", Correo = "wilson@test.com", Contrasena = "1234" }
         );

@@ -1,21 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StudIA.Data.Entities
+[Table("Apuntes")]
+public class Apunte
 {
-    public class Apunte
-    {
-        [Key] // <--- Agregá esto
-        public int IdApunte { get; set; }
+    [Key]
+    [Column("id_apunte")]
+    public int IdApunte { get; set; }
 
-        public int IdMateria { get; set; }
-        public string Titulo { get; set; } = null!;
-        public string Contenido { get; set; } = null!;
-        public DateTime FechaCreacion { get; set; }
-        public Materia Materia { get; set; } = null!;
-    }
+    [Required]
+    [Column("id_materia")]
+    public int IdMateria { get; set; }
+
+    [Required]
+    [StringLength(100)]
+    [Column("titulo")]
+    public string Titulo { get; set; } = null!;
+
+    [Required]
+    [Column("contenido")]
+    public string Contenido { get; set; } = null!;
+
+    [Required]
+    [Column("fecha_creacion")]
+    public DateTime FechaCreacion { get; set; }
+
+    // Relaciones
+    [ForeignKey("IdMateria")]
+    public Materia Materia { get; set; } = null!;
 }

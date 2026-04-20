@@ -1,22 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using StudIA.Data.Entities;
 
-namespace StudIA.Data.Entities
+[Table("Pomodoros")]
+public class Pomodoro
 {
-    public class Pomodoro
-    {
-        public int IdPomodoro { get; set; }
-        public int IdUsuario { get; set; }
-        public int IdMateria { get; set; } // FK Obligatoria
-        public int? IdApunte { get; set; }  // FK Opcional (Flexible)
-        public DateTime Fecha { get; set; }
-        public int DuracionEstudio { get; set; }
-        public int DuracionDescanso { get; set; }
-        // Relaciones
-        public Materia Materia { get; set; } = null!;
-        public Apunte? Apunte { get; set; }
-    }
+    [Key]
+    [Column("id_pomodoro")]
+    public int IdPomodoro { get; set; }
+
+    [Required]
+    [Column("id_usuario")]
+    public int IdUsuario { get; set; }
+
+    [Required]
+    [Column("id_materia")]
+    public int IdMateria { get; set; }
+
+    [Column("id_apunte")]
+    public int? IdApunte { get; set; }
+
+    [Required]
+    [Column("fecha")]
+    public DateTime Fecha { get; set; }
+
+    [Required]
+    [Column("duracion_estudio")]
+    public int DuracionEstudio { get; set; }
+
+    [Required]
+    [Column("duracion_descanso")]
+    public int DuracionDescanso { get; set; }
+
+    [Required]
+    [Column("estado")]
+    public bool Estado { get; set; } // Según diccionario: true/false
+
+    // Relaciones
+    [ForeignKey("IdUsuario")]
+    public Usuario Usuario { get; set; } = null!;
+    [ForeignKey("IdMateria")]
+    public Materia Materia { get; set; } = null!;
+    [ForeignKey("IdApunte")]
+    public Apunte? Apunte { get; set; }
 }

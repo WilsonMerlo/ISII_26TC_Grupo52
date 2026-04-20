@@ -1,20 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using StudIA.Data.Entities;
 
-namespace StudIA.Data.Entities;
-
+[Table("Progresos")]
 public class Progreso
 {
+    [Key]
+    [Column("id_progreso")]
     public int IdProgreso { get; set; }
+
+    [Required]
+    [Column("id_usuario")]
     public int IdUsuario { get; set; }
-    public int? IdMateria { get; set; } // Opcional para progreso general
+
+    [Required]
+    [Column("id_materia")]
+    public int IdMateria { get; set; }
+
+    [Required]
+    [Column("avance_porcentual")]
     public float AvancePorcentual { get; set; }
-    public string? Comentarios { get; set; }
 
     // Relaciones
+    [ForeignKey("IdUsuario")]
     public Usuario Usuario { get; set; } = null!;
-    public Materia? Materia { get; set; }
+    [ForeignKey("IdMateria")]
+    public Materia Materia { get; set; } = null!;
 }

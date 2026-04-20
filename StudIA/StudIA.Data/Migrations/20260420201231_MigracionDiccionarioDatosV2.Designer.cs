@@ -12,8 +12,8 @@ using StudIA.Data;
 namespace StudIA.Data.Migrations
 {
     [DbContext(typeof(StudIAContext))]
-    [Migration("20260420024543_SeedData")]
-    partial class SeedData
+    [Migration("20260420201231_MigracionDiccionarioDatosV2")]
+    partial class MigracionDiccionarioDatosV2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,55 +25,63 @@ namespace StudIA.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("StudIA.Data.Entities.Apunte", b =>
+            modelBuilder.Entity("Apunte", b =>
                 {
                     b.Property<int>("IdApunte")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_apunte");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdApunte"));
 
                     b.Property<string>("Contenido")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("contenido");
 
                     b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha_creacion");
 
                     b.Property<int>("IdMateria")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MateriaIdMateria")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_materia");
 
                     b.Property<string>("Titulo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("titulo");
 
                     b.HasKey("IdApunte");
 
-                    b.HasIndex("MateriaIdMateria");
+                    b.HasIndex("IdMateria");
 
                     b.ToTable("Apuntes");
                 });
 
-            modelBuilder.Entity("StudIA.Data.Entities.Materia", b =>
+            modelBuilder.Entity("Materia", b =>
                 {
                     b.Property<int>("IdMateria")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_materia");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdMateria"));
 
                     b.Property<string>("Descripcion")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("descripcion");
 
                     b.Property<int>("IdUsuario")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_usuario");
 
                     b.Property<string>("NombreMateria")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("nombre_materia");
 
                     b.HasKey("IdMateria");
 
@@ -105,78 +113,80 @@ namespace StudIA.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("StudIA.Data.Entities.Pomodoro", b =>
+            modelBuilder.Entity("Pomodoro", b =>
                 {
                     b.Property<int>("IdPomodoro")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_pomodoro");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPomodoro"));
 
-                    b.Property<int?>("ApunteIdApunte")
-                        .HasColumnType("int");
-
                     b.Property<int>("DuracionDescanso")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("duracion_descanso");
 
                     b.Property<int>("DuracionEstudio")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("duracion_estudio");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit")
+                        .HasColumnName("estado");
 
                     b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha");
 
                     b.Property<int?>("IdApunte")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_apunte");
 
                     b.Property<int>("IdMateria")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_materia");
 
                     b.Property<int>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MateriaIdMateria")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_usuario");
 
                     b.HasKey("IdPomodoro");
 
-                    b.HasIndex("ApunteIdApunte");
+                    b.HasIndex("IdApunte");
 
-                    b.HasIndex("MateriaIdMateria");
+                    b.HasIndex("IdMateria");
+
+                    b.HasIndex("IdUsuario");
 
                     b.ToTable("Pomodoros");
                 });
 
-            modelBuilder.Entity("StudIA.Data.Entities.Progreso", b =>
+            modelBuilder.Entity("Progreso", b =>
                 {
                     b.Property<int>("IdProgreso")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_progreso");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdProgreso"));
 
                     b.Property<float>("AvancePorcentual")
-                        .HasColumnType("real");
+                        .HasColumnType("real")
+                        .HasColumnName("avance_porcentual");
 
-                    b.Property<string>("Comentarios")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("IdMateria")
-                        .HasColumnType("int");
+                    b.Property<int>("IdMateria")
+                        .HasColumnType("int")
+                        .HasColumnName("id_materia");
 
                     b.Property<int>("IdUsuario")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MateriaIdMateria")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuarioIdUsuario")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_usuario");
 
                     b.HasKey("IdProgreso");
 
-                    b.HasIndex("MateriaIdMateria");
+                    b.HasIndex("IdMateria");
 
-                    b.HasIndex("UsuarioIdUsuario");
+                    b.HasIndex("IdUsuario");
 
                     b.ToTable("Progresos");
                 });
@@ -185,21 +195,28 @@ namespace StudIA.Data.Migrations
                 {
                     b.Property<int>("IdUsuario")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("id_usuario");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdUsuario"));
 
                     b.Property<string>("Contrasena")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("contraseña");
 
                     b.Property<string>("Correo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("correo");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("nombre");
 
                     b.HasKey("IdUsuario");
 
@@ -215,18 +232,18 @@ namespace StudIA.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("StudIA.Data.Entities.Apunte", b =>
+            modelBuilder.Entity("Apunte", b =>
                 {
-                    b.HasOne("StudIA.Data.Entities.Materia", "Materia")
+                    b.HasOne("Materia", "Materia")
                         .WithMany("Apuntes")
-                        .HasForeignKey("MateriaIdMateria")
+                        .HasForeignKey("IdMateria")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Materia");
                 });
 
-            modelBuilder.Entity("StudIA.Data.Entities.Materia", b =>
+            modelBuilder.Entity("Materia", b =>
                 {
                     b.HasOne("StudIA.Data.Entities.Usuario", "Usuario")
                         .WithMany("Materias")
@@ -237,33 +254,43 @@ namespace StudIA.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("StudIA.Data.Entities.Pomodoro", b =>
+            modelBuilder.Entity("Pomodoro", b =>
                 {
-                    b.HasOne("StudIA.Data.Entities.Apunte", "Apunte")
+                    b.HasOne("Apunte", "Apunte")
                         .WithMany()
-                        .HasForeignKey("ApunteIdApunte");
+                        .HasForeignKey("IdApunte");
 
-                    b.HasOne("StudIA.Data.Entities.Materia", "Materia")
+                    b.HasOne("Materia", "Materia")
                         .WithMany()
-                        .HasForeignKey("MateriaIdMateria")
+                        .HasForeignKey("IdMateria")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudIA.Data.Entities.Usuario", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Apunte");
 
                     b.Navigation("Materia");
+
+                    b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("StudIA.Data.Entities.Progreso", b =>
+            modelBuilder.Entity("Progreso", b =>
                 {
-                    b.HasOne("StudIA.Data.Entities.Materia", "Materia")
+                    b.HasOne("Materia", "Materia")
                         .WithMany()
-                        .HasForeignKey("MateriaIdMateria");
+                        .HasForeignKey("IdMateria")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudIA.Data.Entities.Usuario", "Usuario")
                         .WithMany()
-                        .HasForeignKey("UsuarioIdUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Materia");
@@ -271,7 +298,7 @@ namespace StudIA.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("StudIA.Data.Entities.Materia", b =>
+            modelBuilder.Entity("Materia", b =>
                 {
                     b.Navigation("Apuntes");
                 });

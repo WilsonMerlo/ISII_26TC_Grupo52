@@ -1,18 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StudIA.Data.Entities
+namespace StudIA.Data.Entities;
+
+[Table("Usuarios")]
+public class Usuario
 {
-    public class Usuario
-    {
-        public int IdUsuario { get; set; }
-        public string Nombre { get; set; } = null!;
-        public string Correo { get; set; } = null!;
-        public string Contrasena { get; set; } = null!;
-        // Relación: 1 Usuario tiene muchas Materias
-        public ICollection<Materia> Materias { get; set; } = new List<Materia>();
-    }
+    [Key]
+    [Column("id_usuario")]
+    public int IdUsuario { get; set; }
+
+    [Required]
+    [StringLength(100)]
+    [Column("nombre")]
+    public string Nombre { get; set; } = null!;
+
+    [Required]
+    [StringLength(150)]
+    [Column("correo")]
+    public string Correo { get; set; } = null!;
+
+    [Required]
+    [StringLength(255)]
+    [Column("contraseña")]
+    public string Contrasena { get; set; } = null!;
+
+    // Relaciones
+    public ICollection<Materia> Materias { get; set; } = new List<Materia>();
 }
