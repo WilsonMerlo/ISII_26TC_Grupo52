@@ -1,8 +1,18 @@
-# Visual Studio temporaries
+# Visual Studio / Visual Studio Code
 .vs/
-[Bb]in/
-[Oo]bj/
+.suo
 *.user
-*.suo
+*.userossc
+*.sln.docstates
+*bin/
+*obj/
+_ReSharper.*/
+*.[Rr]e[Ss]harper.user
+*.[Rr]e[Ss]harper.user.settings
 *.db-shm
 *.db-wal
+*.sqlite
+*.db
+
+# Node.js (para cuando instalemos React)
+node_modules/
