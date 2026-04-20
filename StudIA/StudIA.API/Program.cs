@@ -7,6 +7,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<StudIAContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// --- 1. CONFIGURACIÓN DE CORS (NUEVO) ---
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173") // El puerto por defecto de Vite/React
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+// ----------------------------------------
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -21,6 +33,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// --- 2. ACTIVAR CORS (NUEVO) ---
+app.UseCors("PermitirFrontend");
+// -------------------------------
 
 app.UseAuthorization();
 
