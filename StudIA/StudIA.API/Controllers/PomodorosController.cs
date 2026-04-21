@@ -38,5 +38,18 @@ namespace StudIA.API.Controllers
 
             return Ok(nuevoPomodoro);
         }
+        // DELETE: api/pomodoros/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePomodoro(int id)
+        {
+            var resultado = await _pomodoroService.EliminarPomodoroAsync(id);
+
+            if (!resultado)
+            {
+                return NotFound("El pomodoro no se encontró o ya fue eliminado.");
+            }
+
+            return NoContent(); // Retorna 204 No Content (Éxito)
+        }
     }
 }

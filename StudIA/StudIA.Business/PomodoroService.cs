@@ -29,5 +29,16 @@ namespace StudIA.Business
 
             return pomodoro;
         }
+        // Método para el DELETE
+        public async Task<bool> EliminarPomodoroAsync(int id)
+        {
+            var pomodoro = await _context.Pomodoros.FindAsync(id);
+            if (pomodoro == null) return false;
+
+            _context.Pomodoros.Remove(pomodoro);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
