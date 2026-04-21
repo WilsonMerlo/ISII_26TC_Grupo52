@@ -16,6 +16,11 @@ const PomodoroTimer = () => {
     const [sesionActual, setSesionActual] = useState(1);
     const [esDescanso, setEsDescanso] = useState(false);
     
+
+    // --- NUEVO: ACUMULADORES DE TIEMPO REAL ---
+    const [segundosAcumuladosEstudio, setSegundosAcumuladosEstudio] = useState(0);
+    const [segundosAcumuladosDescanso, setSegundosAcumuladosDescanso] = useState(0)
+    
     // --- ESTADOS DE MODALES ---
     const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false); 
@@ -24,15 +29,45 @@ const PomodoroTimer = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
 
-    // --- ESTADO DEL HISTORIAL ---
-    const [historial, setHistorial] = useState([
-        { 
-            id: 1, 
-            fecha: "20 de abril 2026", 
-            tiempoConcentrado: "100 min", 
-            tiempoDescanso: "15 min" 
-        }
-    ]);
+    // --- NUEVO: FORMATEADOR DE TIEMPO PARA EL HISTORIAL ---
+    const formatearTiempoHistorial = (totalSegundos) => {
+        const mins = Math.floor(totalSegundos / 60);
+        const secs = totalSegundos % 60;
+        
+        if (mins === 0) return `${secs} seg`;
+        if (secs === 0) return `${mins} min`;
+        return `${mins}m ${secs}s`;
+    };
+
+   const [historial, setHistorial] = useState([]);
+   // --- CARGA INICIAL DESDE LA BASE DE DATOS (NUEVO) ---
+    useEffect(() => {
+        const cargarHistorial = async () => {
+            try {
+                // Le pegamos al endpoint que armaste hoy
+                const response = await fetch('https://localhost:7068/api/Pomodoros');
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Mapeamos el JSON de tu backend al formato que armó Karen para las tarjetas
+                    const opcionesFecha = { day: 'numeric', month: 'long', year: 'numeric' };
+                    const historialMapeado = data.map(item => ({
+                    id: item.idPomodoro,
+                    fecha: new Date(item.fecha).toLocaleDateString('es-ES', opcionesFecha),
+                    tiempoConcentrado: formatearTiempoHistorial(item.duracionEstudio), // <- CAMBIO ACÁ
+                    tiempoDescanso: formatearTiempoHistorial(item.duracionDescanso)    // <- CAMBIO ACÁ
+                }));
+                    
+                    // Invertimos el array para que el más nuevo salga primero
+                    setHistorial(historialMapeado.reverse());
+                }
+            } catch (error) {
+                console.error("Error al cargar el historial desde la API:", error);
+            }
+        };
+
+        cargarHistorial();
+    }, []);
 
     // --- LÓGICA DE FASES ---
     const avanzarFase = () => {
@@ -57,31 +92,77 @@ const PomodoroTimer = () => {
     };
 
     // --- LÓGICA DEL HISTORIAL ---
-    const guardarEnHistorial = () => {
-        const opcionesFecha = { day: 'numeric', month: 'long', year: 'numeric' };
-        const fechaHoy = new Date().toLocaleDateString('es-ES', opcionesFecha);
-        
-        const nuevoRegistro = {
-            id: Date.now(), 
-            fecha: fechaHoy,
-            tiempoConcentrado: `${tiempoSesion * ciclosTotales} min`,
-            tiempoDescanso: `${tiempoDescanso * (ciclosTotales - 1)} min`
+   // --- LÓGICA DEL HISTORIAL (CONECTADA AL BACKEND) ---
+    // --- LÓGICA DEL HISTORIAL (CONECTADA AL BACKEND) ---
+    const guardarEnHistorial = async () => {
+        const nuevoPomodoroDB = {
+            idUsuario: parseInt(localStorage.getItem('idUsuario')) || 1, 
+            idMateria: 1, 
+            fecha: new Date().toISOString(),
+            // AHORA MANDAMOS LOS SEGUNDOS EXACTOS:
+            duracionEstudio: segundosAcumuladosEstudio,   
+            duracionDescanso: segundosAcumuladosDescanso, 
+            estado: false 
         };
 
-        setHistorial([nuevoRegistro, ...historial]);
-    };
+        try {
+            const response = await fetch('https://localhost:7068/api/Pomodoros', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevoPomodoroDB)
+            });
 
+            if (response.ok) {
+                const data = await response.json(); 
+                
+                const opcionesFecha = { day: 'numeric', month: 'long', year: 'numeric' };
+                const registroVisual = {
+                    id: data.idPomodoro,
+                    fecha: new Date(data.fecha).toLocaleDateString('es-ES', opcionesFecha),
+                    // USAMOS EL FORMATEADOR PARA LA TARJETA NUEVA:
+                    tiempoConcentrado: formatearTiempoHistorial(data.duracionEstudio), 
+                    tiempoDescanso: formatearTiempoHistorial(data.duracionDescanso)    
+                };
+
+                setHistorial([registroVisual, ...historial]);
+
+                setSegundosAcumuladosEstudio(0);
+                setSegundosAcumuladosDescanso(0);
+            } else {
+                console.error("El servidor rechazó el guardado.");
+            }
+        } catch (error) {
+            console.error("Error de conexión al guardar el pomodoro:", error);
+        }
+    };
+    
     // LÓGICA DEL NUEVO MODAL DE ELIMINACIÓN
     const intentarEliminar = (id) => {
         setItemToDelete(id);
         setIsDeleteModalOpen(true);
     };
 
-    const confirmarEliminacion = () => {
-        const nuevoHistorial = historial.filter(item => item.id !== itemToDelete);
-        setHistorial(nuevoHistorial);
-        setIsDeleteModalOpen(false);
-        setItemToDelete(null);
+   // LÓGICA DEL NUEVO MODAL DE ELIMINACIÓN (CONECTADA AL BACK)
+    const confirmarEliminacion = async () => {
+        try {
+            // Le pegamos al endpoint DELETE que acabás de crear, pasándole el ID
+            const response = await fetch(`https://localhost:7068/api/Pomodoros/${itemToDelete}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                // Si la BD lo borró con éxito, recién ahí lo sacamos de la pantalla
+                const nuevoHistorial = historial.filter(item => item.id !== itemToDelete);
+                setHistorial(nuevoHistorial);
+                setIsDeleteModalOpen(false);
+                setItemToDelete(null);
+            } else {
+                console.error("El servidor no pudo borrar el registro.");
+                alert("Hubo un error al borrar el Pomodoro.");
+            }
+        } catch (error) {
+            console.error("Error de conexión al intentar borrar:", error);
+        }
     };
 
     const cancelarEliminacion = () => {
@@ -95,6 +176,14 @@ const PomodoroTimer = () => {
         if (estaActivo && segundos > 0) {
             intervalo = setInterval(() => {
                 setSegundos((s) => s - 1);
+                
+                // NUEVO: Sumar 1 segundo al acumulador que corresponda
+                if (esDescanso) {
+                    setSegundosAcumuladosDescanso(prev => prev + 1);
+                } else {
+                    setSegundosAcumuladosEstudio(prev => prev + 1);
+                }
+
             }, 1000);
         } else if (segundos === 0) {
             clearInterval(intervalo);
@@ -116,6 +205,8 @@ const PomodoroTimer = () => {
         setEsDescanso(false);
         setSegundos(tiempoSesion * 60);
         setSesionActual(1);
+        setSegundosAcumuladosEstudio(0);
+        setSegundosAcumuladosDescanso(0);
     };
 
     // --- FUNCIONES DEL MODAL CONFIG ---
@@ -144,6 +235,8 @@ const PomodoroTimer = () => {
         }
         setIsEditing(false);
         setIsConfigModalOpen(false);
+        setSegundosAcumuladosEstudio(0);
+        setSegundosAcumuladosDescanso(0);
     };
 
     // --- CÁLCULOS SVG ---
