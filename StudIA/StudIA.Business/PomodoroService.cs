@@ -4,25 +4,30 @@ using StudIA.Data.Entities;
 
 namespace StudIA.Business
 {
-    public class MateriaService
+    public class PomodoroService
     {
         private readonly StudIAContext _context;
 
-        // Inyectamos el contexto de la base de datos (la despensa)
-        public MateriaService(StudIAContext context)
+        public PomodoroService(StudIAContext context)
         {
             _context = context;
         }
 
-        // Método que el Controlador va a llamar para pedir las materias
-        public async Task<IEnumerable<Materia>> ObtenerTodasLasMateriasAsync()
+        // Método para el GET
+        public async Task<IEnumerable<Pomodoro>> ObtenerTodosLosPomodorosAsync()
         {
-            // Acá el Chef busca los ingredientes. 
-            // Si el día de mañana hay una regla que diga "Solo devolver materias activas",
-            // la lógica se programa ACÁ, y no en el Controlador.
-            var materias = await _context.Materias.ToListAsync();
+            return await _context.Pomodoros
+                                 .Include(p => p.Materia)
+                                 .ToListAsync();
+        }
 
-            return materias;
-        }             
+        // Método para el POST
+        public async Task<Pomodoro> CrearPomodoroAsync(Pomodoro pomodoro)
+        {
+            _context.Pomodoros.Add(pomodoro);
+            await _context.SaveChangesAsync();
+
+            return pomodoro;
+        }
     }
 }

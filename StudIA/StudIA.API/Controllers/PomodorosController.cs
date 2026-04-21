@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StudIA.Data;
+using StudIA.Business;
 using StudIA.Data.Entities;
 
 namespace StudIA.API.Controllers
@@ -9,21 +8,19 @@ namespace StudIA.API.Controllers
     [ApiController]
     public class PomodorosController : ControllerBase
     {
-        private readonly StudIAContext _context;
+        private readonly PomodoroService _pomodoroService;
 
-        public PomodorosController(StudIAContext context)
+        // Inyectamos el Servicio
+        public PomodorosController(PomodoroService pomodoroService)
         {
-            _context = context;
+            _pomodoroService = pomodoroService;
         }
 
         // GET: api/pomodoros
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Pomodoro>>> GetPomodoros()
         {
-            // Usamos .Include() para que además del ID, viaje toda la info de la Materia
-            var pomodoros = await _context.Pomodoros
-                                          .Include(p => p.Materia)
-                                          .ToListAsync();
+            var pomodoros = await _pomodoroService.ObtenerTodosLosPomodorosAsync();
 
             if (pomodoros == null || !pomodoros.Any())
             {
@@ -31,6 +28,16 @@ namespace StudIA.API.Controllers
             }
 
             return Ok(pomodoros);
+        }
+
+        // POST: api/pomodoros
+        [HttpPost]
+        public async Task<ActionResult<Pomodoro>> PostPomodoro(Pomodoro pomodoro)
+        {
+            // Le pasamos el objeto al servicio para que lo guarde en la DB
+            var nuevoPomodoro = await _pomodoroService.CrearPomodoroAsync(pomodoro);
+
+            return Ok(nuevoPomodoro);
         }
     }
 }

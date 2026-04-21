@@ -10,7 +10,9 @@ builder.Services.AddDbContext<StudIAContext>(options =>
 
 // --- REGISTRAR NUESTRO SERVICIO (NUEVO) ---
 builder.Services.AddScoped<MateriaService>();
+builder.Services.AddScoped<PomodoroService>();
 // ------------------------------------------
+
 
 
 
