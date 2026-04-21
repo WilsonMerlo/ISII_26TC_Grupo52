@@ -34,7 +34,6 @@ namespace StudIA.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Pomodoro>> PostPomodoro(Pomodoro pomodoro)
         {
-            // Le pasamos el objeto al servicio para que lo guarde en la DB
             var nuevoPomodoro = await _pomodoroService.CrearPomodoroAsync(pomodoro);
 
             return Ok(nuevoPomodoro);
