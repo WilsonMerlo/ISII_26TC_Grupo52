@@ -17,9 +17,6 @@ namespace StudIA.Business
         // Método que el Controlador va a llamar para pedir las materias
         public async Task<IEnumerable<Materia>> ObtenerTodasLasMateriasAsync()
         {
-            // Acá el Chef busca los ingredientes. 
-            // Si el día de mañana hay una regla que diga "Solo devolver materias activas",
-            // la lógica se programa ACÁ, y no en el Controlador.
             var materias = await _context.Materias.ToListAsync();
 
             return materias;
