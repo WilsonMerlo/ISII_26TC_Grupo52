@@ -70,14 +70,17 @@ const PomodoroTimer = () => {
 
     // --- FUNCIÓN: POST a la API (Guardar progreso) ---
     const registrarPomodoro = async () => {
+        // Leemos el ID del usuario desde el localStorage
+        const idUsuarioReal = localStorage.getItem('idUsuario') || 1;
+
         const nuevoPomodoro = {
-            idUsuario: 1, // Hardcodeado para el MVP
+            idUsuario: parseInt(idUsuarioReal), // Ya no es un 1 fijo (hardcodeado)
             idMateria: parseInt(idMateriaSeleccionada),
             idApunte: null,
-            fecha: new Date().toISOString(), // Formato ISO para .NET
-            duracionEstudio: DURACION_ESTUDIO_MINUTOS,
-            duracionDescanso: DURACION_DESCANSO_MINUTOS,
-            estado: true // Completado
+            fecha: new Date().toISOString(),
+            duracionEstudio: 25,
+            duracionDescanso: 5,
+            estado: true
         };
 
         try {

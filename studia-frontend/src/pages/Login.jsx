@@ -8,25 +8,38 @@ const Login = () => {
     const [error, setError] = useState(null); // Mensajes de error
 
     // --- MANEJO DE ENVÍO DE FORMULARIO ---
-    const manejarEnvio = (e) => {
-        e.preventDefault(); // Evitamos que la página se recargue
-        setError(null); // Limpiamos errores anteriores
+    const manejarEnvio = async (e) => {
+    e.preventDefault();
+    setError(null);
 
-        // --- VALIDACIÓN BÁSICA ---
-        if (!email.includes('@')) {
-            setError("Por favor, introduce un correo electrónico válido.");
-            return;
-        }
-        if (password.length < 6) {
-            setError("La contraseña debe tener al menos 6 caracteres.");
-            return;
-        }
-
-        // --- SIMULACIÓN DE LOGIN ---
-        console.log("Iniciando sesión con:", { email, password, recordarme });
-        alert(`¡Login simulado con éxito para ${email}!`);
-        // Aquí iría la llamada real a tu API
+    const credenciales = {
+        correo: email,
+        password: password
     };
+
+    try {
+        const response = await fetch("https://localhost:7068/api/Usuarios/login", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(credenciales)
+        });
+
+        if (response.ok) {
+            const usuarioLogueado = await response.json();
+            console.log("Éxito:", usuarioLogueado);
+            
+            // Guardamos el ID en el almacenamiento del navegador para usarlo en el Pomodoro
+            localStorage.setItem('idUsuario', usuarioLogueado.idUsuario);
+            
+            onNavegar('dashboard'); // Entramos al sistema
+        } else {
+            const errorData = await response.json();
+            setError(errorData.mensaje || "Credenciales incorrectas");
+        }
+    } catch (err) {
+        setError("No hay conexión con el servidor. ¿Encendiste el backend?");
+    }
+};
 
     return (
         <div style={estilos.fullPageWrap}>

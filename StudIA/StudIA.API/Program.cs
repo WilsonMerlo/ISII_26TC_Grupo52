@@ -21,9 +21,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // El puerto por defecto de Vite/React
+        policy.WithOrigins("http://localhost:5173", "http://localhost:5175") // El puerto por defecto de Vite/React
               .AllowAnyHeader()
               .AllowAnyMethod();
+
     });
 });
 // ----------------------------------------

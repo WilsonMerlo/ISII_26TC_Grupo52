@@ -8,24 +8,48 @@ const Registro = ({ onNavegar }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const manejarEnvio = (e) => {
-        e.preventDefault();
-        setError(null);
+    const manejarEnvio = async (e) => {
+    e.preventDefault();
+    setError(null);
 
-        if (formData.password !== formData.confirmPassword) {
-            setError("Las contraseñas no coinciden.");
-            return;
-        }
-        if (formData.password.length < 6) {
-            setError("La contraseña debe tener al menos 6 caracteres.");
-            return;
-        }
+    // 1. Validación de interfaz (Frontend)
+    if (formData.password !== formData.confirmPassword) {
+        setError("Las contraseñas no coinciden.");
+        return;
+    }
 
-        // Simulación de POST a la API
-        alert(`¡Cuenta creada para ${formData.nombre}!`);
-        onNavegar('login'); // Redirigimos al login
+    // 2. Armamos el "Contrato de Datos" (JSON)
+    // IMPORTANTE: Los nombres de la izquierda deben ser IGUALES a los de tu modelo en C#
+    const nuevoUsuario = {
+        nombre: formData.nombre,
+        correo: formData.email,
+        contrasenia: formData.password // Cambiado de 'password' a 'contrasenia'
     };
 
+    try {
+        const response = await fetch("https://localhost:7068/api/Usuarios", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevoUsuario)
+        });
+
+        if (response.ok) {
+            // Si el status es 200-299
+            alert("¡Cuenta creada con éxito! Ya podés entrar.");
+            onNavegar('login');
+        } else {
+            // Si el servidor responde con un error (400, 500, etc.)
+            // Intentamos leer el mensaje que manda el backend
+            const errorData = await response.json();
+            console.log("Detalle del error del servidor:", errorData);
+            
+            setError(errorData.mensaje || "Error al crear la cuenta. Revisa los datos.");
+        }
+    } catch (err) {
+        // Si ni siquiera llega al servidor (Server apagado o error de red)
+        setError("Error de red.");
+    }
+};
     return (
         <div style={estilos.fullPageWrap}>
             <div style={estilos.splitContainer}>

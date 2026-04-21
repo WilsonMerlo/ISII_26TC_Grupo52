@@ -13,7 +13,7 @@ import PomodoroTimer from './components/PomodoroTimer'
 function App() {
   // El estado 'vistaActual' controla qué pantalla se muestra.
   // Puede ser: 'login', 'registro', 'recuperar', o 'dashboard'
-  const [vistaActual, setVistaActual] = useState('dashboard');
+  const [vistaActual, setVistaActual] = useState('registro');
 
   // Función para cambiar de pantalla fácilmente
   const navegarA = (nuevaVista) => {
