@@ -14,12 +14,12 @@ namespace StudIA.Business
         }
 
         // Método para registrar al usuario (POST)
-        public async Task<Usuario> CrearUsuarioAsync(Usuario usuario)
+        public async Task<Usuario?> ValidarLoginAsync(string correo, string contrasena)
         {
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
-
-            return usuario;
+            // Busca el primer usuario que coincida con el correo y la contraseña.
+            // Si no encuentra nada, devuelve null.
+            return await _context.Usuarios
+                                 .FirstOrDefaultAsync(u => u.Correo == correo && u.Contrasena == contrasena);
         }
     }
 }
