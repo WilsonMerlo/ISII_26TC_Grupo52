@@ -36,7 +36,7 @@ const IconEstadisticas = () => (
     </svg>
 );
 
-const Sidebar = ({ nombreUsuario }) => {
+const Sidebar = ({ nombreUsuario = "Usuario", onLogout }) => {
 
     const obtenerIniciales = (nombre) => {
         if (!nombre) return "U";
@@ -74,7 +74,9 @@ const Sidebar = ({ nombreUsuario }) => {
             </nav>
 
             <div style={estilos.seccionInferior}>
-                <button style={estilos.cerrarSesionBtn}>Cerrar Sesión</button>
+                <button style={estilos.cerrarSesionBtn} onClick={onLogout}>
+                    Cerrar Sesión
+                </button>
 
                 <div style={estilos.usuarioCard}>
                     <div style={estilos.userAvatarMini}>{iniciales}</div>

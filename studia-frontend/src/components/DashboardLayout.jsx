@@ -2,12 +2,12 @@ import React from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
-const DashboardLayout = ({ children, nombreUsuario }) => {
+const DashboardLayout = ({ children, nombreUsuario, onLogout }) => {
     return (
         <div style={estilos.mainWrap}>
             <Header nombreUsuario={nombreUsuario} />
             <div style={estilos.seccionInferiorWrap}>
-                <Sidebar nombreUsuario={nombreUsuario} />
+                <Sidebar nombreUsuario={nombreUsuario} onLogout={onLogout} />
                 <main style={estilos.mainContentArea}>
                     {children}
                 </main>
@@ -20,7 +20,8 @@ const estilos = {
     mainWrap: {
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh',
+        height: '100vh',
+        overflow: 'hidden',
         backgroundColor: '#F6F8FE',
         fontFamily: "'IBM Plex Sans', 'Helvetica Neue', sans-serif",
     },

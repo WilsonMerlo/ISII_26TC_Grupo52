@@ -27,6 +27,15 @@ function App() {
     setVistaActual(nuevaVista);
   };
 
+  const manejarCerrarSesion = () => {
+      // Borramos los datos del usuario de la memoria
+      localStorage.removeItem('idUsuario');
+      localStorage.removeItem('nombreUsuario');
+      // Lo mandamos al login
+      setVistaActual('login');
+    };
+
+
   // ── Conditional rendering based on current view ──
   switch (vistaActual) {
     case 'registro':
@@ -37,7 +46,10 @@ function App() {
 
     case 'dashboard':
       return (
-        <DashboardLayout nombreUsuario={nombreParaAvatar}>
+        <DashboardLayout 
+                        nombreUsuario={nombreParaAvatar}
+                        onLogout={manejarCerrarSesion}
+                        >
           <PomodoroTimer />
         </DashboardLayout>
       );
