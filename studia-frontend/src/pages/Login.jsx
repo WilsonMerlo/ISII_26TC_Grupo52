@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Login = () => {
+const Login = ({ onNavegar }) => {
     // --- ESTADOS ---
     const [email, setEmail] = useState(''); // Email del usuario
     const [password, setPassword] = useState(''); // Contraseña
@@ -9,37 +9,51 @@ const Login = () => {
 
     // --- MANEJO DE ENVÍO DE FORMULARIO ---
     const manejarEnvio = async (e) => {
-    e.preventDefault();
-    setError(null);
+        e.preventDefault();
+        setError(null);
 
-    const credenciales = {
-        correo: email,
-        password: password
-    };
+        const credenciales = {
+            correo: email,
+            contrasena: password 
+        };
 
-    try {
-        const response = await fetch("https://localhost:7068/api/Usuarios/login", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(credenciales)
-        });
+        try {
+            console.log("1. Enviando datos al servidor:", credenciales);
 
-        if (response.ok) {
-            const usuarioLogueado = await response.json();
-            console.log("Éxito:", usuarioLogueado);
+            const response = await fetch("https://localhost:7068/api/Usuarios/login", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(credenciales)
+            });
+
+            console.log("2. El servidor respondió con status:", response.status);
+
+            if (response.ok) {
+                // TRUCO SENIOR: Leemos como texto primero por si Wilson mandó text/plain
+                const textoRespuesta = await response.text();
+                console.log("3. Datos crudos de Wilson:", textoRespuesta);
+                
+                // Lo convertimos a objeto JSON de forma segura
+                const usuarioLogueado = JSON.parse(textoRespuesta);
+                
+                // Guardamos el ID para usarlo luego en la sección de apuntes y pomodoros
+                localStorage.setItem('idUsuario', usuarioLogueado.idUsuario);
+                
+                alert(`¡Hola ${usuarioLogueado.nombre}! Entrando a Sanctuary...`);
+                onNavegar('dashboard'); 
+            } else if (response.status === 401) {
+                setError("Correo o contraseña incorrectos.");
+            } else {
+                setError(`Error del servidor: ${response.status}`);
+            }
+        } catch (err) {
+            // ACÁ VAMOS A VER EL ERROR REAL
+            console.error("🚨 EL VERDADERO ERROR ES:", err);
             
-            // Guardamos el ID en el almacenamiento del navegador para usarlo en el Pomodoro
-            localStorage.setItem('idUsuario', usuarioLogueado.idUsuario);
-            
-            onNavegar('dashboard'); // Entramos al sistema
-        } else {
-            const errorData = await response.json();
-            setError(errorData.mensaje || "Credenciales incorrectas");
+            // Te muestro el error en rojo en la pantalla en vez del genérico "Error de red"
+            setError(`Falla técnica: ${err.message}`);
         }
-    } catch (err) {
-        setError("No hay conexión con el servidor. ¿Encendiste el backend?");
-    }
-};
+    };
 
     return (
         <div style={estilos.fullPageWrap}>
@@ -92,7 +106,7 @@ const Login = () => {
                         </div>
                     </div>
 
-                    {/* FILA: Recordarme + Olvidaste contraseña? */}
+                    {/* FILA: Olvidaste contraseña? */}
                     <div style={estilos.filaAdicional}>
                         <label style={estilos.checkboxLabel}>
                             <input 
@@ -103,7 +117,15 @@ const Login = () => {
                             />
                             Recordarme
                         </label>
-                        <a href="#" style={estilos.olvidasteLink}>¿Olvidaste tu contraseña?</a>
+                        
+                        {/* --- CAMBIO AQUÍ: Convertimos el <a> en un botón funcional --- */}
+                        <button 
+                            type="button" 
+                            style={estilos.olvidasteLink}
+                            onClick={() => onNavegar('recuperar')} // <--- Navegamos a la pantalla de recuperación
+                        >
+                            ¿Olvidaste tu contraseña?
+                        </button>
                     </div>
 
                     {/* BOTÓN: Iniciar Sesión */}
@@ -115,7 +137,14 @@ const Login = () => {
                     {/* LINK: Registrarse */}
                     <div style={estilos.registrarseSeccion}>
                         <p style={estilos.registrarseText}>¿No tienes una cuenta?</p>
-                        <a href="#" style={estilos.registrarseLink}>Registrarse</a>
+                        {/* Cambiamos 'a' por 'button' y agregamos el onClick */}
+                        <button 
+                            type="button" 
+                            style={estilos.registrarseLink} 
+                            onClick={() => onNavegar('registro')}
+                        >
+                            Registrarse
+                        </button>
                     </div>
                 </form>
             </main>
@@ -167,8 +196,8 @@ const estilos = {
     filaAdicional: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' },
     checkboxLabel: { fontSize: '0.9rem', color: '#9EA5BA', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' },
     checkbox: { cursor: 'pointer', accentColor: '#3A56AF' },
-    olvidasteLink: { fontSize: '0.9rem', color: '#3A56AF', fontWeight: '600', textDecoration: 'none' },
-    
+    olvidasteLink: { fontSize: '0.9rem', color: '#3A56AF', fontWeight: '600', textDecoration: 'none', background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: 'inherit'
+},    
     // Botón Principal
     mainLoginBtn: { width: '100%', backgroundColor: '#3A56AF', color: 'white', border: 'none', borderRadius: '10px', padding: '15px', fontSize: '1.1rem', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 10px rgba(58, 86, 175, 0.3)', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' },
     btnIcon: { fontSize: '1.2rem', fontWeight: 'bold' },
@@ -176,7 +205,8 @@ const estilos = {
     // Registrarse
     registrarseSeccion: { marginTop: '40px', textAlign: 'center' },
     registrarseText: { fontSize: '1rem', color: '#9EA5BA', fontWeight: '500', margin: '0 0 5px 0' },
-    registrarseLink: { fontSize: '1rem', color: '#3A56AF', fontWeight: '700', textDecoration: 'none' },
+    registrarseLink: { fontSize: '1rem', color: '#3A56AF', fontWeight: '700', textDecoration: 'none',background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: 'inherit' // para que no cambie la letra
+},
     
     // Footer
     loginFooter: { textAlign: 'center', maxWidth: '600px', marginTop: 'auto', padding: '40px 20px', display: 'flex', flexDirection: 'column', gap: '30px' },
