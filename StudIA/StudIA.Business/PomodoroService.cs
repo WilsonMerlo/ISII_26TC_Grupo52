@@ -40,5 +40,14 @@ namespace StudIA.Business
 
             return true;
         }
+        // NUEVO: Método para traer solo los pomodoros de un usuario específico
+        public async Task<IEnumerable<Pomodoro>> ObtenerPomodorosPorUsuarioAsync(int idUsuario)
+        {
+            return await _context.Pomodoros
+                                 .Include(p => p.Materia)
+                                 .Where(p => p.IdUsuario == idUsuario) // <-- EL FILTRO MÁGICO
+                                 .OrderByDescending(p => p.Fecha)      // <-- Los ordena del más nuevo al más viejo
+                                 .ToListAsync();
+        }
     }
 }

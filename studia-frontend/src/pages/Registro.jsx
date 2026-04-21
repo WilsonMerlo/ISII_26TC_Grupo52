@@ -50,7 +50,7 @@ const Registro = ({ onNavegar }) => {
                 
                 {/* COLUMNA IZQUIERDA: Branding e Imagen */}
                 <div style={estilos.leftColumn}>
-                    <h2 style={estilos.brandText}>Sanctuary</h2>
+                    <h2 style={estilos.brandText}>StudIA</h2>
                     <h1 style={estilos.heroTitle}>
                         Tu espacio para el <span style={estilos.textHighlight}>trabajo profundo.</span>
                     </h1>
@@ -61,7 +61,7 @@ const Registro = ({ onNavegar }) => {
                     {/* Imagen Principal del Escritorio */}
                     <img 
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuDElxO5KJ8ShW3wGcc0bwz096o5m4D3R-JfkTXbYRzSS0jfC4UTdVkKKCdGjWKt11topRSf1AZXKRFW3bv1EOYI4mQY0JKLId0dVaAIAG2WoNrzbvqUbbfxR_9-0MEKpYYjmPkI09ZPdkpqDJS32pTgFF2QPqWxuehGOSz-GRm094pamGnL6AC9zPfoFfwmkaY5-Cu6w_GCmkAwoi5hDYVz-tlNBL1gO5rYTLRVXvD5li2j1SK_zPCEdamwBJWDzMQ2Kh3ttrxYvHBX" 
-                        alt="Espacio de trabajo Sanctuary" 
+                        alt="Espacio de trabajo StudIA" 
                         style={estilos.heroImage} 
                     />
                 </div>
@@ -121,7 +121,7 @@ const Registro = ({ onNavegar }) => {
             </div>
 
             <footer style={estilos.footer}>
-                © 2026 Sanctuary Sanctuary. Diseñado para Deep Work. • Privacy Policy • Terms of Service • Help Center
+                © 2026 StudIA StudIA. Diseñado para Deep Work. • Privacy Policy • Terms of Service • Help Center
             </footer>
         </div>
     );

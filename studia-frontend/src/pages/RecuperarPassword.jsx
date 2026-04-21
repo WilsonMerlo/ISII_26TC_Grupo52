@@ -17,7 +17,7 @@ const RecuperarPassword = ({ onNavegar }) => {
     return (
         <div style={estilos.fullPageWrap}>
             {/* Logo superior fuera de la tarjeta */}
-            <h1 style={estilos.logoTop}>Sanctuary</h1>
+            <h1 style={estilos.logoTop}>StudIA</h1>
 
             <main style={estilos.mainContentArea}>
                 <form style={estilos.card} onSubmit={manejarEnvio}>
@@ -43,7 +43,7 @@ const RecuperarPassword = ({ onNavegar }) => {
                                     type="email" 
                                     value={email} 
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="ejemplo@sanctuary.com"
+                                    placeholder="ejemplo@studIA.com"
                                     style={estilos.textInput}
                                     required
                                 />
@@ -66,7 +66,7 @@ const RecuperarPassword = ({ onNavegar }) => {
             </main>
 
             <footer style={estilos.footer}>
-                © 2026 Sanctuary Sanctuary. Diseñado para Deep Work. • Privacy Policy • Terms of Service • Help Center
+                © 2026 StudIA StudIA. Diseñado para Deep Work. • Privacy Policy • Terms of Service • Help Center
             </footer>
         </div>
     );

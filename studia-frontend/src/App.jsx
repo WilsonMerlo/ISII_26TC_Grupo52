@@ -1,49 +1,50 @@
 import React, { useState } from 'react'
 import './App.css'
 
-// Vistas
+// ── VIEWS ──
 import Login from './pages/Login'
 import Registro from './pages/Registro'
 import RecuperarPassword from './pages/RecuperarPassword'
 
-// Dashboard y Componentes
+// ── DASHBOARD & COMPONENTS ──
 import DashboardLayout from './components/DashboardLayout'
 import PomodoroTimer from './components/PomodoroTimer'
 
+/**
+ * Main App Component
+ * 
+ * Manages global navigation and authentication state.
+ * Renders different views based on 'vistaActual' state.
+ */
 function App() {
-  // El estado 'vistaActual' controla qué pantalla se muestra.
   const [vistaActual, setVistaActual] = useState('login');
 
-  // --- LÓGICA PARA EL AVATAR ---
-  // Leemos el nombre que se guardó en el Login. 
-  // Si todavía no hay nadie logueado, usamos "Usuario" como respaldo.
-  const nombreParaAvatar = localStorage.getItem('nombreUsuario') || "Usuario";
+  // ── Get user info from localStorage (set during login) ──
+  const nombreParaAvatar = localStorage.getItem('nombreUsuario') || 'Usuario';
 
+  // ── Navigation handler ──
   const navegarA = (nuevaVista) => {
     setVistaActual(nuevaVista);
   };
 
-  // Renderizado condicional
+  // ── Conditional rendering based on current view ──
   switch (vistaActual) {
     case 'registro':
       return <Registro onNavegar={navegarA} />;
-      
+
     case 'recuperar':
       return <RecuperarPassword onNavegar={navegarA} />;
-      
+
     case 'dashboard':
       return (
-        /* Pasamos el nombre al DashboardLayout */
         <DashboardLayout nombreUsuario={nombreParaAvatar}>
           <PomodoroTimer />
         </DashboardLayout>
       );
-      
+
     case 'login':
     default:
-      return (
-        <Login onNavegar={navegarA} />
-      );
+      return <Login onNavegar={navegarA} />;
   }
 }
 

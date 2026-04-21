@@ -51,5 +51,19 @@ namespace StudIA.API.Controllers
 
             return NoContent(); // Retorna 204 No Content (Éxito)
         }
+        // GET: api/pomodoros/usuario/5
+        [HttpGet("usuario/{idUsuario}")]
+        public async Task<ActionResult<IEnumerable<Pomodoro>>> GetPomodorosUsuario(int idUsuario)
+        {
+            var pomodoros = await _pomodoroService.ObtenerPomodorosPorUsuarioAsync(idUsuario);
+
+            // Si no tiene historial, devolvemos una lista vacía con un 200 OK para que React no rompa
+            if (pomodoros == null || !pomodoros.Any())
+            {
+                return Ok(new List<Pomodoro>());
+            }
+
+            return Ok(pomodoros);
+        }
     }
 }
