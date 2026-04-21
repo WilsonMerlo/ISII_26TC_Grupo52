@@ -1,224 +1,391 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PomodoroTimer = () => {
-    // --- CONSTANTES DE DISEÑO ---
-    const DURACION_ESTUDIO_MINUTOS = 25; // 25:00
-    const DURACION_DESCANSO_MINUTOS = 5;
-    const API_BASE_URL = "https://localhost:7068/api";
+    // --- ESTADOS DE CONFIGURACIÓN ---
+    const [tiempoSesion, setTiempoSesion] = useState(25); 
+    const [tiempoDescanso, setTiempoDescanso] = useState(5); 
+    const [ciclosTotales, setCiclosTotales] = useState(4);
 
-    // --- ESTADOS ---
-    const [materias, setMaterias] = useState([]); // Lista de materias desde la API
-    const [idMateriaSeleccionada, setIdMateriaSeleccionada] = useState(''); // Materia elegida
-    const [segundos, setSegundos] = useState(DURACION_ESTUDIO_MINUTOS * 60); // 25 minutos
-    const [estaActivo, setEstaActivo] = useState(false); // Estado del cronómetro (ejecutando/pausado)
-    const [error, setError] = useState(null); // Para mensajes de error
-    const [bloqueActual, setBloqueActual] = useState(1); // Spec: Capítulo 4, Bloque 1 de 4
+    const [draftSesion, setDraftSesion] = useState(25);
+    const [draftDescanso, setDraftDescanso] = useState(5);
+    const [draftCiclos, setDraftCiclos] = useState(4);
 
-    // --- LÓGICA DE DIBUJO DEL CÍRCULO SVG ---
-    const diametro = 200; // Tamaño del círculo principal
-    const radio = 85; // Radio del círculo interno
-    const circunferencia = 2 * Math.PI * radio;
-    const duracionInicialSegundos = DURACION_ESTUDIO_MINUTOS * 60;
+    // --- ESTADOS DEL TEMPORIZADOR ---
+    const [segundos, setSegundos] = useState(tiempoSesion * 60);
+    const [estaActivo, setEstaActivo] = useState(false);
+    const [sesionActual, setSesionActual] = useState(1);
+    const [esDescanso, setEsDescanso] = useState(false);
     
-    // Calculamos el desfase para el dibujo (progreso)
-    const offsetCircular = useMemo(() => {
-        const fraccionRestante = segundos / duracionInicialSegundos;
-        return circunferencia * (1 - fraccionRestante);
-    }, [segundos, circunferencia, duracionInicialSegundos]);
+    // --- ESTADOS DE MODALES ---
+    const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState(false); 
+    
+    // NUEVOS ESTADOS PARA EL MODAL DE BORRAR
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState(null);
 
-    // --- AYUDANTE PARA EL NOMBRE DE LA MATERIA ACTUAL ---
-    const materiaActual = useMemo(() => {
-        return materias.find(m => m.idMateria === parseInt(idMateriaSeleccionada));
-    }, [materias, idMateriaSeleccionada]);
+    // --- ESTADO DEL HISTORIAL ---
+    const [historial, setHistorial] = useState([
+        { 
+            id: 1, 
+            fecha: "20 de abril 2026", 
+            tiempoConcentrado: "100 min", 
+            tiempoDescanso: "15 min" 
+        }
+    ]);
 
-    // --- EFECTO 1: Cargar materias al montar ---
-    useEffect(() => {
-        const obtenerMaterias = async () => {
-            try {
-                const response = await fetch(`${API_BASE_URL}/Materias`);
-                if (!response.ok) throw new Error("Error al obtener materias");
-                const data = await response.json();
-                setMaterias(data);
-                
-                // Seleccionamos la primera materia por defecto
-                if (data.length > 0) setIdMateriaSeleccionada(data[0].idMateria);
-            } catch (err) {
-                setError("No se pudo conectar con el servidor backend.");
-                console.error(err);
+    // --- LÓGICA DE FASES ---
+    const avanzarFase = () => {
+        setEstaActivo(true); 
+        
+        if (!esDescanso) {
+            setEsDescanso(true);
+            setSegundos(tiempoDescanso * 60);
+        } else {
+            setEsDescanso(false);
+            setSegundos(tiempoSesion * 60);
+            
+            if (sesionActual < ciclosTotales) {
+                setSesionActual(s => s + 1);
+            } else {
+                setEstaActivo(false); 
+                setSesionActual(1);
+                guardarEnHistorial();
+                alert("¡Felicidades! Completaste todos tus ciclos y se guardó en tu historial.");
             }
+        }
+    };
+
+    // --- LÓGICA DEL HISTORIAL ---
+    const guardarEnHistorial = () => {
+        const opcionesFecha = { day: 'numeric', month: 'long', year: 'numeric' };
+        const fechaHoy = new Date().toLocaleDateString('es-ES', opcionesFecha);
+        
+        const nuevoRegistro = {
+            id: Date.now(), 
+            fecha: fechaHoy,
+            tiempoConcentrado: `${tiempoSesion * ciclosTotales} min`,
+            tiempoDescanso: `${tiempoDescanso * (ciclosTotales - 1)} min`
         };
 
-        obtenerMaterias();
-    }, []);
+        setHistorial([nuevoRegistro, ...historial]);
+    };
 
-    // --- EFECTO 2: Lógica del Temporizador ---
+    // LÓGICA DEL NUEVO MODAL DE ELIMINACIÓN
+    const intentarEliminar = (id) => {
+        setItemToDelete(id);
+        setIsDeleteModalOpen(true);
+    };
+
+    const confirmarEliminacion = () => {
+        const nuevoHistorial = historial.filter(item => item.id !== itemToDelete);
+        setHistorial(nuevoHistorial);
+        setIsDeleteModalOpen(false);
+        setItemToDelete(null);
+    };
+
+    const cancelarEliminacion = () => {
+        setIsDeleteModalOpen(false);
+        setItemToDelete(null);
+    };
+
+    // --- LÓGICA DEL RELOJ ---
     useEffect(() => {
         let intervalo = null;
-
         if (estaActivo && segundos > 0) {
             intervalo = setInterval(() => {
-                setSegundos((prev) => prev - 1);
+                setSegundos((s) => s - 1);
             }, 1000);
         } else if (segundos === 0) {
-            setEstaActivo(false);
-            registrarPomodoro();
+            clearInterval(intervalo);
+            avanzarFase(); 
+        } else {
             clearInterval(intervalo);
         }
-
         return () => clearInterval(intervalo);
-    }, [estaActivo, segundos]);
+    }, [estaActivo, segundos, esDescanso, sesionActual, ciclosTotales]);
 
-    // --- FUNCIÓN: POST a la API (Guardar progreso) ---
-    const registrarPomodoro = async () => {
-        // Leemos el ID del usuario desde el localStorage
-        const idUsuarioReal = localStorage.getItem('idUsuario') || 1;
-
-        const nuevoPomodoro = {
-            idUsuario: parseInt(idUsuarioReal), // Ya no es un 1 fijo (hardcodeado)
-            idMateria: parseInt(idMateriaSeleccionada),
-            idApunte: null,
-            fecha: new Date().toISOString(),
-            duracionEstudio: 25,
-            duracionDescanso: 5,
-            estado: true
-        };
-
-        try {
-            const response = await fetch(`${API_BASE_URL}/Pomodoros`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(nuevoPomodoro)
-            });
-
-            if (response.ok) {
-                alert("¡Pomodoro terminado y guardado con éxito!");
-                reiniciarPomodoro(true);
-            } else {
-                throw new Error("Error al guardar el pomodoro");
-            }
-        } catch (err) {
-            setError("Error de red al intentar guardar.");
-            console.error(err);
-        }
+    const formatearTiempo = (s) => {
+        const mins = Math.floor(s / 60);
+        const secs = s % 60;
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
     };
 
-    // --- ACCIONES DE LOS CONTROLES ---
-    const reiniciarPomodoro = (automatico = false) => {
+    const resetearReloj = () => {
         setEstaActivo(false);
-        setSegundos(duracionInicialSegundos);
-        if (!automatico) setBloqueActual(1); // Si lo hace el usuario, reinicia bloques
+        setEsDescanso(false);
+        setSegundos(tiempoSesion * 60);
+        setSesionActual(1);
     };
 
-    const saltarPomodoro = () => {
-        // Para este MVP, saltamos al final y guardamos el progreso.
-        registrarPomodoro();
+    // --- FUNCIONES DEL MODAL CONFIG ---
+    const abrirConfig = () => { setIsEditing(false); setIsConfigModalOpen(true); };
+    const cerrarConfig = () => { setIsConfigModalOpen(false); setIsEditing(false); };
+    
+    const activarModoEdicion = () => {
+        if (!isEditing) {
+            setDraftSesion(tiempoSesion);
+            setDraftDescanso(tiempoDescanso);
+            setDraftCiclos(ciclosTotales);
+        }
+        setIsEditing(!isEditing);
     };
 
-    // --- HELPERS: Formateo de tiempo (MM:SS) ---
-    const formatearTiempo = () => {
-        const minutos = Math.floor(segundos / 60);
-        const secs = segundos % 60;
-        return `${minutos.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    const aplicarConfiguracion = () => {
+        if (isEditing) {
+            setTiempoSesion(draftSesion);
+            setTiempoDescanso(draftDescanso);
+            setCiclosTotales(draftCiclos);
+            
+            setEstaActivo(false);
+            setEsDescanso(false);
+            setSegundos(draftSesion * 60);
+            setSesionActual(1);
+        }
+        setIsEditing(false);
+        setIsConfigModalOpen(false);
     };
+
+    // --- CÁLCULOS SVG ---
+    const radio = 90;
+    const circunferencia = 2 * Math.PI * radio;
+    const tiempoTotalFaseActual = esDescanso ? (tiempoDescanso * 60) : (tiempoSesion * 60);
+    const porcentaje = segundos / tiempoTotalFaseActual;
+    const offset = circunferencia - porcentaje * circunferencia;
 
     return (
         <div style={estilos.pomodoroContainer}>
-            {/* 1. Header de sesión - Spec-Perfect */}
-            <div style={estilos.sessionHeaderWrap}>
-                <div style={estilos.sessionBadge}>SESIÓN DE TRABAJO</div>
-                <h1 style={estilos.sessionTitle}>Estudiando Neurociencia</h1> {/* Placeholder de Neurociencia como el prototipo */}
-                <p style={estilos.sessionSubtitle}>Capítulo 4: Plasticidad Neuronal y Memoria</p>
-            </div>
+            
+            {/* --- ZONA PRINCIPAL DEL RELOJ --- */}
+            <span style={{
+                ...estilos.sessionBadge, 
+                backgroundColor: esDescanso ? '#E5F6ED' : '#D6E0FF', 
+                color: esDescanso ? '#219653' : '#3A56AF'
+            }}>
+                {esDescanso ? "TIEMPO DE DESCANSO" : "SESIÓN DE TRABAJO"}
+            </span>
+            <h1 style={estilos.taskTitle}>Estudiando Neurociencia</h1>
+            <p style={estilos.taskSubtitle}>Capítulo 4: Plasticidad Neuronal y Memoria</p>
 
-            {error && <p style={estilos.error}>{error}</p>}
+            <div style={estilos.sessionCounter}>{sesionActual}/{ciclosTotales}</div>
 
-            {/* 2. Temporizador Circular MASTER - Spec-Perfect */}
-            <div style={estilos.timerVisualSection}>
-                <svg width={diametro} height={diametro} style={estilos.timerSvg}>
-                    {/* Anillo de fondo (Spec: gris punteado) */}
+            <div style={estilos.timerCircleContainer}>
+                <svg width="220" height="220" style={estilos.svgCircle}>
+                    <circle cx="110" cy="110" r={radio} stroke="#E8EBFF" strokeWidth="8" fill="transparent" />
                     <circle 
-                        cx={diametro / 2} cy={diametro / 2} r={radio}
-                        stroke="#E8EBFF" strokeWidth="8" fill="none"
-                        strokeDasharray="10 5" // Hace los puntos/guiones
-                    />
-                    {/* Anillo de progreso (Spec: azul continuo) */}
-                    <circle 
-                        cx={diametro / 2} cy={diametro / 2} r={radio}
-                        stroke="#3A56AF" strokeWidth="8" fill="none"
+                        cx="110" cy="110" r={radio} 
+                        stroke={esDescanso ? "#219653" : "#3A56AF"} 
+                        strokeWidth="8" fill="transparent" 
                         strokeDasharray={circunferencia}
-                        strokeDashoffset={offsetCircular}
-                        strokeLinecap="round" // Bordes redondeados
-                        style={{ transition: 'stroke-dashoffset 0.5s linear' }} // Animación suave
+                        strokeDashoffset={offset}
+                        strokeLinecap="round"
+                        style={{ transition: 'stroke-dashoffset 1s linear, stroke 0.5s ease' }} 
                     />
                 </svg>
-
-                {/* Texto central del timer (Spec-Perfect) */}
-                <div style={estilos.timerTextContainer}>
-                    <div style={estilos.timerTime}>{formatearTiempo()}</div>
-                    <div style={estilos.timerStatus}>EN CURSO</div> {/* Spec dice "EN CURSO" */}
+                <div style={estilos.timeDisplay}>
+                    <div style={{...estilos.clockText, color: esDescanso ? "#219653" : "#3A56AF"}}>
+                        {formatearTiempo(segundos)}
+                    </div>
+                    <div style={estilos.statusLabel}>{estaActivo ? "EN CURSO" : "PAUSADO"}</div>
                 </div>
             </div>
 
-            {/* 3. Controles del temporizador MASTER - Spec-Perfect */}
-            <div style={estilos.controlsSectionMASTER}>
-                {/* Spec: Reset (🔄) -> Pause/Start (||/|>) -> Skip (|>) */}
-                <div style={estilos.controlsRowmaster}>
-                    <button style={estilos.roundIconBtn} onClick={() => reiniciarPomodoro(false)}>
-                        ↻
-                    </button>
-                    <button 
-                        style={estilos.mainPauseBtnMASTER}
-                        onClick={() => setEstaActivo(!estaActivo)}
-                    >
-                        {estaActivo ? "||" : "|>"} 
-                    </button>
-                    <button style={estilos.roundIconBtn} onClick={saltarPomodoro}>
-                        {'|>'}
-                    </button>
+            <div style={estilos.controlsRow}>
+                <button style={estilos.iconBtn} onClick={abrirConfig} title="Configuración">⊞</button>
+                <button style={estilos.playBtn} onClick={() => setEstaActivo(!estaActivo)}>
+                    {estaActivo ? "II" : "▶"}
+                </button>
+                <button style={estilos.iconBtn} onClick={avanzarFase} title="Saltar Fase">⏭</button>
+                <button style={estilos.iconBtn} onClick={resetearReloj} title="Reiniciar">↺</button>
+            </div>
+
+            {/* --- HISTORIAL INTEGRADO --- */}
+            <div style={estilos.historySection}>
+                <h3 style={estilos.historyTitle}>Historial de Enfoque</h3>
+                <div style={estilos.historyListContainerInline}>
+                    {historial.length === 0 ? (
+                        <p style={estilos.emptyHistory}>No hay sesiones completadas aún.</p>
+                    ) : (
+                        historial.map((item) => (
+                            <div key={item.id} style={estilos.historyCard}>
+                                <div style={estilos.historyInfo}>
+                                    <p style={estilos.historyDate}>🗓️ {item.fecha}</p>
+                                    <div style={estilos.historyTimes}>
+                                        <span style={estilos.timeBadgeFocus}>🎯 {item.tiempoConcentrado}</span>
+                                        <span style={estilos.timeBadgeBreak}>☕ {item.tiempoDescanso}</span>
+                                    </div>
+                                </div>
+                                <button 
+                                    style={estilos.deleteBtn} 
+                                    onClick={() => intentarEliminar(item.id)}
+                                    title="Eliminar registro"
+                                >
+                                    🗑️
+                                </button>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
 
-            {/* 4. Frase / Footer motivacional Spec-Perfect */}
-            <div style={estilos.quoteFooterSection}>
-                <p style={estilos.quoteText}>
-                    “La profundidad de tu enfoque determina el nivel de tu maestría.”
-                </p>
-                <div style={estilos.quoteSource}>FILOSOFÍA SANCTUARY</div>
-            </div>
+            <footer style={estilos.quoteSection}>
+                <div style={estilos.quoteLine}></div>
+                <p style={estilos.quoteText}>“La profundidad de tu enfoque determina el nivel de tu maestría.”</p>
+                <p style={estilos.quoteAuthor}>FILOSOFÍA SANCTUARY</p>
+            </footer>
+
+            {/* --- MODAL DE CONFIGURACIÓN --- */}
+            {isConfigModalOpen && (
+                <div style={estilos.modalOverlay}>
+                    <div style={estilos.modalContent}>
+                        <div style={estilos.modalHeader}>
+                            <div>
+                                <h3 style={estilos.modalTitle}>Configuración Pomodoro</h3>
+                                <p style={estilos.modalSubtitle}>Configura tu sesión de trabajo profundo.</p>
+                            </div>
+                            <button style={estilos.closeModalBtn} onClick={cerrarConfig}>✕</button>
+                        </div>
+
+                        <div style={estilos.presetCard}>
+                            <div style={estilos.presetHeader}>
+                                <div style={estilos.presetTitleWrap}>
+                                    <span style={estilos.presetIcon}>⚙️</span>
+                                    <span style={estilos.presetName}>Configuración</span>
+                                </div>
+                                <span style={estilos.badgeRecomendado}>RECOMENDADA</span>
+                            </div>
+
+                            <div style={estilos.presetGrid}>
+                                <div style={estilos.gridItemCenter}>
+                                    <p style={estilos.presetLabel}>SESIONES (min)</p>
+                                    {isEditing ? (
+                                        <input type="number" value={draftSesion} onChange={(e) => setDraftSesion(Number(e.target.value))} style={estilos.inputEdit} min="1"/>
+                                    ) : (
+                                        <p style={estilos.presetValue}>{tiempoSesion} min</p>
+                                    )}
+                                </div>
+                                <div style={estilos.gridItemCenter}>
+                                    <p style={estilos.presetLabel}>DESCANSOS (min)</p>
+                                    {isEditing ? (
+                                        <input type="number" value={draftDescanso} onChange={(e) => setDraftDescanso(Number(e.target.value))} style={estilos.inputEdit} min="1"/>
+                                    ) : (
+                                        <p style={estilos.presetValue}>{tiempoDescanso} min</p>
+                                    )}
+                                </div>
+                                <div style={estilos.ciclosWrap}>
+                                    <p style={estilos.presetLabel}>CICLOS</p>
+                                    {isEditing ? (
+                                        <input type="number" value={draftCiclos} onChange={(e) => setDraftCiclos(Number(e.target.value))} style={estilos.inputEdit} min="1"/>
+                                    ) : (
+                                        <p style={estilos.presetValue}>{ciclosTotales}</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        <button style={estilos.crearPresetBtn} onClick={activarModoEdicion}>
+                            <span style={estilos.plusIcon}>{isEditing ? "✓" : "+"}</span> 
+                            {isEditing ? "Confirmar valores" : "Editar preajuste"}
+                        </button>
+
+                        <div style={estilos.modalActions}>
+                            <button style={estilos.btnAplicar} onClick={aplicarConfiguracion}>Aplicar</button>
+                            <button style={estilos.btnCancelar} onClick={cerrarConfig}>Cancelar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* --- MODAL DE CONFIRMACIÓN DE BORRADO --- */}
+            {isDeleteModalOpen && (
+                <div style={estilos.modalOverlay}>
+                    <div style={estilos.deleteModalContent}>
+                        <div style={estilos.deleteWarningIcon}>⚠️</div>
+                        <h3 style={estilos.modalTitle}>¿Eliminar registro?</h3>
+                        <p style={{...estilos.modalSubtitle, marginBottom: '25px', textAlign: 'center'}}>
+                            Esta acción eliminará el registro de tu historial y no se puede deshacer.
+                        </p>
+                        
+                        <div style={estilos.deleteModalActions}>
+                            <button style={estilos.btnCancelarBorrado} onClick={cancelarEliminacion}>
+                                Cancelar
+                            </button>
+                            <button style={estilos.btnConfirmarBorrado} onClick={confirmarEliminacion}>
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
-// --- OBJETO DE ESTILOS CSS REVISADO (Totalmente Spec-Perfect para Sanctuary) ---
+// --- ESTILOS ENCAPSULADOS ---
 const estilos = {
-    pomodoroContainer: { textAlign: 'center', width: '100%', maxWidth: '600px', margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 0' },
+    pomodoroContainer: { width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', padding: '20px', boxSizing: 'border-box', overflowY: 'auto' },
+    sessionBadge: { padding: '6px 15px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '1px', marginBottom: '20px', transition: 'all 0.5s ease' },
+    taskTitle: { fontSize: '2.5rem', fontWeight: '800', color: '#2D3247', margin: '0 0 5px 0', textAlign: 'center' },
+    taskSubtitle: { fontSize: '1.1rem', color: '#9EA5BA', margin: '0 0 30px 0', textAlign: 'center' },
+    sessionCounter: { backgroundColor: '#F0F3FF', color: '#3A56AF', padding: '5px 15px', borderRadius: '8px', fontWeight: '700', marginBottom: '30px' },
+    timerCircleContainer: { position: 'relative', width: '220px', height: '220px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '30px' },
+    svgCircle: { transform: 'rotate(-90deg)' },
+    timeDisplay: { position: 'absolute', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' },
+    clockText: { fontSize: '4rem', fontWeight: '400', letterSpacing: '-2px', lineHeight: '1', transition: 'color 0.5s ease' },
+    statusLabel: { fontSize: '0.75rem', color: '#9EA5BA', fontWeight: '700', letterSpacing: '1.5px', marginTop: '10px' },
+    controlsRow: { display: 'flex', alignItems: 'center', gap: '25px', backgroundColor: 'white', padding: '15px 35px', borderRadius: '20px', boxShadow: '0 10px 40px rgba(0,0,0,0.05)', marginBottom: '40px' },
+    iconBtn: { background: 'none', border: 'none', color: '#9EA5BA', fontSize: '1.4rem', cursor: 'pointer', transition: 'color 0.2s' },
+    playBtn: { width: '55px', height: '55px', borderRadius: '15px', border: 'none', backgroundColor: 'white', boxShadow: '0 8px 25px rgba(58, 86, 175, 0.15)', color: '#3A56AF', fontSize: '1.2rem', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', transition: 'transform 0.1s' },
     
-    // Header de sesión (Spec-Perfect)
-    sessionHeaderWrap: { marginBottom: '40px' },
-    sessionBadge: { display: 'inline-block', backgroundColor: '#E8EBFF', color: '#3A56AF', fontWeight: '700', fontSize: '0.75rem', letterSpacing: '1px', padding: '6px 12px', borderRadius: '20px', marginBottom: '15px' },
-    sessionTitle: { fontSize: '2.5rem', fontWeight: '800', color: '#2D3247', margin: 0 },
-    sessionSubtitle: { fontSize: '1.1rem', color: '#9EA5BA', fontWeight: '500', margin: '5px 0 0 0' },
-    
-    // Error
-    error: { color: 'red', fontWeight: 'bold' },
-    
-    // Timer Circular master
-    timerVisualSection: { position: 'relative', width: '200px', height: '200px', marginBottom: '40px' },
-    timerSvg: { transform: 'rotate(-90deg)' },
-    timerTextContainer: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' },
-    timerTime: { fontSize: '4rem', fontWeight: 'bold', color: '#2D3247' },
-    timerStatus: { fontSize: '0.85rem', color: '#9EA5BA', fontWeight: '600', letterSpacing: '1px' },
-    
-    // Controles master
-    controlsSectionMASTER: { marginBottom: '80px', width: '100%', display: 'flex', justifyContent: 'center' },
-    controlsRowmaster: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '30px' },
-    roundIconBtn: { width: '50px', height: '50px', borderRadius: '50%', backgroundColor: 'white', border: '1px solid #E8EBFF', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1.3rem', color: '#9EA5BA', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' },
-    mainPauseBtnMASTER: { width: '65px', height: '65px', borderRadius: '50%', backgroundColor: '#3A56AF', border: 'none', color: 'white', fontSize: '1.5rem', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 10px rgba(58, 86, 175, 0.3)' },
-    
-    // Frase / Footer
-    quoteFooterSection: { textAlign: 'center', maxWidth: '500px', marginTop: 'auto', padding: '0 20px' },
-    quoteText: { fontStyle: 'italic', fontSize: '1.1rem', color: '#9EA5BA', lineHeight: '1.6', margin: '0 0 10px 0' },
-    quoteSource: { fontSize: '0.75rem', color: '#9EA5BA', fontWeight: '700', letterSpacing: '1px', opacity: 0.6 }
+    // Historial
+    historySection: { width: '100%', maxWidth: '500px', marginBottom: '40px' },
+    historyTitle: { fontSize: '1.1rem', fontWeight: '700', color: '#2D3247', marginBottom: '15px', paddingLeft: '5px' },
+    historyListContainerInline: { maxHeight: '220px', overflowY: 'auto', paddingRight: '5px' },
+    emptyHistory: { textAlign: 'center', color: '#9EA5BA', fontStyle: 'italic', padding: '20px 0', backgroundColor: 'transparent' },
+    historyCard: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'white', padding: '15px', borderRadius: '15px', marginBottom: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.02)', border: '1px solid #F0F3FF' },
+    historyInfo: { display: 'flex', flexDirection: 'column', gap: '8px' },
+    historyDate: { fontSize: '0.9rem', fontWeight: '700', color: '#2D3247', margin: 0 },
+    historyTimes: { display: 'flex', gap: '10px' },
+    timeBadgeFocus: { backgroundColor: '#F0F3FF', color: '#3A56AF', padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: '700' },
+    timeBadgeBreak: { backgroundColor: '#E5F6ED', color: '#219653', padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: '700' },
+    deleteBtn: { background: 'transparent', border: 'none', color: '#FF4D4D', fontSize: '1.1rem', cursor: 'pointer', padding: '8px', transition: 'transform 0.2s', opacity: 0.7 },
+
+    quoteSection: { textAlign: 'center', marginTop: 'auto', paddingTop: '20px' },
+    quoteLine: { width: '40px', height: '2px', backgroundColor: '#E8EBFF', margin: '0 auto 20px auto' },
+    quoteText: { fontStyle: 'italic', color: '#9EA5BA', fontSize: '1.05rem', maxWidth: '450px', margin: '0 auto 10px auto', lineHeight: '1.6' },
+    quoteAuthor: { fontSize: '0.75rem', fontWeight: '800', color: '#9EA5BA', letterSpacing: '2px', opacity: 0.7 },
+
+    // Modales Generales
+    modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(215, 220, 228, 0.85)', backdropFilter: 'blur(3px)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 },
+    modalContent: { backgroundColor: 'white', width: '100%', maxWidth: '450px', borderRadius: '20px', padding: '35px', boxShadow: '0 20px 50px rgba(0,0,0,0.1)', boxSizing: 'border-box' },
+    modalHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '25px' },
+    modalTitle: { fontSize: '1.4rem', fontWeight: '700', color: '#2D3247', margin: '0 0 5px 0', textAlign: 'center' },
+    modalSubtitle: { fontSize: '0.85rem', color: '#9EA5BA', margin: 0 },
+    closeModalBtn: { background: 'none', border: 'none', fontSize: '1.2rem', color: '#9EA5BA', cursor: 'pointer', padding: 0 },
+    presetCard: { backgroundColor: '#F6F8FE', borderRadius: '15px', padding: '20px', marginBottom: '20px' },
+    presetHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
+    presetTitleWrap: { display: 'flex', alignItems: 'center', gap: '8px' },
+    presetIcon: { color: '#3A56AF' },
+    presetName: { fontSize: '0.95rem', fontWeight: '700', color: '#3A56AF' },
+    badgeRecomendado: { backgroundColor: '#D6E0FF', color: '#3A56AF', padding: '4px 10px', borderRadius: '15px', fontSize: '0.65rem', fontWeight: '800' },
+    presetGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' },
+    gridItemCenter: { textAlign: 'center' },
+    ciclosWrap: { gridColumn: 'span 2', textAlign: 'center' },
+    presetLabel: { fontSize: '0.65rem', color: '#9EA5BA', fontWeight: '700', letterSpacing: '1px', margin: '0 0 5px 0' },
+    presetValue: { fontSize: '1.1rem', fontWeight: '700', color: '#2D3247', margin: 0 },
+    inputEdit: { width: '60px', textAlign: 'center', padding: '5px', fontSize: '1rem', fontWeight: '700', color: '#2D3247', border: '1px solid #D6E0FF', borderRadius: '5px', backgroundColor: 'white', outline: 'none' },
+    crearPresetBtn: { width: '100%', backgroundColor: 'transparent', border: '1.5px dashed #D6E0FF', borderRadius: '12px', padding: '15px', color: '#6B728E', fontSize: '0.9rem', fontWeight: '600', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginBottom: '30px' },
+    plusIcon: { backgroundColor: '#6B728E', color: 'white', width: '16px', height: '16px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '0.8rem' },
+    modalActions: { display: 'flex', flexDirection: 'column', gap: '15px' },
+    btnAplicar: { backgroundColor: '#3A56AF', color: 'white', border: 'none', borderRadius: '10px', padding: '14px', fontSize: '1rem', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 15px rgba(58, 86, 175, 0.2)' },
+    btnCancelar: { backgroundColor: 'transparent', color: '#6B728E', border: 'none', fontSize: '0.9rem', fontWeight: '600', cursor: 'pointer' },
+
+    // Estilos Específicos del Modal de Borrado
+    deleteModalContent: { backgroundColor: 'white', width: '100%', maxWidth: '380px', borderRadius: '20px', padding: '35px 25px', boxShadow: '0 20px 50px rgba(0,0,0,0.15)', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', alignItems: 'center' },
+    deleteWarningIcon: { fontSize: '3rem', marginBottom: '15px' },
+    deleteModalActions: { display: 'flex', width: '100%', gap: '15px', marginTop: '10px' },
+    btnCancelarBorrado: { flex: 1, backgroundColor: '#F0F3FF', color: '#3A56AF', border: 'none', borderRadius: '10px', padding: '12px', fontSize: '0.95rem', fontWeight: '700', cursor: 'pointer' },
+    btnConfirmarBorrado: { flex: 1, backgroundColor: '#FF4D4D', color: 'white', border: 'none', borderRadius: '10px', padding: '12px', fontSize: '0.95rem', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 15px rgba(255, 77, 77, 0.2)' }
 };
 
 export default PomodoroTimer;

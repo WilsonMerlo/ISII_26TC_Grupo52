@@ -12,15 +12,18 @@ import PomodoroTimer from './components/PomodoroTimer'
 
 function App() {
   // El estado 'vistaActual' controla qué pantalla se muestra.
-  // Puede ser: 'login', 'registro', 'recuperar', o 'dashboard'
   const [vistaActual, setVistaActual] = useState('login');
 
-  // Función para cambiar de pantalla fácilmente
+  // --- LÓGICA PARA EL AVATAR ---
+  // Leemos el nombre que se guardó en el Login. 
+  // Si todavía no hay nadie logueado, usamos "Usuario" como respaldo.
+  const nombreParaAvatar = localStorage.getItem('nombreUsuario') || "Usuario";
+
   const navegarA = (nuevaVista) => {
     setVistaActual(nuevaVista);
   };
 
-  // Renderizado condicional estilo Switch
+  // Renderizado condicional
   switch (vistaActual) {
     case 'registro':
       return <Registro onNavegar={navegarA} />;
@@ -30,16 +33,14 @@ function App() {
       
     case 'dashboard':
       return (
-        <DashboardLayout>
-          {/* Aquí le pasamos la función para poder cerrar sesión desde el Sidebar si quisieras implementarlo */}
+        /* Pasamos el nombre al DashboardLayout */
+        <DashboardLayout nombreUsuario={nombreParaAvatar}>
           <PomodoroTimer />
         </DashboardLayout>
       );
       
     case 'login':
     default:
-      // A tu vista Login actual, asegúrate de pasarle la prop 'onNavegar' 
-      // y actualizar los onClick de los enlaces "Registrarse" y "¿Olvidaste tu contraseña?"
       return (
         <Login onNavegar={navegarA} />
       );

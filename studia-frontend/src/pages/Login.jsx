@@ -29,7 +29,6 @@ const Login = ({ onNavegar }) => {
             console.log("2. El servidor respondió con status:", response.status);
 
             if (response.ok) {
-                // TRUCO SENIOR: Leemos como texto primero por si Wilson mandó text/plain
                 const textoRespuesta = await response.text();
                 console.log("3. Datos crudos de Wilson:", textoRespuesta);
                 
@@ -38,9 +37,11 @@ const Login = ({ onNavegar }) => {
                 
                 // Guardamos el ID para usarlo luego en la sección de apuntes y pomodoros
                 localStorage.setItem('idUsuario', usuarioLogueado.idUsuario);
+                localStorage.setItem('nombreUsuario', usuarioLogueado.nombre); // AGREGAR ESTA LÍNEA
                 
                 alert(`¡Hola ${usuarioLogueado.nombre}! Entrando a Sanctuary...`);
                 onNavegar('dashboard'); 
+                
             } else if (response.status === 401) {
                 setError("Correo o contraseña incorrectos.");
             } else {
@@ -108,16 +109,6 @@ const Login = ({ onNavegar }) => {
 
                     {/* FILA: Olvidaste contraseña? */}
                     <div style={estilos.filaAdicional}>
-                        <label style={estilos.checkboxLabel}>
-                            <input 
-                                type="checkbox" 
-                                checked={recordarme} 
-                                onChange={(e) => setRecordarme(e.target.checked)}
-                                style={estilos.checkbox}
-                            />
-                            Recordarme
-                        </label>
-                        
                         {/* --- CAMBIO AQUÍ: Convertimos el <a> en un botón funcional --- */}
                         <button 
                             type="button" 
