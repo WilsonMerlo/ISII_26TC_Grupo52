@@ -2,6 +2,8 @@ import React from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
+
+
 // 1. Agregamos 'nombreUsuario' a los parámetros que recibe el componente
 const DashboardLayout = ({ children, nombreUsuario }) => {
     return (

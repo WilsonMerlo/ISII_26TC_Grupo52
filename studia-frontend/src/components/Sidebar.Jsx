@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Sidebar = ({ nombreUsuario = "Usuario" }) => { // 1. Recibimos el nombre
+const Sidebar = ({ nombreUsuario }) => { 
     
     // --- LÓGICA DE INICIALES ---
     const obtenerIniciales = (nombre) => {
@@ -38,10 +38,10 @@ const Sidebar = ({ nombreUsuario = "Usuario" }) => { // 1. Recibimos el nombre
                 <button style={estilos.cerrarSesionBtn}>Cerrar Sesión</button>
                 
                 <div style={estilos.usuarioCard}>
-                    {/* 2. Usamos las iniciales calculadas */}
+                    {/* Imprimimos las iniciales automáticas */}
                     <div style={estilos.userAvatarMini}>{iniciales}</div>
                     <div style={estilos.userTextos}>
-                        {/* 3. Usamos el nombre real */}
+                        {/* Imprimimos la variable del nombre real, NUNCA MÁS un nombre fijo */}
                         <div style={estilos.userNameMini}>{nombreUsuario}</div>
                         <div style={estilos.userModoMini}>Modo Concentración</div>
                     </div>
@@ -51,6 +51,7 @@ const Sidebar = ({ nombreUsuario = "Usuario" }) => { // 1. Recibimos el nombre
     );
 };
 
+// --- ESTILOS RÁPIDOS PARA SIDEBAR ---
 const estilos = {
     sidebar: { width: '250px', backgroundColor: 'white', borderRight: '1px solid #E8EBFF', display: 'flex', flexDirection: 'column', padding: '30px 20px', justifyContent: 'space-between', minHeight: 'calc(100vh - 70px)' },
     nav: { display: 'flex', flexDirection: 'column', gap: '10px' },

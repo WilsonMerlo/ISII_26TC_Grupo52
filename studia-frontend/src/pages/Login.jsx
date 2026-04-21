@@ -30,7 +30,7 @@ const Login = ({ onNavegar }) => {
 
             if (response.ok) {
                 const textoRespuesta = await response.text();
-                console.log("3. Datos crudos de Wilson:", textoRespuesta);
+                console.log("3. Datos crudos:", textoRespuesta);
                 
                 // Lo convertimos a objeto JSON de forma segura
                 const usuarioLogueado = JSON.parse(textoRespuesta);
