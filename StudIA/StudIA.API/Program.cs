@@ -17,7 +17,7 @@ builder.Services.AddScoped<UsuarioService>();
 
 
 
-// --- 1. CONFIGURACIÓN DE CORS (NUEVO) ---
+// --- 1. CONFIGURACIï¿½N DE CORS (NUEVO) ---
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirFrontend", policy =>
@@ -43,7 +43,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 // --- 2. ACTIVAR CORS (NUEVO) ---
 app.UseCors("PermitirFrontend");

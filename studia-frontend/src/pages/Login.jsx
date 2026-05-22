@@ -1,57 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const Login = ({ onNavegar }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [recordarme, setRecordarme] = useState(false);
-    const [error, setError] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [recordarme, setRecordarme] = useState(false);
+  const [error, setError] = useState(null);
 
-    const manejarEnvio = async (e) => {
-        e.preventDefault();
-        setError(null);
+  const manejarEnvio = async (e) => {
+    e.preventDefault();
+    setError(null);
 
-        const credenciales = {
-            correo: email,
-            contrasena: password
-        };
-
-        try {
-            console.log("1. Enviando datos al servidor:", credenciales);
-
-            const response = await fetch("https://localhost:7068/api/Usuarios/login", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(credenciales)
-            });
-
-            console.log("2. El servidor respondió con status:", response.status);
-
-            if (response.ok) {
-                const textoRespuesta = await response.text();
-                console.log("3. Datos crudos:", textoRespuesta);
-
-                const usuarioLogueado = JSON.parse(textoRespuesta);
-
-                localStorage.setItem('idUsuario', usuarioLogueado.idUsuario);
-                localStorage.setItem('nombreUsuario', usuarioLogueado.nombre);
-
-                alert(`¡Hola ${usuarioLogueado.nombre}! Entrando a StudIA...`);
-                onNavegar('dashboard');
-
-            } else if (response.status === 401) {
-                setError("Correo o contraseña incorrectos.");
-            } else {
-                setError(`Error del servidor: ${response.status}`);
-            }
-        } catch (err) {
-            console.error("🚨 EL VERDADERO ERROR ES:", err);
-            setError(`Falla técnica: ${err.message}`);
-        }
+    const credenciales = {
+      correo: email,
+      contrasena: password,
     };
 
-    return (
-        <>
-            <style>{`
+    try {
+      console.log("1. Enviando datos al servidor:", credenciales);
+
+      // --- CAMBIO APLICADO AQUÍ ---
+      const baseUrl = import.meta.env.VITE_API_URL || "https://localhost:7068";
+      const response = await fetch(`${baseUrl}/api/Usuarios/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(credenciales),
+      });
+      // ----------------------------
+
+      console.log("2. El servidor respondió con status:", response.status);
+
+      if (response.ok) {
+        const textoRespuesta = await response.text();
+        console.log("3. Datos crudos:", textoRespuesta);
+
+        const usuarioLogueado = JSON.parse(textoRespuesta);
+
+        localStorage.setItem("idUsuario", usuarioLogueado.idUsuario);
+        localStorage.setItem("nombreUsuario", usuarioLogueado.nombre);
+
+        alert(`¡Hola ${usuarioLogueado.nombre}! Entrando a StudIA...`);
+        onNavegar("dashboard");
+      } else if (response.status === 401) {
+        setError("Correo o contraseña incorrectos.");
+      } else {
+        setError(`Error del servidor: ${response.status}`);
+      }
+    } catch (err) {
+      console.error("🚨 EL VERDADERO ERROR ES:", err);
+      setError(`Falla técnica: ${err.message}`);
+    }
+  };
+
+  return (
+    <>
+      <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
                 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -365,136 +367,200 @@ const Login = ({ onNavegar }) => {
                 }
             `}</style>
 
-            <div className="login-root">
-
-                {/* ── PANEL IZQUIERDO ── */}
-                <aside className="login-left">
-                    <div className="left-top">
-                        <div className="left-logo-row">
-                            <span className="left-logo-icon">S</span>
-                            <h1 className="left-logo-name">StudIA</h1>
-                        </div>
-                        <p className="left-logo-subtitle">Tu espacio para el trabajo profundo</p>
-                    </div>
-
-                    <div className="left-middle">
-                        <div className="left-accent-line" />
-                        <h2 className="left-headline">
-                            Estudia más inteligente,<br />
-                            no más <span>duro</span>.
-                        </h2>
-                        <p className="left-body">
-                            Pomodoros, apuntes inteligentes y seguimiento de progreso,
-                            todo en un solo lugar diseñado para el enfoque profundo.
-                        </p>
-                    </div>
-
-                    <div className="left-bottom">
-                        <div className="left-quote-mark">"</div>
-                        <p className="left-quote-text">
-                            La profundidad de tu enfoque determina el nivel de tu maestría.
-                        </p>
-                        <div className="left-quote-source">Filosofía StudIA</div>
-                    </div>
-                </aside>
-
-                {/* ── PANEL DERECHO ── */}
-                <section className="login-right">
-                    <div className="login-form-wrap">
-                        <div className="form-header">
-                            <h2 className="form-title">Iniciar Sesión</h2>
-                            <p className="form-subtitle">Ingresa tus credenciales para continuar</p>
-                        </div>
-
-                        {error && (
-                            <div className="error-box">
-                                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                                </svg>
-                                <p>{error}</p>
-                            </div>
-                        )}
-
-                        <form onSubmit={manejarEnvio}>
-                            <div className="input-group">
-                                <label className="input-label">Correo Electrónico</label>
-                                <div className="input-wrap">
-                                    <span className="input-icon">
-                                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" width="15" height="15">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.5 5.5A1.5 1.5 0 014 4h12a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0116 16H4a1.5 1.5 0 01-1.5-1.5v-9z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.5 6l7.5 5 7.5-5" />
-                                        </svg>
-                                    </span>
-                                    <input
-                                        type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="nombre@ejemplo.com"
-                                        className="text-input"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="input-group">
-                                <label className="input-label">Contraseña</label>
-                                <div className="input-wrap">
-                                    <span className="input-icon">
-                                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" width="15" height="15">
-                                            <rect x="4" y="9" width="12" height="9" rx="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 9V6.5a3 3 0 016 0V9" />
-                                            <circle cx="10" cy="13.5" r="1" fill="currentColor" stroke="none" />
-                                        </svg>
-                                    </span>
-                                    <input
-                                        type="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        placeholder="••••••••"
-                                        className="text-input"
-                                        required
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="fila-adicional">
-                                <button
-                                    type="button"
-                                    className="olvide-btn"
-                                    onClick={() => onNavegar('recuperar')}
-                                >
-                                    ¿Olvidaste tu contraseña?
-                                </button>
-                            </div>
-
-                            <button type="submit" className="submit-btn">
-                                Iniciar Sesión
-                                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                                    <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                                </svg>
-                            </button>
-                        </form>
-
-                        <div className="registro-seccion">
-                            <p className="registro-texto">¿No tienes una cuenta?</p>
-                            <button
-                                type="button"
-                                className="registro-btn"
-                                onClick={() => onNavegar('registro')}
-                            >
-                                Registrarse
-                            </button>
-                        </div>
-
-                        <div className="right-footer">
-                            <p>© 2026 StudIA. Diseñado para Deep Work. · Política de Privacidad · Términos de Servicio</p>
-                        </div>
-                    </div>
-                </section>
-
+      <div className="login-root">
+        {/* ── PANEL IZQUIERDO ── */}
+        <aside className="login-left">
+          <div className="left-top">
+            <div className="left-logo-row">
+              <span className="left-logo-icon">S</span>
+              <h1 className="left-logo-name">StudIA</h1>
             </div>
-        </>
-    );
+            <p className="left-logo-subtitle">
+              Tu espacio para el trabajo profundo
+            </p>
+          </div>
+
+          <div className="left-middle">
+            <div className="left-accent-line" />
+            <h2 className="left-headline">
+              Estudia más inteligente,
+              <br />
+              no más <span>duro</span>.
+            </h2>
+            <p className="left-body">
+              Pomodoros, apuntes inteligentes y seguimiento de progreso, todo en
+              un solo lugar diseñado para el enfoque profundo.
+            </p>
+          </div>
+
+          <div className="left-bottom">
+            <div className="left-quote-mark">"</div>
+            <p className="left-quote-text">
+              La profundidad de tu enfoque determina el nivel de tu maestría.
+            </p>
+            <div className="left-quote-source">Filosofía StudIA</div>
+          </div>
+        </aside>
+
+        {/* ── PANEL DERECHO ── */}
+        <section className="login-right">
+          <div className="login-form-wrap">
+            <div className="form-header">
+              <h2 className="form-title">Iniciar Sesión</h2>
+              <p className="form-subtitle">
+                Ingresa tus credenciales para continuar
+              </p>
+            </div>
+
+            {error && (
+              <div className="error-box">
+                <svg
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  width="16"
+                  height="16"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <p>{error}</p>
+              </div>
+            )}
+
+            <form onSubmit={manejarEnvio}>
+              <div className="input-group">
+                <label className="input-label">Correo Electrónico</label>
+                <div className="input-wrap">
+                  <span className="input-icon">
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      width="15"
+                      height="15"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.5 5.5A1.5 1.5 0 014 4h12a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0116 16H4a1.5 1.5 0 01-1.5-1.5v-9z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.5 6l7.5 5 7.5-5"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="nombre@ejemplo.com"
+                    className="text-input"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="input-group">
+                <label className="input-label">Contraseña</label>
+                <div className="input-wrap">
+                  <span className="input-icon">
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      width="15"
+                      height="15"
+                    >
+                      <rect
+                        x="4"
+                        y="9"
+                        width="12"
+                        height="9"
+                        rx="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M7 9V6.5a3 3 0 016 0V9"
+                      />
+                      <circle
+                        cx="10"
+                        cy="13.5"
+                        r="1"
+                        fill="currentColor"
+                        stroke="none"
+                      />
+                    </svg>
+                  </span>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="text-input"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="fila-adicional">
+                <button
+                  type="button"
+                  className="olvide-btn"
+                  onClick={() => onNavegar("recuperar")}
+                >
+                  ¿Olvidaste tu contraseña?
+                </button>
+              </div>
+
+              <button type="submit" className="submit-btn">
+                Iniciar Sesión
+                <svg
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  width="16"
+                  height="16"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </form>
+
+            <div className="registro-seccion">
+              <p className="registro-texto">¿No tienes una cuenta?</p>
+              <button
+                type="button"
+                className="registro-btn"
+                onClick={() => onNavegar("registro")}
+              >
+                Registrarse
+              </button>
+            </div>
+
+            <div className="right-footer">
+              <p>
+                © 2026 StudIA. Diseñado para Deep Work. · Política de Privacidad
+                · Términos de Servicio
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
+  );
 };
 
 export default Login;
