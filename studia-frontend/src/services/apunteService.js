@@ -2,9 +2,19 @@ const API_URL = 'https://localhost:7068/api/Apuntes';
 
 export const apunteService = {
     obtenerPorMateria: async (idMateria) => {
-        const response = await fetch(`${API_URL}/materia/${idMateria}`);
-        if (!response.ok) throw new Error('Error al obtener apuntes');
-        return response.json();
+        try {
+            // 👇 ¡Llamamos a la ruta exacta de Wilson! 👇
+            const response = await fetch(`${API_URL}/materia/${idMateria}`);
+            
+            if (!response.ok) throw new Error('Error al obtener los apuntes');
+            
+            const data = await response.json();
+            console.log("🕵️‍♀️ Datos desde la API de Wilson:", data); // Nuestro espía
+            return data;
+        } catch (error) {
+            console.error("Error en apunteService:", error);
+            return [];
+        }
     },
     guardar: async (apunte) => {
         const method = apunte.idApunte ? 'PUT' : 'POST';

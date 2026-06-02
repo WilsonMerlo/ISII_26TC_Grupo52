@@ -51,7 +51,7 @@ const MateriasDashboard = ({ onNavegar }) => {
     return (
         <div style={estilos.contenedorPrincipal}>
             
-            {/* Cabecera: Título + Botón Agregar */}
+            {/* ¡ACÁ VOLVIÓ TU BOTÓN! Cabecera: Título + Botón Agregar */}
             <div style={estilos.cabecera}>
                 <h2 style={estilos.tituloSeccion}>Mis Materias</h2>
                 <button 
@@ -62,7 +62,7 @@ const MateriasDashboard = ({ onNavegar }) => {
                 </button>
             </div>
             
-            {/* Grilla de Tarjetas */}
+            {/* Grilla de Tarjetas Clickeables */}
             <div style={estilos.gridMaterias}>
                 {materias.map((materia, index) => (
                     <div 
@@ -70,13 +70,12 @@ const MateriasDashboard = ({ onNavegar }) => {
                         style={{...estilos.tarjeta, cursor: 'pointer'}}
                         onClick={() => onNavegar && onNavegar('apuntes', materia)}
                     >
-                        
-                    <h3 style={estilos.tituloMateria}>
+                        <h3 style={estilos.tituloMateria}>
                             {materia.nombre_materia || materia.nombreMateria}
                         </h3>
                         <p style={estilos.descMateria}>{materia.descripcion}</p>
                         
-                        {/* ACÁ PROTEGEMOS EL BASURERO PARA QUE NO NAVEGUE AL BORRAR */}
+                        {/* El basurero protegido para no navegar por error */}
                         <div style={estilos.footerTarjeta} onClick={(e) => e.stopPropagation()}>
                             <LongPressDelete onConfirmDelete={() => manejarBorrado(materia.id_materia || materia.idMateria)} />
                         </div>
