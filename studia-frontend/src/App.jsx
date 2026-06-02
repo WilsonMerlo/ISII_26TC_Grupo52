@@ -9,6 +9,8 @@ import RecuperarPassword from './pages/RecuperarPassword'
 // ── DASHBOARD & COMPONENTS ──
 import DashboardLayout from './components/DashboardLayout'
 import PomodoroTimer from './components/PomodoroTimer'
+import MateriasDashboard from './pages/MateriasDashboard'
+import EditorApunte from './components/EditorApunte'
 
 /**
  * Main App Component
@@ -44,11 +46,28 @@ function App() {
     case 'recuperar':
       return <RecuperarPassword onNavegar={navegarA} />;
 
+    // 
+    case 'materias':
+      return (
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
+          <MateriasDashboard />
+        </DashboardLayout>
+      );
+
+    // 
+    case 'editor':
+      return (
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
+          <EditorApunte onVolver={() => navegarA('materias')} />
+        </DashboardLayout>
+      );
+
     case 'dashboard':
       return (
         <DashboardLayout 
                         nombreUsuario={nombreParaAvatar}
                         onLogout={manejarCerrarSesion}
+                        onNavegar={navegarA}
                         >
           <PomodoroTimer />
         </DashboardLayout>

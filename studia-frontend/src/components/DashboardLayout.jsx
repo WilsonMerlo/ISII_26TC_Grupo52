@@ -2,12 +2,12 @@ import React from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
-const DashboardLayout = ({ children, nombreUsuario, onLogout }) => {
+const DashboardLayout = ({ children, nombreUsuario, onLogout, onNavegar }) => {
     return (
         <div style={estilos.mainWrap}>
             <Header nombreUsuario={nombreUsuario} />
             <div style={estilos.seccionInferiorWrap}>
-                <Sidebar nombreUsuario={nombreUsuario} onLogout={onLogout} />
+                <Sidebar nombreUsuario={nombreUsuario} onLogout={onLogout} onNavegar={onNavegar} />
                 <main style={estilos.mainContentArea}>
                     {children}
                 </main>

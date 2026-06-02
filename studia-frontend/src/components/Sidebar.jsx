@@ -36,7 +36,8 @@ const IconEstadisticas = () => (
     </svg>
 );
 
-const Sidebar = ({ nombreUsuario = "Usuario", onLogout }) => {
+// 1. Recibimos 'onNavegar' por props
+const Sidebar = ({ nombreUsuario = "Usuario", onLogout, onNavegar }) => {
 
     const obtenerIniciales = (nombre) => {
         if (!nombre) return "U";
@@ -47,11 +48,12 @@ const Sidebar = ({ nombreUsuario = "Usuario", onLogout }) => {
 
     const iniciales = obtenerIniciales(nombreUsuario);
 
+    // 2. Agregamos la propiedad 'vista' a cada ítem para saber a dónde ir
     const menuItems = [
-        { icono: <IconEscritorio />, nombre: 'Escritorio' },
-        { icono: <IconNotas />, nombre: 'Notas' },
-        { icono: <IconEnfoque />, nombre: 'Enfoque', activo: true },
-        { icono: <IconEstadisticas />, nombre: 'Estadísticas' },
+        { icono: <IconEscritorio />, nombre: 'Escritorio', vista: 'materias' },
+        { icono: <IconNotas />, nombre: 'Notas', vista: 'editor' },
+        { icono: <IconEnfoque />, nombre: 'Enfoque', vista: 'dashboard', activo: true },
+        { icono: <IconEstadisticas />, nombre: 'Estadísticas', vista: 'estadisticas' },
     ];
 
     return (
@@ -64,6 +66,12 @@ const Sidebar = ({ nombreUsuario = "Usuario", onLogout }) => {
                             ? { ...estilos.menuItem, ...estilos.itemActivo }
                             : estilos.menuItem
                         }
+                        // 3. Agregamos el evento onClick para navegar
+                        onClick={() => {
+                            if (item.vista && onNavegar) {
+                                onNavegar(item.vista);
+                            }
+                        }}
                     >
                         <span style={item.activo ? estilos.menuIconoActivo : estilos.menuIcono}>
                             {item.icono}
