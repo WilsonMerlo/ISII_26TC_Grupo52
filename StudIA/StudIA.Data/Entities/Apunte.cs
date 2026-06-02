@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 [Table("Apuntes")]
 public class Apunte
@@ -25,7 +26,15 @@ public class Apunte
     [Column("fecha_creacion")]
     public DateTime FechaCreacion { get; set; }
 
+    [Required]
+    [Column("fecha_modificacion")]
+    public DateTime FechaModificacion { get; set; }
+
     // Relaciones
+    [JsonIgnore]
     [ForeignKey("IdMateria")]
-    public Materia Materia { get; set; } = null!;
+    public Materia? Materia { get; set; }
+
+    [JsonIgnore]
+    public ICollection<Pomodoro> Pomodoros { get; set; } = new List<Pomodoro>();
 }

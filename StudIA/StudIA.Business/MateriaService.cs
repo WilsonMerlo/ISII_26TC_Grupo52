@@ -8,18 +8,52 @@ namespace StudIA.Business
     {
         private readonly StudIAContext _context;
 
-        // Inyectamos el contexto de la base de datos (la despensa)
         public MateriaService(StudIAContext context)
         {
             _context = context;
         }
 
-        // Método que el Controlador va a llamar para pedir las materias
         public async Task<IEnumerable<Materia>> ObtenerTodasLasMateriasAsync()
         {
-            var materias = await _context.Materias.ToListAsync();
+            return await _context.Materias.ToListAsync();
+        }
 
-            return materias;
-        }             
+        public async Task<Materia> CrearMateriaAsync(Materia materia)
+        {
+            string nombreOriginal = materia.NombreMateria;
+            int contador = 2;
+
+            while (await _context.Materias.AnyAsync(m => m.IdUsuario == materia.IdUsuario && m.NombreMateria == materia.NombreMateria))
+            {
+                materia.NombreMateria = $"{nombreOriginal} ({contador})";
+                contador++;
+            }
+
+            _context.Materias.Add(materia);
+            await _context.SaveChangesAsync();
+            return materia;
+        }
+
+        public async Task<bool> ActualizarMateriaAsync(int id, Materia materiaActualizada)
+        {
+            var materia = await _context.Materias.FindAsync(id);
+            if (materia == null) return false;
+
+            materia.NombreMateria = materiaActualizada.NombreMateria;
+            materia.Descripcion = materiaActualizada.Descripcion;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> EliminarMateriaAsync(int id)
+        {
+            var materia = await _context.Materias.FindAsync(id);
+            if (materia == null) return false;
+
+            _context.Materias.Remove(materia);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

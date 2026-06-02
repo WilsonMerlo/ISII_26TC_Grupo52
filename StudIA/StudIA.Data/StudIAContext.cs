@@ -23,13 +23,7 @@ public class StudIAContext : DbContext
             .WithMany(u => u.Materias)
             .HasForeignKey(m => m.IdUsuario);
 
-        modelBuilder.Entity<Apunte>()
-            .HasOne(a => a.Materia)
-            .WithMany(m => m.Apuntes)
-            .HasForeignKey(a => a.IdMateria);
-
-        // --- SOLUCIÓN AL ERROR DE CASCADA ---
-        // Evitamos que SQL Server se confunda al borrar un Usuario
+        // --- SOLUCIÓN AL ERROR DE CASCADA ORIGINAL ---
         modelBuilder.Entity<Progreso>()
             .HasOne(p => p.Usuario)
             .WithMany()
@@ -42,6 +36,29 @@ public class StudIAContext : DbContext
             .HasForeignKey(p => p.IdUsuario)
             .OnDelete(DeleteBehavior.Restrict);
         // ------------------------------------
+
+        // --- NUEVAS REGLAS DE NEGOCIO (Sprint 3) ---
+
+        // REGLA 1: Si se elimina un Apunte, los Pomodoros NO se borran. Pasan a NULL.
+        modelBuilder.Entity<Pomodoro>()
+            .HasOne(p => p.Apunte)
+            .WithMany(a => a.Pomodoros)
+            .HasForeignKey(p => p.IdApunte)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        // REGLA 2: Si se elimina una Materia, se borran en cascada sus Apuntes.
+        modelBuilder.Entity<Apunte>()
+            .HasOne(a => a.Materia)
+            .WithMany(m => m.Apuntes)
+            .HasForeignKey(a => a.IdMateria)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // REGLA 3: Si se elimina una Materia, se borran en cascada sus Pomodoros.
+        modelBuilder.Entity<Pomodoro>()
+            .HasOne(p => p.Materia)
+            .WithMany()
+            .HasForeignKey(p => p.IdMateria)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // Seed Data
         modelBuilder.Entity<Usuario>().HasData(

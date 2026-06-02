@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using StudIA.Data.Entities;
 
 [Table("Materias")]
@@ -22,7 +23,10 @@ public class Materia
     public string? Descripcion { get; set; } // Tipo 'text' en SQL mapea a string
 
     // Relaciones
+    [JsonIgnore]
     [ForeignKey("IdUsuario")]
-    public Usuario Usuario { get; set; } = null!;
+    public Usuario? Usuario { get; set; }
+
+    [JsonIgnore]
     public ICollection<Apunte> Apuntes { get; set; } = new List<Apunte>();
 }
