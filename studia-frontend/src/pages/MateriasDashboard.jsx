@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { materiaService } from '../services/materiaService';
 import LongPressDelete from '../components/LongPressDelete';
 
-const MateriasDashboard = () => {
+const MateriasDashboard = ({ onNavegar }) => {
     const [materias, setMaterias] = useState([]);
     const [mostrarModal, setMostrarModal] = useState(false);
     const [nuevaMateria, setNuevaMateria] = useState({ nombre_materia: '', descripcion: '' });
@@ -65,12 +65,19 @@ const MateriasDashboard = () => {
             {/* Grilla de Tarjetas */}
             <div style={estilos.gridMaterias}>
                 {materias.map((materia, index) => (
-                    <div key={materia.id_materia || materia.idMateria || index} style={estilos.tarjeta}>
-                        <h3 style={estilos.tituloMateria}>
+                    <div 
+                        key={materia.id_materia || materia.idMateria || index} 
+                        style={{...estilos.tarjeta, cursor: 'pointer'}}
+                        onClick={() => onNavegar && onNavegar('apuntes', materia)}
+                    >
+                        
+                    <h3 style={estilos.tituloMateria}>
                             {materia.nombre_materia || materia.nombreMateria}
                         </h3>
                         <p style={estilos.descMateria}>{materia.descripcion}</p>
-                        <div style={estilos.footerTarjeta}>
+                        
+                        {/* ACÁ PROTEGEMOS EL BASURERO PARA QUE NO NAVEGUE AL BORRAR */}
+                        <div style={estilos.footerTarjeta} onClick={(e) => e.stopPropagation()}>
                             <LongPressDelete onConfirmDelete={() => manejarBorrado(materia.id_materia || materia.idMateria)} />
                         </div>
                     </div>
