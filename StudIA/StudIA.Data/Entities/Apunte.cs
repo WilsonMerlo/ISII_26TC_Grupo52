@@ -26,9 +26,8 @@ public class Apunte
     [Column("fecha_creacion")]
     public DateTime FechaCreacion { get; set; }
 
-    [Required]
     [Column("fecha_modificacion")]
-    public DateTime FechaModificacion { get; set; }
+    public DateTime? FechaModificacion { get; set; }
 
     // Relaciones
     [JsonIgnore]

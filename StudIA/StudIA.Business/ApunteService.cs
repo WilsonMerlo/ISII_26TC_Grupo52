@@ -24,7 +24,7 @@ namespace StudIA.Business
         public async Task<Apunte> CrearApunteAsync(Apunte apunte)
         {
             apunte.FechaCreacion = DateTime.UtcNow;
-            apunte.FechaModificacion = DateTime.UtcNow;
+            apunte.FechaModificacion = null; // Fuerza el nulo en la creación
 
             _context.Apuntes.Add(apunte);
             await _context.SaveChangesAsync();

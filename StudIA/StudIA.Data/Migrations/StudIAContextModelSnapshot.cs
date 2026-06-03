@@ -40,7 +40,7 @@ namespace StudIA.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("fecha_creacion");
 
-                    b.Property<DateTime>("FechaModificacion")
+                    b.Property<DateTime?>("FechaModificacion")
                         .HasColumnType("datetime2")
                         .HasColumnName("fecha_modificacion");
 
@@ -259,7 +259,8 @@ namespace StudIA.Data.Migrations
                 {
                     b.HasOne("Apunte", "Apunte")
                         .WithMany("Pomodoros")
-                        .HasForeignKey("IdApunte");
+                        .HasForeignKey("IdApunte")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Materia", "Materia")
                         .WithMany()

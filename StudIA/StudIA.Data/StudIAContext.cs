@@ -44,7 +44,7 @@ public class StudIAContext : DbContext
             .HasOne(p => p.Apunte)
             .WithMany(a => a.Pomodoros)
             .HasForeignKey(p => p.IdApunte)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.Restrict);
 
         // REGLA 2: Si se elimina una Materia, se borran en cascada sus Apuntes.
         modelBuilder.Entity<Apunte>()

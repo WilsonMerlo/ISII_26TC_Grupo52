@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StudIA.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class MigracionDiccionarioDatosV2 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,7 +58,8 @@ namespace StudIA.Data.Migrations
                     id_materia = table.Column<int>(type: "int", nullable: false),
                     titulo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     contenido = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    fecha_creacion = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    fecha_creacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    fecha_modificacion = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,7 +120,8 @@ namespace StudIA.Data.Migrations
                         name: "FK_Pomodoros_Apuntes_id_apunte",
                         column: x => x.id_apunte,
                         principalTable: "Apuntes",
-                        principalColumn: "id_apunte");
+                        principalColumn: "id_apunte",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Pomodoros_Materias_id_materia",
                         column: x => x.id_materia,

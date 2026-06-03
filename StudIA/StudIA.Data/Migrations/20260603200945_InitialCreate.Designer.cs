@@ -12,8 +12,8 @@ using StudIA.Data;
 namespace StudIA.Data.Migrations
 {
     [DbContext(typeof(StudIAContext))]
-    [Migration("20260420201231_MigracionDiccionarioDatosV2")]
-    partial class MigracionDiccionarioDatosV2
+    [Migration("20260603200945_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,11 @@ namespace StudIA.Data.Migrations
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2")
                         .HasColumnName("fecha_creacion");
+
+                    b.Property<DateTime?>("FechaModificacion")
+                        .IsRequired()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha_modificacion");
 
                     b.Property<int>("IdMateria")
                         .HasColumnType("int")
@@ -257,8 +262,9 @@ namespace StudIA.Data.Migrations
             modelBuilder.Entity("Pomodoro", b =>
                 {
                     b.HasOne("Apunte", "Apunte")
-                        .WithMany()
-                        .HasForeignKey("IdApunte");
+                        .WithMany("Pomodoros")
+                        .HasForeignKey("IdApunte")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Materia", "Materia")
                         .WithMany()
@@ -296,6 +302,11 @@ namespace StudIA.Data.Migrations
                     b.Navigation("Materia");
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Apunte", b =>
+                {
+                    b.Navigation("Pomodoros");
                 });
 
             modelBuilder.Entity("Materia", b =>

@@ -12,8 +12,8 @@ using StudIA.Data;
 namespace StudIA.Data.Migrations
 {
     [DbContext(typeof(StudIAContext))]
-    [Migration("20260602034038_UpdateApunteYReglasCascada")]
-    partial class UpdateApunteYReglasCascada
+    [Migration("20260603203218_UpdateFechaModificacionDb")]
+    partial class UpdateFechaModificacionDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,7 @@ namespace StudIA.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("fecha_creacion");
 
-                    b.Property<DateTime>("FechaModificacion")
+                    b.Property<DateTime?>("FechaModificacion")
                         .HasColumnType("datetime2")
                         .HasColumnName("fecha_modificacion");
 
@@ -262,7 +262,8 @@ namespace StudIA.Data.Migrations
                 {
                     b.HasOne("Apunte", "Apunte")
                         .WithMany("Pomodoros")
-                        .HasForeignKey("IdApunte");
+                        .HasForeignKey("IdApunte")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Materia", "Materia")
                         .WithMany()
