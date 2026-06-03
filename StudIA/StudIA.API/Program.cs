@@ -34,6 +34,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ApunteService>();
+builder.Services.AddScoped<ProgresoService>();
 
 
 var app = builder.Build();
