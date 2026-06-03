@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; // Estilos base de Quill
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import { apunteService } from '../services/apunteService'; // Asegúrate de que la ruta sea correcta
 
 const VistaEditorApunte = ({ idMateriaActiva = 1, nombreMateria = "Materia Desconocida", onVolver }) => {
