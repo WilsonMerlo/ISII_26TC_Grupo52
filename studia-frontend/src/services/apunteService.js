@@ -27,5 +27,37 @@ export const apunteService = {
         });
         if (!response.ok) throw new Error('Error al guardar el apunte');
         return response.json();
+    },
+
+    actualizar: async (id, apunteActualizado) => {
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(apunteActualizado)
+            });
+            return response.ok;
+        } catch (error) {
+            console.error("Error actualizando apunte:", error);
+            return false;
+        }
+    },
+
+    obtenerPorId: async (idApunte) => {
+        try {
+            // Llama al endpoint de Wilson para buscar 1 solo apunte
+            const response = await fetch(`${API_URL}/${idApunte}`);
+            
+            if (!response.ok) throw new Error('Error al obtener el apunte');
+            
+            return await response.json();
+        } catch (error) {
+            console.error("Error obteniendo el apunte por ID:", error);
+            return null;
+        }
     }
+
+
 };

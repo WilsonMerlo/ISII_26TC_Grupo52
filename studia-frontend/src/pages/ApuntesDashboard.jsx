@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apunteService } from '../services/apunteService';
 
-const ApuntesDashboard = ({ materia, onVolver, onNuevoApunte }) => {
+const ApuntesDashboard = ({ materia, onVolver, onNuevoApunte, onVerApunte }) => {
     const [apuntes, setApuntes] = useState([]);
     const nombreMateria = materia?.nombre_materia || materia?.nombreMateria || "Materia desconocida";
 
@@ -44,10 +44,22 @@ const ApuntesDashboard = ({ materia, onVolver, onNuevoApunte }) => {
                     </div>
                 ) : (
                     apuntes.map((apunte, index) => (
-                        <div key={apunte.id_apunte || index} style={estilos.tarjetaApunte}>
+                        <div 
+                            key={apunte.id_apunte || apunte.idApunte || index} 
+                            style={estilos.tarjetaApunte}
+                            // 👇 AQUÍ ESTÁ EL CLIC CONECTADO AL ESPÍA 👇
+                            onClick={() => {
+                                console.log("Clic detectado en apunte:", apunte.titulo);
+                                if (onVerApunte) {
+                                    onVerApunte(apunte);
+                                } else {
+                                    console.error("Error: onVerApunte no está conectado desde App.jsx");
+                                }
+                            }}
+                        >
                             <h3 style={estilos.tituloApunte}>{apunte.titulo || "Sin título"}</h3>
                             <div style={estilos.fecha}>
-                                📅 {new Date(apunte.fecha_creacion).toLocaleDateString()}
+                                📅 {apunte.fecha_creacion ? new Date(apunte.fecha_creacion).toLocaleDateString() : 'Sin fecha'}
                             </div>
                         </div>
                     ))
@@ -64,7 +76,6 @@ const estilos = {
     btnVolver: { background: 'none', border: 'none', color: '#6A7185', cursor: 'pointer', textAlign: 'left', fontSize: '0.9rem', padding: 0 },
     tituloSeccion: { color: '#2D3247', margin: 0, fontSize: '1.8rem' },
     btnAgregar: { backgroundColor: '#3A56AF', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' },
-    
     gridApuntes: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' },
     tarjetaApunte: { backgroundColor: 'white', borderRadius: '12px', padding: '20px', border: '1px solid #E8EBFF', boxShadow: '0 2px 8px rgba(58, 86, 175, 0.04)', cursor: 'pointer', transition: 'transform 0.2s' },
     tituloApunte: { fontSize: '1.2rem', color: '#2D3247', margin: '0 0 15px 0' },

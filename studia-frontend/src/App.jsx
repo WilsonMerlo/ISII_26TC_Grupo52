@@ -11,40 +11,34 @@ import DashboardLayout from './components/DashboardLayout'
 import PomodoroTimer from './components/PomodoroTimer'
 import MateriasDashboard from './pages/MateriasDashboard'
 import EditorApunte from './components/EditorApunte'
-import ApuntesDashboard from './pages/ApuntesDashboard';
+import ApuntesDashboard from './pages/ApuntesDashboard'
+import VerApunte from './pages/VerApunte'
 
-/**
- * Main App Component
- * 
- * Manages global navigation and authentication state.
- * Renders different views based on 'vistaActual' state.
- */
 function App() {
   const [vistaActual, setVistaActual] = useState('login');
-
+  
+  // Memorias de la aplicación
   const [materiaActiva, setMateriaActiva] = useState(null);
+  const [apunteActivo, setApunteActivo] = useState(null);
 
-  // ── Get user info from localStorage (set during login) ──
   const nombreParaAvatar = localStorage.getItem('nombreUsuario') || 'Usuario';
 
-  // ── Navigation handler ──
+  // Función maestra de navegación
   const navegarA = (nuevaVista, datosExtra = null) => {
-    if (datosExtra) {
+    if (nuevaVista === 'apuntes' || nuevaVista === 'editor') {
         setMateriaActiva(datosExtra);
+    } else if (nuevaVista === 'verApunte') {
+        setApunteActivo(datosExtra);
     }
     setVistaActual(nuevaVista);
   };
 
   const manejarCerrarSesion = () => {
-      // Borramos los datos del usuario de la memoria
       localStorage.removeItem('idUsuario');
       localStorage.removeItem('nombreUsuario');
-      // Lo mandamos al login
       setVistaActual('login');
-    };
+  };
 
-
-  // ── Conditional rendering based on current view ──
   switch (vistaActual) {
     case 'registro':
       return <Registro onNavegar={navegarA} />;
@@ -52,16 +46,13 @@ function App() {
     case 'recuperar':
       return <RecuperarPassword onNavegar={navegarA} />;
 
-    // 
     case 'materias':
       return (
         <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
-          {/* Le pasamos onNavegar al Dashboard de materias para que los clics funcionen */}
           <MateriasDashboard onNavegar={navegarA} />
         </DashboardLayout>
       );
 
-    //
     case 'apuntes':
       return (
         <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
@@ -69,6 +60,7 @@ function App() {
              materia={materiaActiva} 
              onVolver={() => navegarA('materias')} 
              onNuevoApunte={() => navegarA('editor', materiaActiva)} 
+             onVerApunte={(apunte) => navegarA('verApunte', apunte)} 
           />
         </DashboardLayout>
       );
@@ -79,18 +71,25 @@ function App() {
           <EditorApunte 
              idMateriaActiva={materiaActiva?.id_materia || materiaActiva?.idMateria}
              nombreMateria={materiaActiva?.nombre_materia || materiaActiva?.nombreMateria}
-             onVolver={() => navegarA('apuntes')} 
+             onVolver={() => navegarA('apuntes', materiaActiva)} 
+          />
+        </DashboardLayout>
+      );
+
+    case 'verApunte':
+      return (
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
+          <VerApunte 
+            // 👇 CAMBIAMOS ESTA LÍNEA PARA PASAR EL OBJETO EN MEMORIA 👇
+            apunteSeleccionado={apunteActivo}
+            onVolver={() => navegarA('apuntes', materiaActiva)} 
           />
         </DashboardLayout>
       );
 
     case 'dashboard':
       return (
-        <DashboardLayout 
-                        nombreUsuario={nombreParaAvatar}
-                        onLogout={manejarCerrarSesion}
-                        onNavegar={navegarA}
-                        >
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
           <PomodoroTimer />
         </DashboardLayout>
       );
