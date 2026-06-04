@@ -145,51 +145,44 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
     // -----------------------------------------------------------------------
     // Handlers de toolbar
     // -----------------------------------------------------------------------
+    
+    const aplicarEstiloASeleccion = (propiedad, valor) => {
+        const editor = editorRef.current;
+        const selection = window.getSelection();
+
+        if (!editor || !selection || selection.rangeCount === 0) return;
+
+        const range = selection.getRangeAt(0);
+        const contenedor = range.commonAncestorContainer;
+
+        if (contenedor !== editor && !editor.contains(contenedor)) return;
+
+        if (range.collapsed) return;
+
+        const contenidoSeleccionado = range.extractContents();
+
+        const span = document.createElement('span');
+        span.style.setProperty(propiedad, valor, 'important');
+        span.appendChild(contenidoSeleccionado);
+
+        range.insertNode(span);
+
+        const nuevoRange = document.createRange();
+        nuevoRange.selectNodeContents(span);
+
+        selection.removeAllRanges();
+        selection.addRange(nuevoRange);
+
+        setHayCambiosSinGuardar(true);
+    };
+    
     const handleBold = () => {
         editorRef.current?.focus();
         execCmd('bold');
     };
 
     const handleItalic = () => {
-        const editor = editorRef.current;
-        if (!editor) return;
-        editor.focus();
-
-        const sel = window.getSelection();
-        if (!sel || sel.rangeCount === 0) return;
-
-        // Intentar con execCommand primero; si el texto ya tiene font-style forzado usamos insertHTML
-        const alreadyItalic = document.queryCommandState('italic');
-        if (alreadyItalic) {
-            // Quitar cursiva
-            execCmd('italic');
-        } else {
-            // Aplicar: primero intentar execCommand nativo
-            execCmd('italic');
-            // Verificar que se aplicó revisando el computed style del nodo seleccionado
-            const node = sel.anchorNode?.parentElement;
-            if (node) {
-                const computed = window.getComputedStyle(node).fontStyle;
-                if (computed !== 'italic' && computed !== 'oblique') {
-                    // execCommand no funcionó visualmente → usar insertHTML con <em> y estilo inline
-                    document.execCommand('undo', false, null);
-                    const range = sel.getRangeAt(0);
-                    const selectedText = range.toString();
-                    if (selectedText) {
-                        range.deleteContents();
-                        const em = document.createElement('em');
-                        em.style.fontStyle = 'italic';
-                        em.textContent = selectedText;
-                        range.insertNode(em);
-                        // Mover cursor al final del em
-                        range.setStartAfter(em);
-                        range.setEndAfter(em);
-                        sel.removeAllRanges();
-                        sel.addRange(range);
-                    }
-                }
-            }
-        }
+        aplicarEstiloASeleccion('font-style', 'italic');
     };
 
     const handleUnderline = () => {
@@ -429,7 +422,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
                             [&_ol]:list-decimal [&_ol]:pl-6
                             empty:before:content-[attr(data-placeholder)] empty:before:text-slate-400
                         "
-                        style={{ caretColor: '#3A5A82', fontStyle: 'normal' }}
+                        style={{ caretColor: '#3A5A82' }}
                     />
 
                 </div>
