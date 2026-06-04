@@ -1,6 +1,7 @@
+import React, { useState } from 'react';
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import { apunteService } from '../services/apunteService'; // Asegúrate de que la ruta sea correcta
+import { apunteService } from '../services/apunteService';
 
 const VistaEditorApunte = ({ idMateriaActiva = 1, nombreMateria = "Materia Desconocida", onVolver }) => {
     const [titulo, setTitulo] = useState('');
