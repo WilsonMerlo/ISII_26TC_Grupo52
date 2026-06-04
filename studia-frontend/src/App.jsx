@@ -16,30 +16,51 @@ import VerApunte from './pages/VerApunte'
 
 function App() {
   const [vistaActual, setVistaActual] = useState(() => {
-      const idUsuario = localStorage.getItem('idUsuario');
-      return idUsuario ? 'dashboard' : 'login';
+    const idUsuario = localStorage.getItem('idUsuario');
+      if (!idUsuario) return 'login';
+      return localStorage.getItem('vistaActual') || 'dashboard';
   });
   
   // Memorias de la aplicación
-  const [materiaActiva, setMateriaActiva] = useState(null);
-  const [apunteActivo, setApunteActivo] = useState(null);
+  const [materiaActiva, setMateriaActiva] = useState(() => {
+      const materiaGuardada = localStorage.getItem('materiaActiva');
+      return materiaGuardada ? JSON.parse(materiaGuardada) : null;
+  });
+
+  const [apunteActivo, setApunteActivo] = useState(() => {
+      const apunteGuardado = localStorage.getItem('apunteActivo');
+      return apunteGuardado ? JSON.parse(apunteGuardado) : null;
+  });
 
   const nombreParaAvatar = localStorage.getItem('nombreUsuario') || 'Usuario';
 
   // Función maestra de navegación
   const navegarA = (nuevaVista, datosExtra = null) => {
+    localStorage.setItem('vistaActual', nuevaVista);
+
     if (nuevaVista === 'apuntes' || nuevaVista === 'editor') {
         setMateriaActiva(datosExtra);
-    } else if (nuevaVista === 'verApunte') {
-        setApunteActivo(datosExtra);
+        localStorage.setItem('materiaActiva', JSON.stringify(datosExtra));
     }
+
+    if (nuevaVista === 'verApunte') {
+        setApunteActivo(datosExtra);
+        localStorage.setItem('apunteActivo', JSON.stringify(datosExtra));
+    }
+
     setVistaActual(nuevaVista);
   };
 
   const manejarCerrarSesion = () => {
       localStorage.removeItem('idUsuario');
       localStorage.removeItem('nombreUsuario');
+      localStorage.removeItem('vistaActual');
+      localStorage.removeItem('materiaActiva');
+      localStorage.removeItem('apunteActivo');
+
       setVistaActual('login');
+      setMateriaActiva(null);
+      setApunteActivo(null);
   };
 
   switch (vistaActual) {
