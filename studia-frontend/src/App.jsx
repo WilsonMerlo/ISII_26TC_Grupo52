@@ -81,10 +81,9 @@ function App() {
       return (
         <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
           <ApuntesDashboard 
-             materia={materiaActiva} 
-             onVolver={() => navegarA('materias')} 
-             onNuevoApunte={() => navegarA('editor', materiaActiva)} 
-             onVerApunte={(apunte) => navegarA('verApunte', apunte)} 
+            materia={materiaActiva} 
+            onVolver={() => navegarA('materias')} 
+            onVerApunte={(apunte) => navegarA('verApunte', apunte)} 
           />
         </DashboardLayout>
       );
