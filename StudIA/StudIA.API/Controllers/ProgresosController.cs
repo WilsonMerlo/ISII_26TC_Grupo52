@@ -25,7 +25,7 @@ namespace StudIA.API.Controllers
         [HttpPost("actualizar")]
         public async Task<ActionResult<Progreso>> ActualizarProgreso([FromBody] UpdateProgresoRequest request)
         {
-            var progreso = await _progresoService.ActualizarProgresoAsync(request.IdUsuario, request.IdMateria, request.AvancePorcentual);
+            var progreso = await _progresoService.ActualizarProgresoAsync(request.IdUsuario, request.IdMateria, request.SegundosAcumulados);
             return Ok(progreso);
         }
     }
@@ -34,6 +34,6 @@ namespace StudIA.API.Controllers
     {
         public int IdUsuario { get; set; }
         public int IdMateria { get; set; }
-        public float AvancePorcentual { get; set; }
+        public int SegundosAcumulados { get; set; }
     }
 }

@@ -18,8 +18,8 @@ public class Progreso
     public int IdMateria { get; set; }
 
     [Required]
-    [Column("avance_porcentual")]
-    public float AvancePorcentual { get; set; }
+    [Column("segundos_acumulados")]
+    public int SegundosAcumulados { get; set; }
 
     // Relaciones
     [ForeignKey("IdUsuario")]
