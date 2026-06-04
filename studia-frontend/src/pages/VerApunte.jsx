@@ -95,11 +95,34 @@ const Toast = ({ status }) => {
 // ---------------------------------------------------------------------------
 const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
     const editorRef = useRef(null);
+    const seleccionEditorRef = useRef(null);
     const activeFormats = useFormatState(editorRef);
 
     const [titulo, setTitulo] = useState('');
     const [saveStatus, setSaveStatus] = useState(null); // null | 'loading' | 'success' | 'error'
     const [hayCambiosSinGuardar, setHayCambiosSinGuardar] = useState(false);
+
+    const obtenerRangoSeleccionEditor = () => {
+        const editor = editorRef.current;
+        const selection = window.getSelection();
+
+        if (!editor || !selection || selection.rangeCount === 0) return null;
+
+        const range = selection.getRangeAt(0);
+        const empiezaDentro = editor.contains(range.startContainer);
+        const terminaDentro = editor.contains(range.endContainer);
+
+        if (!empiezaDentro || !terminaDentro) return null;
+
+        return range.cloneRange();
+    };
+
+    const guardarSeleccionEditor = () => {
+        const range = obtenerRangoSeleccionEditor();
+        if (range) {
+            seleccionEditorRef.current = range;
+        }
+    };
 
     // Cargar datos al montar o cuando cambia el apunte
     useEffect(() => {
@@ -142,29 +165,99 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
 
 
 
+    useEffect(() => {
+        const guardarSeleccionGlobal = () => {
+            guardarSeleccionEditor();
+        };
+
+        document.addEventListener('selectionchange', guardarSeleccionGlobal);
+
+        return () => {
+            document.removeEventListener('selectionchange', guardarSeleccionGlobal);
+        };
+    }, []);
+
     // -----------------------------------------------------------------------
     // Handlers de toolbar
     // -----------------------------------------------------------------------
-    
-    const aplicarEstiloASeleccion = (propiedad, valor) => {
+    const handleBold = () => {
+        editorRef.current?.focus();
+        execCmd('bold');
+        setHayCambiosSinGuardar(true);
+    };
+
+    const seleccionEstaEnCursiva = (range) => {
+        const nodo = range.startContainer;
+        const elemento = nodo.nodeType === Node.TEXT_NODE ? nodo.parentElement : nodo;
+
+        if (!elemento || !editorRef.current?.contains(elemento)) return false;
+
+        const estilo = window.getComputedStyle(elemento);
+        return estilo.fontStyle === 'italic' || estilo.fontStyle === 'oblique';
+    };
+
+    const limpiarFontStyleDelFragmento = (fragmento) => {
+        // Sacar font-style inline de cualquier elemento seleccionado
+        fragmento.querySelectorAll?.('[style]').forEach((el) => {
+            el.style.removeProperty('font-style');
+
+            if (!el.getAttribute('style')) {
+                el.removeAttribute('style');
+            }
+        });
+
+        // Convertir <i> y <em> en <span> para que no sigan forzando cursiva
+        fragmento.querySelectorAll?.('i, em').forEach((el) => {
+            const span = document.createElement('span');
+
+            while (el.firstChild) {
+                span.appendChild(el.firstChild);
+            }
+
+            el.replaceWith(span);
+        });
+    };
+
+    const handleItalic = () => {
         const editor = editorRef.current;
         const selection = window.getSelection();
 
-        if (!editor || !selection || selection.rangeCount === 0) return;
+        if (!editor || !selection) return;
 
-        const range = selection.getRangeAt(0);
-        const contenedor = range.commonAncestorContainer;
+        let range = obtenerRangoSeleccionEditor();
 
-        if (contenedor !== editor && !editor.contains(contenedor)) return;
+        if (!range && seleccionEditorRef.current) {
+            range = seleccionEditorRef.current.cloneRange();
+        }
 
-        if (range.collapsed) return;
+        if (!range) return;
 
+        editor.focus({ preventScroll: true });
+
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        if (range.collapsed) {
+            execCmd('italic');
+            seleccionEditorRef.current = range.cloneRange();
+            setHayCambiosSinGuardar(true);
+            return;
+        }
+
+        const yaEstaEnCursiva = seleccionEstaEnCursiva(range);
         const contenidoSeleccionado = range.extractContents();
 
-        const span = document.createElement('span');
-        span.style.setProperty(propiedad, valor, 'important');
-        span.appendChild(contenidoSeleccionado);
+        limpiarFontStyleDelFragmento(contenidoSeleccionado);
 
+        const span = document.createElement('span');
+
+        span.style.setProperty(
+            'font-style',
+            yaEstaEnCursiva ? 'normal' : 'italic',
+            'important'
+        );
+
+        span.appendChild(contenidoSeleccionado);
         range.insertNode(span);
 
         const nuevoRange = document.createRange();
@@ -173,31 +266,27 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
         selection.removeAllRanges();
         selection.addRange(nuevoRange);
 
-        setHayCambiosSinGuardar(true);
-    };
-    
-    const handleBold = () => {
-        editorRef.current?.focus();
-        execCmd('bold');
-    };
+        seleccionEditorRef.current = nuevoRange.cloneRange();
 
-    const handleItalic = () => {
-        aplicarEstiloASeleccion('font-style', 'italic');
+        setHayCambiosSinGuardar(true);
     };
 
     const handleUnderline = () => {
         editorRef.current?.focus();
         execCmd('underline');
+        setHayCambiosSinGuardar(true);
     };
 
     const handleBulletList = () => {
         editorRef.current?.focus();
         execCmd('insertUnorderedList');
+        setHayCambiosSinGuardar(true);
     };
 
     const handleNumberedList = () => {
         editorRef.current?.focus();
         execCmd('insertOrderedList');
+        setHayCambiosSinGuardar(true);
     };
 
     const confirmarSalidaSinGuardar = () => {
@@ -357,7 +446,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
                                 <span className="material-symbols-outlined text-[20px]">format_bold</span>
                             </button>
                             <button
-                                onMouseDown={(e) => { e.preventDefault(); handleItalic(); }}
+                                onMouseDown={(e) => { e.preventDefault(); guardarSeleccionEditor(); handleItalic(); }}
                                 className={toolbarBtnClass(activeFormats.italic)}
                                 title="Cursiva"
                             >
@@ -406,7 +495,13 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
                         contentEditable
                         suppressContentEditableWarning
                         spellCheck
-                        onInput={handleCambioContenido}
+                        onMouseUp={guardarSeleccionEditor}
+                        onKeyUp={guardarSeleccionEditor}
+                        onBlur={guardarSeleccionEditor}
+                        onInput={(e) => {
+                            guardarSeleccionEditor();
+                            handleCambioContenido(e);
+                        }}
                         data-placeholder="Empezá a escribir tu apunte…"
                         className="
                             prose prose-slate max-w-none text-lg text-[#465365] leading-relaxed font-body
