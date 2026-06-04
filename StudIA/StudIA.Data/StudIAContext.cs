@@ -60,6 +60,12 @@ public class StudIAContext : DbContext
             .HasForeignKey(p => p.IdMateria)
             .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Progreso>()
+            .HasOne(p => p.Materia)
+            .WithMany() 
+            .HasForeignKey(p => p.IdMateria)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // Seed Data
         modelBuilder.Entity<Usuario>().HasData(
             new Usuario { IdUsuario = 1, Nombre = "Wilson Merlo", Correo = "wilson@test.com", Contrasena = "1234" }
@@ -70,5 +76,7 @@ public class StudIAContext : DbContext
             new Materia { IdMateria = 2, IdUsuario = 1, NombreMateria = "Cálculo", Descripcion = "Preparación de finales" },
             new Materia { IdMateria = 3, IdUsuario = 1, NombreMateria = "Estadística", Descripcion = "Modelos probabilísticos" }
         );
+        
+
     }
 }
