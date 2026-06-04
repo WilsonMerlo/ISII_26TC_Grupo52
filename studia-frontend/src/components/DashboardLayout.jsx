@@ -28,13 +28,15 @@ const estilos = {
     seccionInferiorWrap: {
         display: 'flex',
         flex: 1,
+        minHeight: 0,        // permite que los hijos flex se encojan
+        overflow: 'hidden',
     },
     mainContentArea: {
         flex: 1,
+        minHeight: 0,
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        overflowY: 'auto',
+        flexDirection: 'column', // los hijos se apilan en columna y pueden ocupar el 100%
+        overflow: 'hidden',      // el scroll lo maneja cada vista internamente
     },
 };
 
