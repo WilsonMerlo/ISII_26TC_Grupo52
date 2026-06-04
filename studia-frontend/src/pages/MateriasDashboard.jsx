@@ -5,7 +5,10 @@ import LongPressDelete from '../components/LongPressDelete';
 const MateriasDashboard = ({ onNavegar }) => {
     const [materias, setMaterias] = useState([]);
     const [mostrarModal, setMostrarModal] = useState(false);
-    const [nuevaMateria, setNuevaMateria] = useState({ nombre_materia: '', descripcion: '' });
+    const [nuevaMateria, setNuevaMateria] = useState({
+        nombreMateria: '',
+        descripcion: ''
+    });
 
     useEffect(() => {
         cargarMaterias();
@@ -22,19 +25,37 @@ const MateriasDashboard = ({ onNavegar }) => {
 
     const manejarCrearMateria = async (e) => {
         e.preventDefault();
+
+        if (!nuevaMateria.nombreMateria.trim()) {
+            alert("El nombre de la materia es obligatorio.");
+            return;
+        }
+
         try {
-            // Enviamos el objeto con los nombres exactos de la BD de Wilson
-            // IMPORTANTE: id_usuario suele ser el del usuario logueado (ej: 1)
+            const idUsuario = Number(localStorage.getItem('idUsuario'));
+
+            if (!idUsuario) {
+                alert("No se encontró el usuario logueado. Iniciá sesión nuevamente.");
+                return;
+            }
+
             const materiaAGuardar = {
-                ...nuevaMateria,
-                id_usuario: localStorage.getItem('idUsuario') || 1 
+                idUsuario,
+                nombreMateria: nuevaMateria.nombreMateria.trim(),
+                descripcion: nuevaMateria.descripcion.trim()
             };
-            
+
             await materiaService.crear(materiaAGuardar);
-            setMostrarModal(false); // Cerramos el formulario
-            setNuevaMateria({ nombre_materia: '', descripcion: '' }); // Limpiamos
-            cargarMaterias(); // Recargamos la lista automáticamente
+
+            setMostrarModal(false);
+            setNuevaMateria({
+                nombreMateria: '',
+                descripcion: ''
+            });
+
+            await cargarMaterias();
         } catch (error) {
+            console.error("Error al crear materia:", error);
             alert("Error al crear la materia. Revisa la conexión con el servidor.");
         }
     };
@@ -42,42 +63,55 @@ const MateriasDashboard = ({ onNavegar }) => {
     const manejarBorrado = async (id) => {
         try {
             await materiaService.eliminar(id);
-            setMaterias(materias.filter(m => (m.id_materia || m.idMateria) !== id));
+            setMaterias((prevMaterias) =>
+                prevMaterias.filter((m) => (m.id_materia || m.idMateria) !== id)
+            );
         } catch (error) {
+            console.error("Error al borrar materia:", error);
             alert("Hubo un problema al borrar la materia.");
         }
     };
 
     return (
         <div style={estilos.contenedorPrincipal}>
-            
-            {/* ¡ACÁ VOLVIÓ TU BOTÓN! Cabecera: Título + Botón Agregar */}
+
+            {/* Cabecera: Título + Botón Agregar */}
             <div style={estilos.cabecera}>
                 <h2 style={estilos.tituloSeccion}>Mis Materias</h2>
-                <button 
-                    style={estilos.btnAgregar} 
+                <button
+                    style={estilos.btnAgregar}
                     onClick={() => setMostrarModal(true)}
                 >
                     <span style={estilos.iconoPlus}>+</span> Agregar Materia
                 </button>
             </div>
-            
+
             {/* Grilla de Tarjetas Clickeables */}
             <div style={estilos.gridMaterias}>
                 {materias.map((materia, index) => (
-                    <div 
-                        key={materia.id_materia || materia.idMateria || index} 
-                        style={{...estilos.tarjeta, cursor: 'pointer'}}
+                    <div
+                        key={materia.id_materia || materia.idMateria || index}
+                        style={{ ...estilos.tarjeta, cursor: 'pointer' }}
                         onClick={() => onNavegar && onNavegar('apuntes', materia)}
                     >
                         <h3 style={estilos.tituloMateria}>
                             {materia.nombre_materia || materia.nombreMateria}
                         </h3>
-                        <p style={estilos.descMateria}>{materia.descripcion}</p>
-                        
+
+                        <p style={estilos.descMateria}>
+                            {materia.descripcion}
+                        </p>
+
                         {/* El basurero protegido para no navegar por error */}
-                        <div style={estilos.footerTarjeta} onClick={(e) => e.stopPropagation()}>
-                            <LongPressDelete onConfirmDelete={() => manejarBorrado(materia.id_materia || materia.idMateria)} />
+                        <div
+                            style={estilos.footerTarjeta}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <LongPressDelete
+                                onConfirmDelete={() =>
+                                    manejarBorrado(materia.id_materia || materia.idMateria)
+                                }
+                            />
                         </div>
                     </div>
                 ))}
@@ -87,25 +121,49 @@ const MateriasDashboard = ({ onNavegar }) => {
             {mostrarModal && (
                 <div style={estilos.overlayModal}>
                     <div style={estilos.modal}>
-                        <h3 style={{marginBottom: '20px', color: '#2D3247'}}>Nueva Materia</h3>
+                        <h3 style={{ marginBottom: '20px', color: '#2D3247' }}>
+                            Nueva Materia
+                        </h3>
+
                         <form onSubmit={manejarCrearMateria} style={estilos.formulario}>
-                            <input 
-                                type="text" 
-                                placeholder="Nombre de la materia (ej: Cálculo)" 
+                            <input
+                                type="text"
+                                placeholder="Nombre de la materia (ej: Cálculo)"
                                 required
-                                value={nuevaMateria.nombre_materia}
-                                onChange={(e) => setNuevaMateria({...nuevaMateria, nombre_materia: e.target.value})}
+                                value={nuevaMateria.nombreMateria}
+                                onChange={(e) =>
+                                    setNuevaMateria({
+                                        ...nuevaMateria,
+                                        nombreMateria: e.target.value
+                                    })
+                                }
                                 style={estilos.input}
                             />
-                            <textarea 
-                                placeholder="Breve descripción..." 
+
+                            <textarea
+                                placeholder="Breve descripción..."
                                 value={nuevaMateria.descripcion}
-                                onChange={(e) => setNuevaMateria({...nuevaMateria, descripcion: e.target.value})}
+                                onChange={(e) =>
+                                    setNuevaMateria({
+                                        ...nuevaMateria,
+                                        descripcion: e.target.value
+                                    })
+                                }
                                 style={estilos.textarea}
                             />
+
                             <div style={estilos.botonesForm}>
-                                <button type="button" onClick={() => setMostrarModal(false)} style={estilos.btnCancelar}>Cancelar</button>
-                                <button type="submit" style={estilos.btnGuardar}>Guardar Materia</button>
+                                <button
+                                    type="button"
+                                    onClick={() => setMostrarModal(false)}
+                                    style={estilos.btnCancelar}
+                                >
+                                    Cancelar
+                                </button>
+
+                                <button type="submit" style={estilos.btnGuardar}>
+                                    Guardar Materia
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -116,29 +174,136 @@ const MateriasDashboard = ({ onNavegar }) => {
 };
 
 const estilos = {
-    contenedorPrincipal: { padding: '40px', width: '100%', boxSizing: 'border-box', position: 'relative' },
-    cabecera: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' },
-    tituloSeccion: { color: '#2D3247', margin: 0, fontSize: '1.8rem' },
-    
-    // Botón Agregar
-    btnAgregar: { backgroundColor: '#3A56AF', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '10px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'all 0.2s' },
-    iconoPlus: { fontSize: '1.4rem', lineHeight: '1' },
+    contenedorPrincipal: {
+        padding: '40px',
+        width: '100%',
+        boxSizing: 'border-box',
+        position: 'relative'
+    },
+    cabecera: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '30px'
+    },
+    tituloSeccion: {
+        color: '#2D3247',
+        margin: 0,
+        fontSize: '1.8rem'
+    },
 
-    gridMaterias: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '25px' },
-    tarjeta: { backgroundColor: 'white', borderRadius: '15px', padding: '25px', border: '1px solid #E8EBFF', boxShadow: '0 4px 12px rgba(58, 86, 175, 0.05)', display: 'flex', flexDirection: 'column', minHeight: '180px' },
-    tituloMateria: { fontSize: '1.4rem', color: '#3A56AF', margin: '0 0 10px 0' },
-    descMateria: { fontSize: '0.9rem', color: '#6A7185', margin: '0 0 20px 0', lineHeight: '1.4' },
-    footerTarjeta: { marginTop: 'auto', display: 'flex', justifyContent: 'flex-end' },
+    btnAgregar: {
+        backgroundColor: '#3A56AF',
+        color: 'white',
+        border: 'none',
+        padding: '12px 20px',
+        borderRadius: '10px',
+        fontWeight: '600',
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        transition: 'all 0.2s'
+    },
+    iconoPlus: {
+        fontSize: '1.4rem',
+        lineHeight: '1'
+    },
 
-    // Estilos del Modal
-    overlayModal: { position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', backgroundColor: 'rgba(45, 50, 71, 0.6)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 },
-    modal: { backgroundColor: 'white', padding: '40px', borderRadius: '20px', width: '400px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' },
-    formulario: { display: 'flex', flexDirection: 'column', gap: '15px' },
-    input: { padding: '12px', borderRadius: '8px', border: '1px solid #E8EBFF', outline: 'none', fontSize: '1rem' },
-    textarea: { padding: '12px', borderRadius: '8px', border: '1px solid #E8EBFF', outline: 'none', fontSize: '1rem', minHeight: '80px', fontFamily: 'inherit' },
-    botonesForm: { display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' },
-    btnCancelar: { background: 'none', border: 'none', color: '#6A7185', cursor: 'pointer', fontWeight: '600' },
-    btnGuardar: { backgroundColor: '#3A56AF', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }
+    gridMaterias: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+        gap: '25px'
+    },
+    tarjeta: {
+        backgroundColor: 'white',
+        borderRadius: '15px',
+        padding: '25px',
+        border: '1px solid #E8EBFF',
+        boxShadow: '0 4px 12px rgba(58, 86, 175, 0.05)',
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '180px'
+    },
+    tituloMateria: {
+        fontSize: '1.4rem',
+        color: '#3A56AF',
+        margin: '0 0 10px 0'
+    },
+    descMateria: {
+        fontSize: '0.9rem',
+        color: '#6A7185',
+        margin: '0 0 20px 0',
+        lineHeight: '1.4'
+    },
+    footerTarjeta: {
+        marginTop: 'auto',
+        display: 'flex',
+        justifyContent: 'flex-end'
+    },
+
+    overlayModal: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        backgroundColor: 'rgba(45, 50, 71, 0.6)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 1000
+    },
+    modal: {
+        backgroundColor: 'white',
+        padding: '40px',
+        borderRadius: '20px',
+        width: '400px',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+    },
+    formulario: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '15px'
+    },
+    input: {
+        padding: '12px',
+        borderRadius: '8px',
+        border: '1px solid #E8EBFF',
+        outline: 'none',
+        fontSize: '1rem'
+    },
+    textarea: {
+        padding: '12px',
+        borderRadius: '8px',
+        border: '1px solid #E8EBFF',
+        outline: 'none',
+        fontSize: '1rem',
+        minHeight: '80px',
+        fontFamily: 'inherit'
+    },
+    botonesForm: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        gap: '10px',
+        marginTop: '10px'
+    },
+    btnCancelar: {
+        background: 'none',
+        border: 'none',
+        color: '#6A7185',
+        cursor: 'pointer',
+        fontWeight: '600'
+    },
+    btnGuardar: {
+        backgroundColor: '#3A56AF',
+        color: 'white',
+        border: 'none',
+        padding: '10px 20px',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        fontWeight: '600'
+    }
 };
 
 export default MateriasDashboard;
