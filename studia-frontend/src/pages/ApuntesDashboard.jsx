@@ -21,6 +21,37 @@ const ApuntesDashboard = ({ materia, onVolver, onNuevoApunte, onVerApunte }) => 
         }
     };
 
+    const formatearFechaModificacion = (apunte) => {
+        const fecha =
+            apunte.fecha_modificacion ||
+            apunte.fechaModificacion ||
+            apunte.FechaModificacion ||
+            apunte.fecha_actualizacion ||
+            apunte.fechaActualizacion ||
+            apunte.FechaActualizacion ||
+            apunte.updatedAt ||
+            apunte.fecha_creacion ||
+            apunte.fechaCreacion ||
+            apunte.FechaCreacion;
+
+        if (!fecha) return 'Sin fecha';
+
+        const date = new Date(fecha);
+        date.setHours(date.getHours() - 3);
+
+        const hora = date.toLocaleTimeString('es-AR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        });
+
+        const dia = String(date.getDate()).padStart(2, '0');
+        const mes = String(date.getMonth() + 1).padStart(2, '0');
+        const anio = String(date.getFullYear()).slice(-2);
+
+        return `${dia}/${mes}/${anio} - ${hora}`;
+    };
+
     return (
         <div style={estilos.contenedorPrincipal}>
             
@@ -59,7 +90,7 @@ const ApuntesDashboard = ({ materia, onVolver, onNuevoApunte, onVerApunte }) => 
                         >
                             <h3 style={estilos.tituloApunte}>{apunte.titulo || "Sin título"}</h3>
                             <div style={estilos.fecha}>
-                                📅 {apunte.fecha_creacion ? new Date(apunte.fecha_creacion).toLocaleDateString() : 'Sin fecha'}
+                                {formatearFechaModificacion(apunte)}
                             </div>
                         </div>
                     ))

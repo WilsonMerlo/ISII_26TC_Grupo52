@@ -358,6 +358,36 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
         }
     };
 
+    const formatearFechaCreacion = (apunte) => {
+        const fecha =
+            apunte.fecha_creacion ||
+            apunte.fechaCreacion ||
+            apunte.FechaCreacion ||
+            apunte.createdAt ||
+            apunte.CreatedAt;
+
+        if (!fecha) return 'Creado sin fecha';
+
+        const date = new Date(fecha);
+
+        // Ajuste por zona horaria, igual que hiciste con modificación
+        date.setHours(date.getHours() - 3);
+
+        if (Number.isNaN(date.getTime())) return 'Creado sin fecha';
+
+        const dia = String(date.getDate()).padStart(2, '0');
+        const mes = String(date.getMonth() + 1).padStart(2, '0');
+        const anio = date.getFullYear();
+
+        const hora = String(date.getHours()).padStart(2, '0');
+        const minutos = String(date.getMinutes()).padStart(2, '0');
+
+        return `Creado ${dia}/${mes}/${anio} - ${hora}:${minutos}`;
+    };
+
+
+
+
     // -----------------------------------------------------------------------
     // UI helpers
     // -----------------------------------------------------------------------
@@ -427,6 +457,10 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
                         </>
                     )}
                 </button>
+
+                <span className="text-sm font-semibold text-slate-500">
+                    {formatearFechaCreacion(apunteSeleccionado)}
+                </span>
             </div>
 
             {/* Lienzo principal */}
