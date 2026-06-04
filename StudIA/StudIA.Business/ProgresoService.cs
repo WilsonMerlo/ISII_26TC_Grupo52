@@ -1,3 +1,4 @@
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using StudIA.Data;
 using StudIA.Data.Entities;
@@ -20,11 +21,10 @@ namespace StudIA.Business
                                  .Where(p => p.IdUsuario == idUsuario)
                                  .ToListAsync();
         }
-
-        public async Task<Progreso> ActualizarProgresoAsync(int idUsuario, int idMateria, float avance)
+        public async Task<Progreso> ActualizarProgresoAsync(int idUsuario, int idMateria, int segundosAcumulados)
         {
             var progreso = await _context.Progresos
-                                         .FirstOrDefaultAsync(p => p.IdUsuario == idUsuario && p.IdMateria == idMateria);
+                .FirstOrDefaultAsync(p => p.IdUsuario == idUsuario && p.IdMateria == idMateria);
 
             if (progreso == null)
             {
@@ -32,17 +32,18 @@ namespace StudIA.Business
                 {
                     IdUsuario = idUsuario,
                     IdMateria = idMateria,
-                    AvancePorcentual = avance
+                    SegundosAcumulados = segundosAcumulados
                 };
                 _context.Progresos.Add(progreso);
             }
             else
             {
-                progreso.AvancePorcentual = avance;
+                progreso.SegundosAcumulados += segundosAcumulados;
             }
 
             await _context.SaveChangesAsync();
-            return progreso;
+
+            return progreso; // Retorno agregado
         }
     }
 }
