@@ -2,12 +2,17 @@ import React from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
-const DashboardLayout = ({ children, nombreUsuario, onLogout, onNavegar }) => {
+const DashboardLayout = ({ children, nombreUsuario, onLogout, onNavegar, vistaActual }) => {
     return (
         <div style={estilos.mainWrap}>
             <Header nombreUsuario={nombreUsuario} />
             <div style={estilos.seccionInferiorWrap}>
-                <Sidebar nombreUsuario={nombreUsuario} onLogout={onLogout} onNavegar={onNavegar} />
+                <Sidebar
+                    nombreUsuario={nombreUsuario}
+                    onLogout={onLogout}
+                    onNavegar={onNavegar}
+                    vistaActual={vistaActual}
+                />
                 <main style={estilos.mainContentArea}>
                     {children}
                 </main>
@@ -28,15 +33,15 @@ const estilos = {
     seccionInferiorWrap: {
         display: 'flex',
         flex: 1,
-        minHeight: 0,        // permite que los hijos flex se encojan
+        minHeight: 0,
         overflow: 'hidden',
     },
     mainContentArea: {
         flex: 1,
         minHeight: 0,
         display: 'flex',
-        flexDirection: 'column', // los hijos se apilan en columna y pueden ocupar el 100%
-        overflow: 'hidden',      // el scroll lo maneja cada vista internamente
+        flexDirection: 'column',
+        overflow: 'hidden',
     },
 };
 

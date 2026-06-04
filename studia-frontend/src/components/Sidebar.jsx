@@ -1,26 +1,33 @@
 import React from 'react';
 
-// --- Íconos SVG Vectoriales Profesionales ---
-const IconEscritorio = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-        <line x1="8" y1="21" x2="16" y2="21"></line>
-        <line x1="12" y1="17" x2="12" y2="21"></line>
-    </svg>
-);
-
-const IconNotas = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-        <polyline points="14 2 14 8 20 8"></polyline>
-        <line x1="16" y1="13" x2="8" y2="13"></line>
-        <line x1="16" y1="17" x2="8" y2="17"></line>
-        <polyline points="10 9 9 9 8 9"></polyline>
+// --- Íconos SVG ---
+const IconMaterias = () => (
+    <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+        <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"></path>
     </svg>
 );
 
 const IconEnfoque = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
         <circle cx="12" cy="13" r="8"></circle>
         <polyline points="12 9 12 13 14 15"></polyline>
         <line x1="12" y1="2" x2="12" y2="4"></line>
@@ -29,56 +36,81 @@ const IconEnfoque = () => (
 );
 
 const IconEstadisticas = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
         <line x1="18" y1="20" x2="18" y2="10"></line>
         <line x1="12" y1="20" x2="12" y2="4"></line>
         <line x1="6" y1="20" x2="6" y2="14"></line>
     </svg>
 );
 
-// 1. Recibimos 'onNavegar' por props
-const Sidebar = ({ nombreUsuario = "Usuario", onLogout, onNavegar }) => {
-
+const Sidebar = ({ nombreUsuario = "Usuario", onLogout, onNavegar, vistaActual }) => {
     const obtenerIniciales = (nombre) => {
         if (!nombre) return "U";
+
         const palabras = nombre.trim().split(/\s+/);
-        if (palabras.length >= 2) return (palabras[0][0] + palabras[1][0]).toUpperCase();
+
+        if (palabras.length >= 2) {
+            return (palabras[0][0] + palabras[1][0]).toUpperCase();
+        }
+
         return palabras[0][0].toUpperCase();
     };
 
     const iniciales = obtenerIniciales(nombreUsuario);
 
-    // 2. Agregamos la propiedad 'vista' a cada ítem para saber a dónde ir
     const menuItems = [
-        { icono: <IconEscritorio />, nombre: 'Escritorio', vista: 'materias' },
-        { icono: <IconNotas />, nombre: 'Notas', vista: 'editor' },
-        { icono: <IconEnfoque />, nombre: 'Enfoque', vista: 'dashboard', activo: true },
+        { icono: <IconMaterias />, nombre: 'Materias', vista: 'materias' },
+        { icono: <IconEnfoque />, nombre: 'Enfoque', vista: 'dashboard' },
         { icono: <IconEstadisticas />, nombre: 'Estadísticas', vista: 'estadisticas' },
     ];
+
+    const esItemActivo = (item) => {
+        if (
+            item.vista === 'materias' &&
+            ['materias', 'apuntes', 'verApunte', 'editor'].includes(vistaActual)
+        ) {
+            return true;
+        }
+
+        return item.vista === vistaActual;
+    };
 
     return (
         <aside style={estilos.sidebar}>
             <nav style={estilos.nav}>
-                {menuItems.map((item, index) => (
-                    <div
-                        key={index}
-                        style={item.activo
-                            ? { ...estilos.menuItem, ...estilos.itemActivo }
-                            : estilos.menuItem
-                        }
-                        // 3. Agregamos el evento onClick para navegar
-                        onClick={() => {
-                            if (item.vista && onNavegar) {
-                                onNavegar(item.vista);
+                {menuItems.map((item, index) => {
+                    const activo = esItemActivo(item);
+
+                    return (
+                        <div
+                            key={index}
+                            style={
+                                activo
+                                    ? { ...estilos.menuItem, ...estilos.itemActivo }
+                                    : estilos.menuItem
                             }
-                        }}
-                    >
-                        <span style={item.activo ? estilos.menuIconoActivo : estilos.menuIcono}>
-                            {item.icono}
-                        </span>
-                        <span>{item.nombre}</span>
-                    </div>
-                ))}
+                            onClick={() => {
+                                if (item.vista && onNavegar) {
+                                    onNavegar(item.vista);
+                                }
+                            }}
+                        >
+                            <span style={activo ? estilos.menuIconoActivo : estilos.menuIcono}>
+                                {item.icono}
+                            </span>
+                            <span>{item.nombre}</span>
+                        </div>
+                    );
+                })}
             </nav>
 
             <div style={estilos.seccionInferior}>
@@ -145,7 +177,6 @@ const estilos = {
         color: '#3A56AF',
         flexShrink: 0,
     },
-
     seccionInferior: {
         borderTop: '1px solid #E8EBFF',
         paddingTop: '20px',
@@ -186,7 +217,9 @@ const estilos = {
         fontSize: '0.75rem',
         flexShrink: 0,
     },
-    userTextos: { overflow: 'hidden' },
+    userTextos: {
+        overflow: 'hidden',
+    },
     userNameMini: {
         fontWeight: '600',
         color: '#2D3247',

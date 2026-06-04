@@ -72,14 +72,14 @@ function App() {
 
     case 'materias':
       return (
-        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
           <MateriasDashboard onNavegar={navegarA} />
         </DashboardLayout>
       );
 
     case 'apuntes':
       return (
-        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
           <ApuntesDashboard 
              materia={materiaActiva} 
              onVolver={() => navegarA('materias')} 
@@ -91,7 +91,7 @@ function App() {
     
     case 'editor':
       return (
-        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
           <EditorApunte 
              idMateriaActiva={materiaActiva?.id_materia || materiaActiva?.idMateria}
              nombreMateria={materiaActiva?.nombre_materia || materiaActiva?.nombreMateria}
@@ -102,7 +102,7 @@ function App() {
 
     case 'verApunte':
       return (
-        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
           <VerApunte 
             // 👇 CAMBIAMOS ESTA LÍNEA PARA PASAR EL OBJETO EN MEMORIA 👇
             apunteSeleccionado={apunteActivo}
@@ -113,7 +113,7 @@ function App() {
 
     case 'dashboard':
       return (
-        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA}>
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
           <PomodoroTimer />
         </DashboardLayout>
       );
