@@ -1,5 +1,6 @@
 // src/pages/VerApunte.jsx
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { apunteService } from '../services/apunteService';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -188,29 +189,40 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
     // -----------------------------------------------------------------------
     const handleGuardar = async () => {
         if (!apunteSeleccionado) return;
+
         const contenidoActualizado = editorRef.current?.innerHTML || '';
 
+        const id =
+            apunteSeleccionado.id_apunte ||
+            apunteSeleccionado.idApunte ||
+            apunteSeleccionado.IdApunte ||
+            apunteSeleccionado.id ||
+            apunteSeleccionado.Id;
+
+        if (!id) {
+            console.error('No se encontró ID del apunte:', apunteSeleccionado);
+            setSaveStatus('error');
+            return;
+        }
+
         setSaveStatus('loading');
+
         try {
-            // Si el padre pasa onGuardar, delegar; sino hacer fetch directo
-            if (typeof onGuardar === 'function') {
-                await onGuardar({
-                    ...apunteSeleccionado,
-                    titulo,
-                    Titulo: titulo,
-                    contenido: contenidoActualizado,
-                    Contenido: contenidoActualizado,
-                });
-            } else {
-                // Fallback: PATCH/PUT genérico al endpoint de la API
-                const id = apunteSeleccionado.id || apunteSeleccionado.Id || apunteSeleccionado._id;
-                const res = await fetch(`/api/apuntes/${id}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ titulo, contenido: contenidoActualizado }),
-                });
-                if (!res.ok) throw new Error('Error en el servidor');
+            const apunteActualizado = {
+                ...apunteSeleccionado,
+                idApunte: id,
+                titulo,
+                Titulo: titulo,
+                contenido: contenidoActualizado,
+                Contenido: contenidoActualizado,
+            };
+
+            const ok = await apunteService.actualizar(id, apunteActualizado);
+
+            if (!ok) {
+                throw new Error('No se pudo actualizar el apunte');
             }
+
             setSaveStatus('success');
         } catch (err) {
             console.error('Error al guardar:', err);
