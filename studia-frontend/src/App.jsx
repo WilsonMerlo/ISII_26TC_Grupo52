@@ -15,7 +15,10 @@ import ApuntesDashboard from './pages/ApuntesDashboard'
 import VerApunte from './pages/VerApunte'
 
 function App() {
-  const [vistaActual, setVistaActual] = useState('login');
+  const [vistaActual, setVistaActual] = useState(() => {
+      const idUsuario = localStorage.getItem('idUsuario');
+      return idUsuario ? 'dashboard' : 'login';
+  });
   
   // Memorias de la aplicación
   const [materiaActiva, setMateriaActiva] = useState(null);

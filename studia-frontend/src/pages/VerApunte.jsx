@@ -99,16 +99,22 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
 
     const [titulo, setTitulo] = useState('');
     const [saveStatus, setSaveStatus] = useState(null); // null | 'loading' | 'success' | 'error'
+    const [hayCambiosSinGuardar, setHayCambiosSinGuardar] = useState(false);
 
     // Cargar datos al montar o cuando cambia el apunte
     useEffect(() => {
         if (!apunteSeleccionado) return;
+
         const tituloInicial = apunteSeleccionado.titulo || apunteSeleccionado.Titulo || '';
         const contenidoInicial = apunteSeleccionado.contenido || apunteSeleccionado.Contenido || '';
+
         setTitulo(tituloInicial);
+
         if (editorRef.current) {
             editorRef.current.innerHTML = contenidoInicial;
         }
+
+        setHayCambiosSinGuardar(false);
     }, [apunteSeleccionado]);
 
     // Limpiar toast automáticamente
@@ -118,6 +124,23 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
             return () => clearTimeout(timer);
         }
     }, [saveStatus]);
+
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            if (!hayCambiosSinGuardar) return;
+
+            e.preventDefault();
+            e.returnValue = '';
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, [hayCambiosSinGuardar]);
+
+
 
     // -----------------------------------------------------------------------
     // Handlers de toolbar
@@ -184,6 +207,28 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
         execCmd('insertOrderedList');
     };
 
+    const confirmarSalidaSinGuardar = () => {
+    if (!hayCambiosSinGuardar) return true;
+
+    return window.confirm(
+        'Tenés cambios sin guardar. ¿Querés salir sin guardar?'
+    );
+};
+
+    const handleVolver = () => {
+        if (!confirmarSalidaSinGuardar()) return;
+        onVolver?.();
+    };
+
+    const handleCambioTitulo = (e) => {
+        setTitulo(e.target.value);
+        setHayCambiosSinGuardar(true);
+    };
+
+    const handleCambioContenido = () => {
+        setHayCambiosSinGuardar(true);
+    };
+
     // -----------------------------------------------------------------------
     // Guardar
     // -----------------------------------------------------------------------
@@ -223,6 +268,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
                 throw new Error('No se pudo actualizar el apunte');
             }
 
+            setHayCambiosSinGuardar(false);
             setSaveStatus('success');
         } catch (err) {
             console.error('Error al guardar:', err);
@@ -266,7 +312,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
             {/* Acciones superiores (Volver + Guardar) */}
             <div className="absolute top-6 left-8 flex items-center gap-3 z-40">
                 <button
-                    onClick={onVolver}
+                    onClick={handleVolver}
                     className="flex items-center gap-1.5 text-slate-500 hover:text-[#3A5A82] transition-colors font-semibold text-sm"
                 >
                     <span className="material-symbols-outlined text-lg">arrow_back</span>
@@ -357,7 +403,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
                         className="w-full bg-transparent border-none focus:ring-0 text-5xl font-extrabold font-['Manrope'] tracking-tight text-[#2b3437] mb-8 block outline-none placeholder-slate-300"
                         type="text"
                         value={titulo}
-                        onChange={(e) => setTitulo(e.target.value)}
+                        onChange={handleCambioTitulo}
                         placeholder="Sin título"
                     />
 
@@ -367,6 +413,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
                         contentEditable
                         suppressContentEditableWarning
                         spellCheck
+                        onInput={handleCambioContenido}
                         data-placeholder="Empezá a escribir tu apunte…"
                         className="
                             prose prose-slate max-w-none text-lg text-[#465365] leading-relaxed font-body
