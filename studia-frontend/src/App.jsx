@@ -13,6 +13,7 @@ import MateriasDashboard from './pages/MateriasDashboard'
 import EditorApunte from './components/EditorApunte'
 import ApuntesDashboard from './pages/ApuntesDashboard'
 import VerApunte from './pages/VerApunte'
+import EstadisticasDashboard from './pages/EstadisticasDashboard'
 
 function App() {
   const [vistaActual, setVistaActual] = useState(() => {
@@ -107,6 +108,13 @@ function App() {
             apunteSeleccionado={apunteActivo}
             onVolver={() => navegarA('apuntes', materiaActiva)} 
           />
+        </DashboardLayout>
+      );
+
+    case 'estadisticas':
+      return (
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
+          <EstadisticasDashboard />
         </DashboardLayout>
       );
 
