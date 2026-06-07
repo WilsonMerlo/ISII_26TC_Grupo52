@@ -144,6 +144,20 @@ export const apunteService = {
         }
     },
 
+    eliminar: async (id) => {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error eliminando apunte:', response.status, errorText);
+            throw new Error('Error al eliminar el apunte');
+        }
+
+        return leerRespuesta(response);
+    },
+
     obtenerPorId: async (idApunte) => {
         try {
             const response = await fetch(`${API_URL}/${idApunte}`);

@@ -175,41 +175,43 @@ const MateriasDashboard = ({ onNavegar }) => {
             </div>
 
             {/* Grilla de Tarjetas Clickeables */}
-            <div style={estilos.gridMaterias}>
-                {materias.map((materia, index) => (
-                    <div
-                        key={obtenerIdMateria(materia) || index}
-                        style={{ ...estilos.tarjeta, cursor: 'pointer' }}
-                        onClick={() => onNavegar && onNavegar('apuntes', materia)}
-                    >
-                        <h3 style={estilos.tituloMateria}>
-                            {obtenerNombreMateria(materia)}
-                        </h3>
+            <div style={estilos.scrollMaterias}>
+                <div style={estilos.gridMaterias}>
+                    {materias.map((materia, index) => (
+                        <div
+                            key={obtenerIdMateria(materia) || index}
+                            style={{ ...estilos.tarjeta, cursor: 'pointer' }}
+                            onClick={() => onNavegar && onNavegar('apuntes', materia)}
+                        >
+                            <h3 style={estilos.tituloMateria}>
+                                {obtenerNombreMateria(materia)}
+                            </h3>
 
-                        <p style={estilos.descMateria}>
-                            {obtenerDescripcionMateria(materia)}
-                        </p>
+                            <p style={estilos.descMateria}>
+                                {obtenerDescripcionMateria(materia)}
+                            </p>
 
-                        {/* El basurero protegido para no navegar por error */}
-                        <div style={estilos.footerTarjeta} onClick={(e) => e.stopPropagation()}>
-                            <button
-                                type="button"
-                                style={estilos.btnEditar}
-                                onClick={() => abrirModalEditar(materia)}
-                            >
-                                Editar
-                            </button>
+                            {/* Botones protegidos para no navegar por error */}
+                            <div style={estilos.footerTarjeta} onClick={(e) => e.stopPropagation()}>
+                                <button
+                                    type="button"
+                                    style={estilos.btnEditar}
+                                    onClick={() => abrirModalEditar(materia)}
+                                >
+                                    Editar
+                                </button>
 
-                            <button
-                                type="button"
-                                style={estilos.btnEliminar}
-                                onClick={() => abrirModalEliminar(materia)}
-                            >
-                                Borrar
-                            </button>
+                                <button
+                                    type="button"
+                                    style={estilos.btnEliminar}
+                                    onClick={() => abrirModalEliminar(materia)}
+                                >
+                                    Borrar
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
 
             {/* Modal crear materia */}
@@ -355,14 +357,20 @@ const estilos = {
     contenedorPrincipal: {
         padding: '40px',
         width: '100%',
+        height: '100%',
+        minHeight: 0,
         boxSizing: 'border-box',
-        position: 'relative'
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden'
     },
     cabecera: {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '30px'
+        marginBottom: '30px',
+        flexShrink: 0
     },
     tituloSeccion: {
         color: '#2D3247',
@@ -388,10 +396,19 @@ const estilos = {
         lineHeight: '1'
     },
 
+    scrollMaterias: {
+        flex: 1,
+        minHeight: 0,
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        paddingRight: '8px'
+    },
+
     gridMaterias: {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-        gap: '25px'
+        gap: '25px',
+        paddingBottom: '24px'
     },
     tarjeta: {
         backgroundColor: 'white',
