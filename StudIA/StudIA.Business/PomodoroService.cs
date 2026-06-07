@@ -29,6 +29,7 @@ namespace StudIA.Business
 
             return pomodoro;
         }
+
         // Método para el DELETE
         public async Task<bool> EliminarPomodoroAsync(int id)
         {
@@ -40,14 +41,45 @@ namespace StudIA.Business
 
             return true;
         }
-        // NUEVO: Método para traer solo los pomodoros de un usuario específico
+
+        // Método para traer solo los pomodoros de un usuario específico
         public async Task<IEnumerable<Pomodoro>> ObtenerPomodorosPorUsuarioAsync(int idUsuario)
         {
             return await _context.Pomodoros
                                  .Include(p => p.Materia)
-                                 .Where(p => p.IdUsuario == idUsuario) // <-- EL FILTRO MÁGICO
-                                 .OrderByDescending(p => p.Fecha)      // <-- Los ordena del más nuevo al más viejo
+                                 .Where(p => p.IdUsuario == idUsuario)
+                                 .OrderByDescending(p => p.Fecha)
                                  .ToListAsync();
+        }
+
+        // NUEVO: Método que ejecuta el patrón State
+        public async Task<Pomodoro?> EjecutarAccionPomodoroAsync(int id, string accion)
+        {
+            var pomodoro = await _context.Pomodoros.FindAsync(id);
+            if (pomodoro == null) return null;
+
+            // Delegamos la orden. Si es ilegal, la entidad lanzará una InvalidOperationException
+            switch (accion.ToLower())
+            {
+                case "iniciar":       // <-- Agregado
+                case "reanudar":      // "iniciar" y "reanudar" hacen lo mismo
+                    pomodoro.Reanudar();
+                    break;
+                case "pausar":
+                    pomodoro.Pausar();
+                    break;
+                case "finalizar":
+                    pomodoro.Finalizar();
+                    break;
+                case "saltarfase":
+                    pomodoro.SaltarFase();
+                    break;
+                default: throw new ArgumentException("Acción no reconocida en el sistema.");
+            }
+
+            // EF Core detecta el cambio en 'EstadoFase' y hace el UPDATE
+            await _context.SaveChangesAsync();
+            return pomodoro;
         }
     }
 }

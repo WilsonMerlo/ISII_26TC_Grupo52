@@ -187,7 +187,7 @@ public class StudIAContext : DbContext
                 Fecha = fecha.AddMinutes(minutosDelDia),
                 DuracionEstudio = 1500, // 25 minutos
                 DuracionDescanso = 300, // 5 minutos
-                Estado = true
+                EstadoFase = FasePomodoro.Completado
             });
 
             minutosDelDia += 30; // Salto temporal para el próximo pomodoro

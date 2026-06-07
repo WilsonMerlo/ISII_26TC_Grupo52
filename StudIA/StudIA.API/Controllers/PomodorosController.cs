@@ -65,5 +65,32 @@ namespace StudIA.API.Controllers
 
             return Ok(pomodoros);
         }
+
+        // POST: api/pomodoros/5/accion/pausar
+        [HttpPost("{id}/accion/{tipoAccion}")]
+        public async Task<IActionResult> EjecutarAccion(int id, string tipoAccion)
+        {
+            try
+            {
+                var pomodoro = await _pomodoroService.EjecutarAccionPomodoroAsync(id, tipoAccion);
+
+                if (pomodoro == null)
+                {
+                    return NotFound(new { mensaje = "Pomodoro no encontrado." });
+                }
+
+                return Ok(pomodoro);
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Si el patrón State rechaza la acción (ej: pausar cuando ya está finalizado), 
+                // devolvemos un 400 Bad Request con el mensaje de error.
+                return BadRequest(new { error = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

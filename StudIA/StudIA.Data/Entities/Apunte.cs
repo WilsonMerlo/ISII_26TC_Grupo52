@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using StudIA.Data.Entities;
 
 [Table("Apuntes")]
 public class Apunte
