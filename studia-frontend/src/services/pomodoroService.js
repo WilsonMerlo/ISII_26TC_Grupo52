@@ -85,3 +85,16 @@ export async function ejecutarAccion(idPomodoro, tipoAccion) {
   );
   return handleResponse(response); // devuelve el Pomodoro actualizado
 }
+
+// ─────────────────────────────────────────────────────────────────
+// PUT /api/Pomodoros/{id}
+// Actualiza los tiempos acumulados de un pomodoro específico.
+// ─────────────────────────────────────────────────────────────────
+export async function actualizarPomodoro(idPomodoro, datosActualizados) {
+  const response = await fetch(`${BASE_URL}/api/Pomodoros/${idPomodoro}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datosActualizados),
+  });
+  return handleResponse(response);
+}

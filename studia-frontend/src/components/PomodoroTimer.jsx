@@ -4,6 +4,7 @@ import {
   crearPomodoro,
   eliminarPomodoro,
   ejecutarAccion,
+  actualizarPomodoro
 } from "../services/pomodoroService";
 
 // ══════════════════════════════════════════════════════════════════
@@ -159,6 +160,9 @@ const PomodoroTimer = () => {
   const [segundosAcumuladosEstudio,  setSegundosAcumuladosEstudio]  = useState(0);
   const [segundosAcumuladosDescanso, setSegundosAcumuladosDescanso] = useState(0);
 
+  const estudioRef = useRef(0);
+  const descansoRef = useRef(0);
+
   // ── ESTADO DEL PATRÓN STATE ────────────────────────────────────
   // pomodoroActivo: { id, estadoFase } del pomodoro en curso en el backend.
   // Null si aún no se presionó Play en esta sesión.
@@ -203,8 +207,10 @@ const PomodoroTimer = () => {
         setSegundos((s) => s - 1);
         if (esDescanso) {
           setSegundosAcumuladosDescanso((prev) => prev + 1);
+          descansoRef.current += 1;
         } else {
           setSegundosAcumuladosEstudio((prev) => prev + 1);
+          estudioRef.current += 1;
         }
       }, 1000);
     } else if (segundos === 0) {
@@ -229,10 +235,31 @@ const PomodoroTimer = () => {
     setSesionActual(1);
     setSegundosAcumuladosEstudio(0);
     setSegundosAcumuladosDescanso(0);
+    estudioRef.current = 0;
+    descansoRef.current = 0;
     setPomodoroActivo(null);
     setErrorAccion(null);
   };
 
+
+  // ══════════════════════════════════════════════════════════════
+  // SINCRONIZADOR DE TIEMPOS
+  // ══════════════════════════════════════════════════════════════
+  const sincronizarTiemposBackend = async (id) => {
+    try {
+      await actualizarPomodoro(id, {
+        idPomodoro: id,
+        duracionEstudio: estudioRef.current,
+        duracionDescanso: descansoRef.current
+      });
+    } catch (err) {
+      console.error("Error al sincronizar tiempos:", err);
+    }
+  };
+
+  // ══════════════════════════════════════════════════════════════
+  // ACCIÓN: PLAY / PAUSE
+  // ══════════════════════════════════════════════════════════════
   // ══════════════════════════════════════════════════════════════
   // ACCIÓN: PLAY / PAUSE
   // ══════════════════════════════════════════════════════════════
@@ -242,29 +269,43 @@ const PomodoroTimer = () => {
 
     // ─ CASO 1: Primer play de la sesión → crear + iniciar ──────
     if (!pomodoroActivo) {
+      // 1. Limpiamos los contadores para que cada Pomodoro arranque de cero real
+      estudioRef.current = 0;
+      descansoRef.current = 0;
+      setSegundosAcumuladosEstudio(0);
+      setSegundosAcumuladosDescanso(0);
+
       setAccionEnCurso(true);
-      // Update optimista: arrancamos el timer visualmente de inmediato
-      setEstaActivo(true);
+      setEstaActivo(true); // Update optimista visual
+
       try {
-        // 1a. Crear el Pomodoro en estado Pendiente (estadoFase = 0)
+        // 1a. Crear el Pomodoro en la base de datos
         const nuevoPomodoro = await crearPomodoro({
           idUsuario,
-          idMateria: null,   // General — sin materia vinculada por ahora
-          idApunte:  null,
+          idMateria: null,
+          idApunte: null,
           fecha: new Date().toISOString(),
-          duracionEstudio:  0,
+          duracionEstudio: 0,
           duracionDescanso: 0,
           estadoFase: FASE.PENDIENTE,
         });
 
-        // 1b. Iniciar → transiciona a EnCurso
-        const pomodoroIniciado = await ejecutarAccion(nuevoPomodoro.idPomodoro, "iniciar");
+        // 2. PROTECCIÓN CONTRA NULL: Revisamos si el backend devolvió 'idPomodoro' o 'id'
+        const idGenerado = nuevoPomodoro?.idPomodoro || nuevoPomodoro?.id;
+
+        if (!idGenerado) {
+          throw new Error("El servidor no devolvió el ID del Pomodoro creado.");
+        }
+
+        // 1b. Iniciamos en el backend usando el ID seguro
+        await ejecutarAccion(idGenerado, "iniciar");
+
+        // 3. Forzamos el estado local sin depender de la segunda respuesta de la API
         setPomodoroActivo({
-          id: pomodoroIniciado.idPomodoro,
-          estadoFase: pomodoroIniciado.estadoFase,
+          id: idGenerado,
+          estadoFase: FASE.EN_CURSO,
         });
       } catch (err) {
-        // Rollback optimista
         setEstaActivo(false);
         setErrorAccion(err.message);
         console.error("Error al iniciar pomodoro:", err);
@@ -277,18 +318,26 @@ const PomodoroTimer = () => {
     // ─ CASO 2: Ya hay un pomodoro activo → Pausar o Reanudar ───
     const accion = estaActivo ? "pausar" : "reanudar";
 
-    // Update optimista
     setEstaActivo(!estaActivo);
     setAccionEnCurso(true);
 
     try {
       const pomodoroActualizado = await ejecutarAccion(pomodoroActivo.id, accion);
-      setPomodoroActivo({
-        id: pomodoroActualizado.idPomodoro,
-        estadoFase: pomodoroActualizado.estadoFase,
-      });
+      
+      // PROTECCIÓN: Solo actualizamos si la API devuelve un objeto válido
+      if (pomodoroActualizado && typeof pomodoroActualizado === 'object') {
+        setPomodoroActivo({
+          id: pomodoroActualizado.idPomodoro || pomodoroActualizado.id || pomodoroActivo.id,
+          estadoFase: pomodoroActualizado.estadoFase ?? (estaActivo ? FASE.PAUSADO : FASE.EN_CURSO),
+        });
+      } else {
+        // Si la API no devuelve nada (ej. 204 No Content), asumimos el cambio localmente
+        setPomodoroActivo({
+          ...pomodoroActivo,
+          estadoFase: estaActivo ? FASE.PAUSADO : FASE.EN_CURSO
+        });
+      }
     } catch (err) {
-      // Rollback
       setEstaActivo(estaActivo);
       setErrorAccion(err.message);
       console.error(`Error al ejecutar '${accion}':`, err);
@@ -315,8 +364,9 @@ const PomodoroTimer = () => {
     setAccionEnCurso(true);
 
     // El backend determina si la siguiente fase es EnDescanso o Completado.
-    // Nosotros actualizamos la UI optimistamente y sincronizamos con la respuesta.
     try {
+      await sincronizarTiemposBackend(pom.id);
+      
       const pomodoroActualizado = await ejecutarAccion(pom.id, "saltarfase");
       const nuevaFase = pomodoroActualizado.estadoFase;
 
@@ -351,6 +401,8 @@ const PomodoroTimer = () => {
     }
 
     try {
+      await sincronizarTiemposBackend(pom.id);
+      
       const pomodoroActualizado = await ejecutarAccion(pom.id, "saltarfase");
       const nuevaFase = pomodoroActualizado.estadoFase;
 
@@ -401,9 +453,6 @@ const PomodoroTimer = () => {
     const esUltimoCiclo = sesionActual >= ciclosTotales;
 
     if (!esUltimoCiclo) {
-      // Aún hay ciclos: reseteamos para el próximo (UI local)
-      // El pomodoro actual quedó "Completado" en el backend.
-      // Creamos uno nuevo en el próximo Play.
       setEsDescanso(false);
       setSegundos(tiempoSesion * 60);
       setSesionActual((s) => s + 1);
@@ -411,8 +460,9 @@ const PomodoroTimer = () => {
       setPomodoroActivo(null);
       setSegundosAcumuladosEstudio(0);
       setSegundosAcumuladosDescanso(0);
+      estudioRef.current = 0;
+      descansoRef.current = 0;
 
-      // Refrescar historial para mostrar el pomodoro recién completado
       try {
         const data = await obtenerPomodorosPorUsuario(idUsuario);
         setHistorial(data.map(mapearItemHistorial));
@@ -449,13 +499,12 @@ const PomodoroTimer = () => {
   const resetearReloj = async () => {
     if (pomodoroActivo) {
       try {
-        // Intentamos finalizar el pomodoro en el backend (sesión abandonada)
+        await sincronizarTiemposBackend(pomodoroActivo.id);
+        
         await ejecutarAccion(pomodoroActivo.id, "finalizar");
-        // Refrescar historial para mostrar el pomodoro abandonado
         const data = await obtenerPomodorosPorUsuario(idUsuario);
         setHistorial(data.map(mapearItemHistorial));
       } catch (err) {
-        // Si ya estaba en un estado que no permite finalizar (ej. Completado), ignoramos
         console.warn("No se pudo finalizar el pomodoro al resetear:", err.message);
       }
     }
