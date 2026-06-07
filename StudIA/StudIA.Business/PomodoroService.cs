@@ -52,17 +52,23 @@ namespace StudIA.Business
                                  .ToListAsync();
         }
 
-        // NUEVO: Método que ejecuta el patrón State
-        public async Task<Pomodoro?> EjecutarAccionPomodoroAsync(int id, string accion)
+        public async Task<Pomodoro?> EjecutarAccionPomodoroAsync(int id, string accion, int? duracionEstudio = null, int? duracionDescanso = null)
         {
             var pomodoro = await _context.Pomodoros.FindAsync(id);
             if (pomodoro == null) return null;
 
-            // Delegamos la orden. Si es ilegal, la entidad lanzará una InvalidOperationException
+            // Si el frontend envía duraciones, las asignamos directamente (segundos puros)
+            if (duracionEstudio.HasValue)
+                pomodoro.DuracionEstudio = duracionEstudio.Value;
+
+            if (duracionDescanso.HasValue)
+                pomodoro.DuracionDescanso = duracionDescanso.Value;
+
+            // Delegamos la orden al patrón State
             switch (accion.ToLower())
             {
-                case "iniciar":       // <-- Agregado
-                case "reanudar":      // "iniciar" y "reanudar" hacen lo mismo
+                case "iniciar":
+                case "reanudar":
                     pomodoro.Reanudar();
                     break;
                 case "pausar":
@@ -74,10 +80,10 @@ namespace StudIA.Business
                 case "saltarfase":
                     pomodoro.SaltarFase();
                     break;
-                default: throw new ArgumentException("Acción no reconocida en el sistema.");
+                default:
+                    throw new ArgumentException("Acción no reconocida en el sistema.");
             }
 
-            // EF Core detecta el cambio en 'EstadoFase' y hace el UPDATE
             await _context.SaveChangesAsync();
             return pomodoro;
         }

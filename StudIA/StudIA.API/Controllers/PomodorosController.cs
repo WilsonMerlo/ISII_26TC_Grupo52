@@ -38,6 +38,7 @@ namespace StudIA.API.Controllers
 
             return Ok(nuevoPomodoro);
         }
+
         // DELETE: api/pomodoros/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePomodoro(int id)
@@ -51,6 +52,7 @@ namespace StudIA.API.Controllers
 
             return NoContent(); // Retorna 204 No Content (Éxito)
         }
+
         // GET: api/pomodoros/usuario/5
         [HttpGet("usuario/{idUsuario}")]
         public async Task<ActionResult<IEnumerable<Pomodoro>>> GetPomodorosUsuario(int idUsuario)
@@ -68,11 +70,14 @@ namespace StudIA.API.Controllers
 
         // POST: api/pomodoros/5/accion/pausar
         [HttpPost("{id}/accion/{tipoAccion}")]
-        public async Task<IActionResult> EjecutarAccion(int id, string tipoAccion)
+        public async Task<IActionResult> EjecutarAccion(int id, string tipoAccion, [FromBody] ActionPomodoroDto? dto)
         {
             try
             {
-                var pomodoro = await _pomodoroService.EjecutarAccionPomodoroAsync(id, tipoAccion);
+                int? estudio = dto?.DuracionEstudio;
+                int? descanso = dto?.DuracionDescanso;
+
+                var pomodoro = await _pomodoroService.EjecutarAccionPomodoroAsync(id, tipoAccion, estudio, descanso);
 
                 if (pomodoro == null)
                 {
@@ -92,5 +97,12 @@ namespace StudIA.API.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+    }
+
+    // DTO para recibir las duraciones opcionales desde el frontend
+    public class ActionPomodoroDto
+    {
+        public int? DuracionEstudio { get; set; }
+        public int? DuracionDescanso { get; set; }
     }
 }
