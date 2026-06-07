@@ -65,6 +65,9 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
     const [creandoApunte, setCreandoApunte] = useState(false);
     const [apunteAEliminar, setApunteAEliminar] = useState(null);
     const [eliminandoApunte, setEliminandoApunte] = useState(false);
+    const [busqueda, setBusqueda] = useState('');
+    const [buscadorActivo, setBuscadorActivo] = useState(false);
+    const buscadorRef = useRef(null);
 
     const nombreMateria =
         materia?.nombre_materia ||
@@ -77,6 +80,20 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
             cargarApuntes();
         }
     }, [materia]);
+
+    useEffect(() => {
+        const manejarClickFuera = (event) => {
+            if (buscadorRef.current && !buscadorRef.current.contains(event.target)) {
+                setBuscadorActivo(false);
+            }
+        };
+
+        document.addEventListener('mousedown', manejarClickFuera);
+
+        return () => {
+            document.removeEventListener('mousedown', manejarClickFuera);
+        };
+    }, []);
 
     const obtenerIdMateria = () => {
         return materia?.id_materia || materia?.idMateria || materia?.IdMateria || materia?.id || materia?.Id;
@@ -262,6 +279,31 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
         }
     };
 
+    const normalizarTexto = (texto) => {
+        return String(texto || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .trim();
+    };
+
+    const terminoNormalizado = normalizarTexto(busqueda);
+
+    const apuntesCoincidentes = terminoNormalizado
+        ? apuntes.filter((apunte) =>
+            normalizarTexto(obtenerTituloApunte(apunte)).includes(terminoNormalizado)
+        )
+        : [];
+
+    const abrirApunteDesdeBusqueda = (apunte) => {
+        setBusqueda('');
+        setBuscadorActivo(false);
+
+        if (onVerApunte) {
+            onVerApunte(apunte);
+        }
+    };
+
     const formatearFechaModificacion = (apunte) => {
         const fecha = obtenerFechaModificacion(apunte);
 
@@ -292,9 +334,70 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
                         Volver
                     </button>
 
-                    <h2 style={estilos.tituloSeccion}>
-                        Apuntes de <span style={{ color: '#3A56AF' }}>{nombreMateria}</span>
-                    </h2>
+                    <div style={estilos.filaTituloBuscador}>
+                        <h2 style={estilos.tituloSeccion}>
+                            Apuntes de <span style={{ color: '#3A56AF' }}>{nombreMateria}</span>
+                        </h2>
+
+                        <div style={estilos.buscadorWrapper} ref={buscadorRef}>
+                            <div style={estilos.buscadorCaja}>
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                    style={estilos.buscadorIcono}
+                                >
+                                    <circle cx="11" cy="11" r="8" />
+                                    <path d="M21 21l-4.3-4.3" />
+                                </svg>
+
+                                <input
+                                    type="text"
+                                    value={busqueda}
+                                    onChange={(e) => {
+                                        setBusqueda(e.target.value);
+                                        setBuscadorActivo(true);
+                                    }}
+                                    onFocus={() => setBuscadorActivo(true)}
+                                    placeholder="Buscar apunte..."
+                                    style={estilos.buscadorInput}
+                                />
+                            </div>
+
+                            {buscadorActivo && busqueda.trim() && (
+                                <div style={estilos.resultadosBusqueda}>
+                                    {apuntesCoincidentes.length > 0 ? (
+                                        apuntesCoincidentes.map((apunte) => (
+                                            <button
+                                                key={obtenerIdApunte(apunte)}
+                                                type="button"
+                                                style={estilos.resultadoItem}
+                                                onClick={() => abrirApunteDesdeBusqueda(apunte)}
+                                            >
+                                                <span style={estilos.resultadoTitulo}>
+                                                    {obtenerTituloApunte(apunte)}
+                                                </span>
+
+                                                <span style={estilos.resultadoFecha}>
+                                                    {formatearFechaModificacion(apunte)}
+                                                </span>
+                                            </button>
+                                        ))
+                                    ) : (
+                                        <div style={estilos.resultadoVacio}>
+                                            No se encontraron apuntes.
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 <button
@@ -474,7 +577,9 @@ const estilos = {
     grupoIzquierdo: {
         display: 'flex',
         flexDirection: 'column',
-        gap: '5px'
+        gap: '10px',
+        flex: 1,
+        minWidth: 0
     },
     btnVolver: {
         background: 'none',
@@ -500,7 +605,86 @@ const estilos = {
     tituloSeccion: {
         color: '#2D3247',
         margin: 0,
-        fontSize: '1.8rem'
+        fontSize: '1.8rem',
+        flexShrink: 0
+    },
+    filaTituloBuscador: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '20px',
+        flexWrap: 'wrap',
+        width: '100%'
+    },
+    buscadorWrapper: {
+        position: 'relative',
+        flex: '1 1 320px',
+        maxWidth: '520px',
+        minWidth: '260px',
+        zIndex: 20
+    },
+    buscadorCaja: {
+        height: '48px',
+        backgroundColor: 'white',
+        border: '1px solid #E8EBFF',
+        borderRadius: '999px',
+        boxShadow: '0 10px 24px rgba(58, 86, 175, 0.08)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        padding: '0 18px'
+    },
+    buscadorIcono: {
+        color: '#6A7185',
+        flexShrink: 0
+    },
+    buscadorInput: {
+        border: 'none',
+        outline: 'none',
+        width: '100%',
+        height: '100%',
+        backgroundColor: 'transparent',
+        color: '#2D3247',
+        fontSize: '0.95rem'
+    },
+    resultadosBusqueda: {
+        position: 'absolute',
+        top: '58px',
+        left: 0,
+        right: 0,
+        backgroundColor: 'white',
+        border: '1px solid #E8EBFF',
+        borderRadius: '16px',
+        boxShadow: '0 16px 36px rgba(45, 50, 71, 0.16)',
+        padding: '8px',
+        maxHeight: '280px',
+        overflowY: 'auto'
+    },
+    resultadoItem: {
+        width: '100%',
+        background: 'none',
+        border: 'none',
+        textAlign: 'left',
+        padding: '12px 14px',
+        borderRadius: '12px',
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '4px'
+    },
+    resultadoTitulo: {
+        color: '#2D3247',
+        fontWeight: 700,
+        fontSize: '0.95rem'
+    },
+    resultadoFecha: {
+        color: '#9EA5BA',
+        fontSize: '0.78rem'
+    },
+    resultadoVacio: {
+        color: '#9EA5BA',
+        fontSize: '0.9rem',
+        padding: '14px',
+        textAlign: 'center'
     },
     btnAgregar: {
         backgroundColor: '#3A56AF',

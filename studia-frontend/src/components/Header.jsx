@@ -22,28 +22,8 @@ const Header = ({ nombreUsuario = "Usuario" }) => {
                 </div>
             </div>
 
-            {/* Breadcrumb */}
-            <div style={estilos.breadcrumb}>
-                <span style={estilos.crumbPadre}>Enfoque</span>
-                <span style={estilos.crumbSeparador}>·</span>
-                <span style={estilos.crumbActual}>Temporizador Pomodoro</span>
-            </div>
-
-            {/* Acciones */}
+            {/* Usuario */}
             <div style={estilos.acciones}>
-                <button style={estilos.iconoBtn} title="Notificaciones">
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" width="18" height="18">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 2a6 6 0 00-6 6v2.5L2.5 13h15L16 10.5V8a6 6 0 00-6-6z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 13v.5a2 2 0 004 0V13" />
-                    </svg>
-                </button>
-                <button style={estilos.iconoBtn} title="Configuración">
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" width="18" height="18">
-                        <circle cx="10" cy="10" r="2.5" strokeLinecap="round" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 2v1.5M10 16.5V18M2 10h1.5M16.5 10H18M4.1 4.1l1.1 1.1M14.8 14.8l1.1 1.1M4.1 15.9l1.1-1.1M14.8 5.2l1.1-1.1" />
-                    </svg>
-                </button>
-
                 <div
                     style={estilos.avatarPlaceholder}
                     title={nombreUsuario}
@@ -102,32 +82,9 @@ const estilos = {
         letterSpacing: '0.05em',
         lineHeight: 1,
     },
-    breadcrumb: {
-        color: '#9EA5BA',
-        fontSize: '0.88rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-    },
-    crumbPadre: { fontWeight: '400' },
-    crumbSeparador: { opacity: 0.4 },
-    crumbActual: { fontWeight: '600', color: '#2D3247' },
-
     acciones: {
         display: 'flex',
         alignItems: 'center',
-        gap: '4px',
-    },
-    iconoBtn: {
-        background: 'none',
-        border: 'none',
-        color: '#9EA5BA',
-        cursor: 'pointer',
-        padding: '8px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: '6px',
     },
     avatarPlaceholder: {
         width: '36px',
@@ -143,7 +100,6 @@ const estilos = {
         border: '2px solid #E8EBFF',
         userSelect: 'none',
         cursor: 'pointer',
-        marginLeft: '8px',
     },
 };
 
