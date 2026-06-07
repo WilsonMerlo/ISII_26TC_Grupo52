@@ -40,6 +40,23 @@ namespace StudIA.API.Controllers
             // Si está todo bien, devolvemos un 200 OK con los datos del usuario
             return Ok(usuario);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Usuario>> ActualizarUsuario(int id, Usuario usuarioActualizado)
+        {
+            var usuario = await _usuarioService.ActualizarUsuarioAsync(
+                id,
+                usuarioActualizado
+            );
+
+            if (usuario == null)
+            {
+                return NotFound("Usuario no encontrado");
+            }
+
+            return Ok(usuario);
+        }
+
     }
 
     // --- CLASE PARA RECIBIR EL JSON DE LOGIN ---

@@ -29,5 +29,26 @@ namespace StudIA.Business
             return await _context.Usuarios
                                  .FirstOrDefaultAsync(u => u.Correo == correo && u.Contrasena == contrasena);
         }
+
+        public async Task<Usuario?> ActualizarUsuarioAsync(int id, Usuario datos)
+        {
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.IdUsuario == id);
+
+            if (usuario == null)
+                return null;
+
+            usuario.Nombre = datos.Nombre;
+            usuario.Correo = datos.Correo;
+
+            if (!string.IsNullOrWhiteSpace(datos.Contrasena))
+            {
+                usuario.Contrasena = datos.Contrasena;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return usuario;
+        }
     }
 }
