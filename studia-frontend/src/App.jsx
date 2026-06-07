@@ -13,65 +13,88 @@ import MateriasDashboard from './pages/MateriasDashboard'
 import EditorApunte from './components/EditorApunte'
 import ApuntesDashboard from './pages/ApuntesDashboard'
 import VerApunte from './pages/VerApunte'
+import { eliminarPomodoro } from './services/pomodoroService'
 
 function App() {
   const [vistaActual, setVistaActual] = useState(() => {
-    const idUsuario = localStorage.getItem('idUsuario');
-      if (!idUsuario) return 'login';
-      return localStorage.getItem('vistaActual') || 'dashboard';
+      const idUsuario = localStorage.getItem('idUsuario');
+      return idUsuario ? 'dashboard' : 'login';
   });
 
+  // Memorias de la aplicación
+  const [materiaActiva, setMateriaActiva] = useState(null);
+  const [apunteActivo, setApunteActivo] = useState(null);
+
+  // Estado global para advertir si hay un Pomodoro en curso
   const [pomodoroEnCurso, setPomodoroEnCurso] = useState(false);
   const [avisoSalidaPomodoro, setAvisoSalidaPomodoro] = useState({
-    abierto: false,
-    tipo: null,
-    vista: null,
-    datosExtra: null,
-  });
-
-  useEffect(() => {
-    if (!pomodoroEnCurso) return;
-
-    const advertirRecarga = (event) => {
-      event.preventDefault();
-
-      // Los navegadores modernos no permiten personalizar el texto del aviso,
-      // pero esta asignación fuerza la alerta nativa de confirmación.
-      event.returnValue = 'Tenés un Pomodoro en curso. Si recargás la página, se puede interrumpir la sesión.';
-      return event.returnValue;
-    };
-
-    window.addEventListener('beforeunload', advertirRecarga);
-
-    return () => {
-      window.removeEventListener('beforeunload', advertirRecarga);
-    };
-  }, [pomodoroEnCurso]);
-  
-  // Memorias de la aplicación
-  const [materiaActiva, setMateriaActiva] = useState(() => {
-      const materiaGuardada = localStorage.getItem('materiaActiva');
-      return materiaGuardada ? JSON.parse(materiaGuardada) : null;
-  });
-
-  const [apunteActivo, setApunteActivo] = useState(() => {
-      const apunteGuardado = localStorage.getItem('apunteActivo');
-      return apunteGuardado ? JSON.parse(apunteGuardado) : null;
+      abierto: false,
+      tipo: null,
+      vista: null,
+      datosExtra: null,
   });
 
   const nombreParaAvatar = localStorage.getItem('nombreUsuario') || 'Usuario';
+  const BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7068';
+  const POMODORO_APUNTE_STORAGE_KEY = 'pomodoroApunteActivoId';
+
+  const eliminarPomodoroActivoSinGuardar = async () => {
+      const idPomodoro = localStorage.getItem(POMODORO_APUNTE_STORAGE_KEY);
+
+      if (!idPomodoro) return;
+
+      try {
+          await eliminarPomodoro(idPomodoro);
+      } catch (error) {
+          console.error('Error al eliminar Pomodoro abandonado:', error);
+      } finally {
+          localStorage.removeItem(POMODORO_APUNTE_STORAGE_KEY);
+      }
+  };
+
+  useEffect(() => {
+      if (!pomodoroEnCurso) return;
+
+      const advertirRecarga = (event) => {
+          event.preventDefault();
+
+          // Los navegadores modernos no permiten personalizar completamente
+          // el texto del aviso, pero returnValue activa la alerta nativa.
+          event.returnValue = 'Hay un Pomodoro en curso. Si recargás la página, el progreso se perderá.';
+          return event.returnValue;
+      };
+
+      const eliminarSiLaPaginaSeAbandona = () => {
+          const idPomodoro = localStorage.getItem(POMODORO_APUNTE_STORAGE_KEY);
+
+          if (!idPomodoro) return;
+
+          try {
+              fetch(`${BASE_URL}/api/Pomodoros/${idPomodoro}`, {
+                  method: 'DELETE',
+                  keepalive: true,
+              });
+          } catch (error) {
+              console.error('Error al enviar eliminación del Pomodoro abandonado:', error);
+          } finally {
+              localStorage.removeItem(POMODORO_APUNTE_STORAGE_KEY);
+          }
+      };
+
+      window.addEventListener('beforeunload', advertirRecarga);
+      window.addEventListener('pagehide', eliminarSiLaPaginaSeAbandona);
+
+      return () => {
+          window.removeEventListener('beforeunload', advertirRecarga);
+          window.removeEventListener('pagehide', eliminarSiLaPaginaSeAbandona);
+      };
+  }, [pomodoroEnCurso, BASE_URL]);
 
   const ejecutarNavegacion = (nuevaVista, datosExtra = null) => {
-    localStorage.setItem('vistaActual', nuevaVista);
-
     if (nuevaVista === 'apuntes' || nuevaVista === 'editor') {
         setMateriaActiva(datosExtra);
-        localStorage.setItem('materiaActiva', JSON.stringify(datosExtra));
-    }
-
-    if (nuevaVista === 'verApunte') {
+    } else if (nuevaVista === 'verApunte') {
         setApunteActivo(datosExtra);
-        localStorage.setItem('apunteActivo', JSON.stringify(datosExtra));
     }
 
     setVistaActual(nuevaVista);
@@ -80,18 +103,16 @@ function App() {
   // Función maestra de navegación
   const navegarA = (nuevaVista, datosExtra = null) => {
     if (
-      pomodoroEnCurso &&
-      vistaActual === 'dashboard' &&
-      nuevaVista !== 'dashboard' &&
-      nuevaVista !== vistaActual
+        pomodoroEnCurso &&
+        nuevaVista !== vistaActual
     ) {
-      setAvisoSalidaPomodoro({
-        abierto: true,
-        tipo: 'navegacion',
-        vista: nuevaVista,
-        datosExtra,
-      });
-      return;
+        setAvisoSalidaPomodoro({
+            abierto: true,
+            tipo: 'navegacion',
+            vista: nuevaVista,
+            datosExtra,
+        });
+        return;
     }
 
     ejecutarNavegacion(nuevaVista, datosExtra);
@@ -100,10 +121,7 @@ function App() {
   const cerrarSesionDirecto = () => {
       localStorage.removeItem('idUsuario');
       localStorage.removeItem('nombreUsuario');
-      localStorage.removeItem('vistaActual');
-      localStorage.removeItem('materiaActiva');
-      localStorage.removeItem('apunteActivo');
-
+      localStorage.removeItem(POMODORO_APUNTE_STORAGE_KEY);
       setPomodoroEnCurso(false);
       setVistaActual('login');
       setMateriaActiva(null);
@@ -111,76 +129,90 @@ function App() {
   };
 
   const manejarCerrarSesion = () => {
-      if (pomodoroEnCurso && vistaActual === 'dashboard') {
-        setAvisoSalidaPomodoro({
-          abierto: true,
-          tipo: 'logout',
-          vista: null,
-          datosExtra: null,
-        });
-        return;
+      if (pomodoroEnCurso) {
+          setAvisoSalidaPomodoro({
+              abierto: true,
+              tipo: 'logout',
+              vista: null,
+              datosExtra: null,
+          });
+          return;
       }
 
       cerrarSesionDirecto();
   };
 
   const cancelarSalidaPomodoro = () => {
-    setAvisoSalidaPomodoro({
-      abierto: false,
-      tipo: null,
-      vista: null,
-      datosExtra: null,
-    });
+      setAvisoSalidaPomodoro({
+          abierto: false,
+          tipo: null,
+          vista: null,
+          datosExtra: null,
+      });
   };
 
-  const confirmarSalidaPomodoro = () => {
-    const accionPendiente = avisoSalidaPomodoro;
+  const confirmarSalidaPomodoro = async () => {
+      const accionPendiente = avisoSalidaPomodoro;
 
-    setPomodoroEnCurso(false);
-    cancelarSalidaPomodoro();
+      await eliminarPomodoroActivoSinGuardar();
 
-    if (accionPendiente.tipo === 'logout') {
-      cerrarSesionDirecto();
-      return;
-    }
+      setPomodoroEnCurso(false);
+      cancelarSalidaPomodoro();
 
-    if (accionPendiente.vista) {
-      ejecutarNavegacion(accionPendiente.vista, accionPendiente.datosExtra);
-    }
+      if (accionPendiente.tipo === 'logout') {
+          cerrarSesionDirecto();
+          return;
+      }
+
+      if (accionPendiente.vista) {
+          ejecutarNavegacion(accionPendiente.vista, accionPendiente.datosExtra);
+      }
   };
 
   const renderAvisoSalidaPomodoro = () => {
-    if (!avisoSalidaPomodoro.abierto) return null;
+      if (!avisoSalidaPomodoro.abierto) return null;
 
-    return (
-      <div style={estilosModalPomodoro.overlay}>
-        <div style={estilosModalPomodoro.modal}>
-          <h3 style={estilosModalPomodoro.titulo}>Pomodoro en curso</h3>
-          <p style={estilosModalPomodoro.texto}>
-            Tenés un Pomodoro iniciado. Si salís de esta sección desde el sidebar, el temporizador se va a interrumpir.
-          </p>
-          <p style={estilosModalPomodoro.advertencia}>
-            Esta acción puede hacer que pierdas el progreso actual del ciclo.
-          </p>
+      return (
+          <div style={estilosModalPomodoro.overlay}>
+              <div style={estilosModalPomodoro.modal}>
+                  <h3 style={estilosModalPomodoro.titulo}>Pomodoro en curso</h3>
 
-          <div style={estilosModalPomodoro.acciones}>
-            <button type="button" style={estilosModalPomodoro.btnCancelar} onClick={cancelarSalidaPomodoro}>
-              Cancelar
-            </button>
-            <button type="button" style={estilosModalPomodoro.btnSalir} onClick={confirmarSalidaPomodoro}>
-              Salir de todos modos
-            </button>
+                  <p style={estilosModalPomodoro.texto}>
+                      Hay una sesión Pomodoro activa en este apunte.
+                  </p>
+
+                  <p style={estilosModalPomodoro.advertencia}>
+                      Si abandonás esta sección o cerrás sesión, el progreso actual se perderá.
+                      ¿Querés abandonar la sesión?
+                  </p>
+
+                  <div style={estilosModalPomodoro.acciones}>
+                      <button
+                          type="button"
+                          style={estilosModalPomodoro.btnCancelar}
+                          onClick={cancelarSalidaPomodoro}
+                      >
+                          Cancelar
+                      </button>
+
+                      <button
+                          type="button"
+                          style={estilosModalPomodoro.btnSalir}
+                          onClick={confirmarSalidaPomodoro}
+                      >
+                          Abandonar sesión
+                      </button>
+                  </div>
+              </div>
           </div>
-        </div>
-      </div>
-    );
+      );
   };
 
   const envolverConAvisoPomodoro = (contenido) => (
-    <>
-      {contenido}
-      {renderAvisoSalidaPomodoro()}
-    </>
+      <>
+          {contenido}
+          {renderAvisoSalidaPomodoro()}
+      </>
   );
 
   switch (vistaActual) {
@@ -208,7 +240,7 @@ function App() {
           />
         </DashboardLayout>
       );
-    
+
     case 'editor':
       return envolverConAvisoPomodoro(
         <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
@@ -224,9 +256,10 @@ function App() {
       return envolverConAvisoPomodoro(
         <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
           <VerApunte 
-            // 👇 CAMBIAMOS ESTA LÍNEA PARA PASAR EL OBJETO EN MEMORIA 👇
             apunteSeleccionado={apunteActivo}
-            onVolver={() => navegarA('apuntes', materiaActiva)} 
+            materiaActiva={materiaActiva}
+            onVolver={() => navegarA('apuntes', materiaActiva)}
+            onEstadoPomodoroChange={setPomodoroEnCurso}
           />
         </DashboardLayout>
       );
@@ -246,67 +279,68 @@ function App() {
 
 const estilosModalPomodoro = {
   overlay: {
-    position: 'fixed',
-    inset: 0,
-    backgroundColor: 'rgba(45, 50, 71, 0.62)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 3000,
+      position: 'fixed',
+      inset: 0,
+      backgroundColor: 'rgba(45, 50, 71, 0.62)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 3000,
   },
   modal: {
-    width: '420px',
-    maxWidth: 'calc(100vw - 32px)',
-    backgroundColor: 'white',
-    borderRadius: '18px',
-    padding: '32px',
-    boxShadow: '0 18px 45px rgba(0,0,0,0.22)',
+      width: '430px',
+      maxWidth: 'calc(100vw - 32px)',
+      backgroundColor: 'white',
+      borderRadius: '18px',
+      padding: '32px',
+      boxShadow: '0 18px 45px rgba(0,0,0,0.22)',
+      fontFamily: "'IBM Plex Sans', 'Helvetica Neue', sans-serif",
   },
   titulo: {
-    margin: '0 0 12px 0',
-    color: '#2D3247',
-    fontSize: '1.25rem',
-    fontWeight: 800,
+      margin: '0 0 12px 0',
+      color: '#2D3247',
+      fontSize: '1.25rem',
+      fontWeight: 800,
   },
   texto: {
-    margin: '0 0 12px 0',
-    color: '#465365',
-    lineHeight: 1.5,
-    fontSize: '0.95rem',
+      margin: '0 0 12px 0',
+      color: '#465365',
+      lineHeight: 1.5,
+      fontSize: '0.95rem',
   },
   advertencia: {
-    margin: '0 0 22px 0',
-    color: '#D64545',
-    backgroundColor: '#FFF1F1',
-    border: '1px solid #FFD0D0',
-    borderRadius: '10px',
-    padding: '12px',
-    fontSize: '0.88rem',
-    fontWeight: 600,
-    lineHeight: 1.4,
+      margin: '0 0 22px 0',
+      color: '#D64545',
+      backgroundColor: '#FFF1F1',
+      border: '1px solid #FFD0D0',
+      borderRadius: '10px',
+      padding: '12px',
+      fontSize: '0.9rem',
+      fontWeight: 600,
+      lineHeight: 1.4,
   },
   acciones: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    gap: '10px',
-    flexWrap: 'wrap',
+      display: 'flex',
+      justifyContent: 'flex-end',
+      gap: '10px',
+      flexWrap: 'wrap',
   },
   btnCancelar: {
-    background: 'none',
-    border: 'none',
-    color: '#6A7185',
-    cursor: 'pointer',
-    fontWeight: 700,
-    padding: '10px 14px',
+      background: 'none',
+      border: 'none',
+      color: '#6A7185',
+      cursor: 'pointer',
+      fontWeight: 700,
+      padding: '10px 14px',
   },
   btnSalir: {
-    backgroundColor: '#D64545',
-    color: 'white',
-    border: 'none',
-    borderRadius: '9px',
-    padding: '10px 18px',
-    cursor: 'pointer',
-    fontWeight: 800,
+      backgroundColor: '#D64545',
+      color: 'white',
+      border: 'none',
+      borderRadius: '9px',
+      padding: '10px 18px',
+      cursor: 'pointer',
+      fontWeight: 800,
   },
 };
 
