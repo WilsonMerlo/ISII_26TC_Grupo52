@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudIA.Data;
 using StudIA.Data.Entities;
+using System.Linq;
 
 namespace StudIA.Business
 {
@@ -16,6 +17,13 @@ namespace StudIA.Business
         public async Task<IEnumerable<Materia>> ObtenerTodasLasMateriasAsync()
         {
             return await _context.Materias.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Materia>> ObtenerMateriasPorUsuarioAsync(int idUsuario)
+        {
+            return await _context.Materias
+                .Where(m => m.IdUsuario == idUsuario)
+                .ToListAsync();
         }
 
         public async Task<Materia> CrearMateriaAsync(Materia materia)

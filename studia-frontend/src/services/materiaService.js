@@ -71,5 +71,25 @@ export const materiaService = {
         }
 
         return leerRespuesta(response);
-    }
+    },
+
+    obtenerPorUsuario: async (idUsuario) => {
+        const response = await fetch(
+            `${API_URL}/usuario/${idUsuario}`
+        );
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(
+                'Error al obtener materias:',
+                response.status,
+                errorText
+            );
+
+            throw new Error('Error al obtener materias');
+        }
+
+        return response.json();
+    },
+
 };

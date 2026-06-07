@@ -23,6 +23,14 @@ namespace StudIA.API.Controllers
             return Ok(materias);
         }
 
+        [HttpGet("usuario/{idUsuario}")]
+        public async Task<ActionResult<IEnumerable<Materia>>> GetMateriasPorUsuario(int idUsuario)
+        {
+            var materias = await _materiaService.ObtenerMateriasPorUsuarioAsync(idUsuario);
+
+            return Ok(materias);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Materia>> PostMateria(Materia materia)
         {

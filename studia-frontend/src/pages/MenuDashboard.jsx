@@ -41,34 +41,6 @@ const obtenerFechaModificacion = (apunte) => (
     null
 );
 
-
-const inicioDeSemanaActual = () => {
-    const fecha = new Date();
-    const dia = fecha.getDay();
-    const diferencia = dia === 0 ? -6 : 1 - dia;
-
-    fecha.setDate(fecha.getDate() + diferencia);
-    fecha.setHours(0, 0, 0, 0);
-
-    return fecha;
-};
-
-const finDeSemanaActual = () => {
-    const inicio = inicioDeSemanaActual();
-    const fin = new Date(inicio);
-
-    fin.setDate(inicio.getDate() + 6);
-    fin.setHours(23, 59, 59, 999);
-
-    return fin;
-};
-
-const formatearRangoSemana = (inicio, fin) => {
-    const opciones = { day: 'numeric', month: 'short' };
-
-    return `${inicio.toLocaleDateString('es-AR', opciones)} - ${fin.toLocaleDateString('es-AR', opciones)}`;
-};
-
 const convertirHtmlATexto = (html) => {
     const texto = String(html || '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ');
     return texto.replace(/\s+/g, ' ').trim();
@@ -104,16 +76,20 @@ const MenuDashboard = ({ onNavegar }) => {
     });
 
     const nombreUsuario = localStorage.getItem('nombreUsuario') || 'Usuario';
-    const inicioSemana = useMemo(() => inicioDeSemanaActual(), []);
-    const finSemana = useMemo(() => finDeSemanaActual(), []);
-    const rangoSemanaActual = useMemo(() => formatearRangoSemana(inicioSemana, finSemana), [inicioSemana, finSemana]);
-
 
     const cargarDatos = async () => {
         setCargando(true);
 
         try {
-            const materiasData = await materiaService.obtenerTodas();
+            const idUsuario = Number(localStorage.getItem('idUsuario'));
+
+            if (!idUsuario) {
+                setMaterias([]);
+                setApuntesRecientes([]);
+                return;
+            }
+
+            const materiasData = await materiaService.obtenerPorUsuario(idUsuario);
             const materiasNormalizadas = Array.isArray(materiasData) ? materiasData : [];
             setMaterias(materiasNormalizadas);
 
@@ -152,14 +128,7 @@ const MenuDashboard = ({ onNavegar }) => {
 
     const cargarEstadisticas = async () => {
         try {
-            const fechaInicio = inicioDeSemanaActual();
-            const fechaFin = finDeSemanaActual();
-
-            const data = await estadisticaService.obtenerEstadisticasSemana({
-                fechaInicio,
-                fechaFin
-            });
-
+            const data = await estadisticaService.obtenerEstadisticasSemana();
             setEstadisticas(data);
         } catch (error) {
             console.warn('No se pudieron cargar estadísticas del menú:', error);
@@ -186,11 +155,8 @@ const MenuDashboard = ({ onNavegar }) => {
             { dia: 'DOM', minutos: 0 }
         ];
 
-    const minutosPorDia = diasSemana.map((dia) => Number(dia.minutos) || 0);
-    const maxMinutos = Math.max(...minutosPorDia, 0);
+    const maxMinutos = Math.max(...diasSemana.map((dia) => Number(dia.minutos) || 0), 1);
     const totalHorasSemana = ((estadisticas?.totalSemanaMinutos || 0) / 60).toFixed(1);
-    const indiceMayorTiempo = maxMinutos > 0 ? minutosPorDia.indexOf(maxMinutos) : -1;
-
 
     const manejarCrearMateria = async (event) => {
         event.preventDefault();
@@ -292,26 +258,22 @@ const MenuDashboard = ({ onNavegar }) => {
                     <div style={estilos.cardHeaderCompacto}>
                         <div>
                             <h2 style={estilos.tituloCardChico}>Horas de Enfoque</h2>
-                            <p style={estilos.descripcionChica}>Semana actual · {rangoSemanaActual}</p>
+                            <p style={estilos.descripcionChica}>Esta semana</p>
                         </div>
                         <div style={estilos.totalHoras}>{totalHorasSemana}</div>
                     </div>
 
                     <div style={estilos.barras}>
                         {diasSemana.map((dia, index) => {
-                            const minutosDia = Number(dia.minutos) || 0;
-                            const alto = maxMinutos > 0
-                                ? Math.round((minutosDia / maxMinutos) * 100)
-                                : 0;
+                            const alto = Math.max(12, Math.round(((Number(dia.minutos) || 0) / maxMinutos) * 100));
 
                             return (
                                 <div key={`${dia.dia}-${index}`} style={estilos.columnaBarra}>
                                     <div
-                                        title={`${dia.dia}: ${Math.floor(minutosDia / 60)}h ${minutosDia % 60}min`}
                                         style={{
                                             ...estilos.barra,
                                             height: `${alto}%`,
-                                            ...(index === indiceMayorTiempo ? estilos.barraActiva : {})
+                                            ...(alto === 100 ? estilos.barraActiva : {})
                                         }}
                                     />
                                     <span style={estilos.labelDia}>{String(dia.dia || '').slice(0, 1)}</span>

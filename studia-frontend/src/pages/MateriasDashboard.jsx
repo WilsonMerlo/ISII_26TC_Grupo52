@@ -91,8 +91,16 @@ const MateriasDashboard = ({ onNavegar }) => {
 
     const cargarMaterias = async () => {
         try {
-            const data = await materiaService.obtenerTodas();
-            setMaterias(data);
+            const idUsuario = Number(localStorage.getItem('idUsuario'));
+
+            if (!idUsuario) {
+                setMaterias([]);
+                alert("No se encontró el usuario logueado. Iniciá sesión nuevamente.");
+                return;
+            }
+
+            const data = await materiaService.obtenerPorUsuario(idUsuario);
+            setMaterias(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error("Error cargando materias:", error);
         }
