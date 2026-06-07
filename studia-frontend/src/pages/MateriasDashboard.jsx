@@ -1,14 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { materiaService } from '../services/materiaService';
 
+const IconoEditar = () => (
+    <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+    >
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+    </svg>
+);
+
+const IconoBasurero = () => (
+    <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+    >
+        <polyline points="3 6 5 6 21 6" />
+        <path d="M19 6l-1 14H6L5 6" />
+        <path d="M10 11v6" />
+        <path d="M14 11v6" />
+        <path d="M9 6V4h6v2" />
+    </svg>
+);
 
 const MateriasDashboard = ({ onNavegar }) => {
     const [materias, setMaterias] = useState([]);
     const [mostrarModal, setMostrarModal] = useState(false);
+
     const [nuevaMateria, setNuevaMateria] = useState({
         nombreMateria: '',
         descripcion: ''
     });
+
     const [materiaAEliminar, setMateriaAEliminar] = useState(null);
     const [materiaEditando, setMateriaEditando] = useState(null);
 
@@ -22,15 +60,15 @@ const MateriasDashboard = ({ onNavegar }) => {
     }, []);
 
     const obtenerIdMateria = (materia) => {
-        return materia.id_materia || materia.idMateria || materia.IdMateria || materia.id;
+        return materia?.id_materia || materia?.idMateria || materia?.IdMateria || materia?.id;
     };
 
     const obtenerNombreMateria = (materia) => {
-        return materia.nombre_materia || materia.nombreMateria || materia.NombreMateria || '';
+        return materia?.nombre_materia || materia?.nombreMateria || materia?.NombreMateria || '';
     };
 
     const obtenerDescripcionMateria = (materia) => {
-        return materia.descripcion || materia.Descripcion || '';
+        return materia?.descripcion || materia?.Descripcion || '';
     };
 
     const cargarMaterias = async () => {
@@ -72,7 +110,7 @@ const MateriasDashboard = ({ onNavegar }) => {
                 descripcion: ''
             });
 
-            await cargarMaterias();
+            cargarMaterias();
         } catch (error) {
             console.error("Error al crear materia:", error);
             alert("Error al crear la materia. Revisa la conexión con el servidor.");
@@ -162,10 +200,9 @@ const MateriasDashboard = ({ onNavegar }) => {
 
     return (
         <div style={estilos.contenedorPrincipal}>
-
-            {/* Cabecera: Título + Botón Agregar */}
             <div style={estilos.cabecera}>
                 <h2 style={estilos.tituloSeccion}>Mis Materias</h2>
+
                 <button
                     style={estilos.btnAgregar}
                     onClick={() => setMostrarModal(true)}
@@ -174,7 +211,6 @@ const MateriasDashboard = ({ onNavegar }) => {
                 </button>
             </div>
 
-            {/* Grilla de Tarjetas Clickeables */}
             <div style={estilos.scrollMaterias}>
                 <div style={estilos.gridMaterias}>
                     {materias.map((materia, index) => (
@@ -191,22 +227,25 @@ const MateriasDashboard = ({ onNavegar }) => {
                                 {obtenerDescripcionMateria(materia)}
                             </p>
 
-                            {/* Botones protegidos para no navegar por error */}
                             <div style={estilos.footerTarjeta} onClick={(e) => e.stopPropagation()}>
                                 <button
                                     type="button"
                                     style={estilos.btnEditar}
                                     onClick={() => abrirModalEditar(materia)}
+                                    title="Editar materia"
+                                    aria-label="Editar materia"
                                 >
-                                    Editar
+                                    <IconoEditar />
                                 </button>
 
                                 <button
                                     type="button"
                                     style={estilos.btnEliminar}
                                     onClick={() => abrirModalEliminar(materia)}
+                                    title="Borrar materia"
+                                    aria-label="Borrar materia"
                                 >
-                                    Borrar
+                                    <IconoBasurero />
                                 </button>
                             </div>
                         </div>
@@ -214,141 +253,136 @@ const MateriasDashboard = ({ onNavegar }) => {
                 </div>
             </div>
 
-            {/* Modal crear materia */}
-                {mostrarModal && (
-                    <div style={estilos.overlayModal}>
-                        <div style={estilos.modal}>
-                            <h3 style={{ marginBottom: '20px', color: '#2D3247' }}>
-                                Nueva Materia
-                            </h3>
+            {mostrarModal && (
+                <div style={estilos.overlayModal}>
+                    <div style={estilos.modal}>
+                        <h3 style={estilos.tituloModal}>Nueva Materia</h3>
 
-                            <form onSubmit={manejarCrearMateria} style={estilos.formulario}>
-                                <input
-                                    type="text"
-                                    placeholder="Nombre de la materia (ej: Cálculo)"
-                                    required
-                                    value={nuevaMateria.nombreMateria}
-                                    onChange={(e) =>
-                                        setNuevaMateria({
-                                            ...nuevaMateria,
-                                            nombreMateria: e.target.value
-                                        })
-                                    }
-                                    style={estilos.input}
-                                />
+                        <form onSubmit={manejarCrearMateria} style={estilos.formulario}>
+                            <input
+                                type="text"
+                                placeholder="Nombre de la materia (ej: Cálculo)"
+                                required
+                                value={nuevaMateria.nombreMateria}
+                                onChange={(e) =>
+                                    setNuevaMateria({
+                                        ...nuevaMateria,
+                                        nombreMateria: e.target.value
+                                    })
+                                }
+                                style={estilos.input}
+                            />
 
-                                <textarea
-                                    placeholder="Breve descripción..."
-                                    value={nuevaMateria.descripcion}
-                                    onChange={(e) =>
-                                        setNuevaMateria({
-                                            ...nuevaMateria,
-                                            descripcion: e.target.value
-                                        })
-                                    }
-                                    style={estilos.textarea}
-                                />
-
-                                <div style={estilos.botonesForm}>
-                                    <button
-                                        type="button"
-                                        onClick={() => setMostrarModal(false)}
-                                        style={estilos.btnCancelar}
-                                    >
-                                        Cancelar
-                                    </button>
-
-                                    <button type="submit" style={estilos.btnGuardar}>
-                                        Guardar Materia
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                )}
-
-                {/* Modal confirmar borrado */}
-                {materiaAEliminar && (
-                    <div style={estilos.overlayModal}>
-                        <div style={estilos.modalConfirmacion}>
-                            <h3 style={estilos.tituloModal}>Eliminar materia</h3>
-
-                            <p style={estilos.textoConfirmacion}>
-                                ¿Estás seguro de que querés eliminar la materia{' '}
-                                <strong>{obtenerNombreMateria(materiaAEliminar)}</strong>?
-                            </p>
+                            <textarea
+                                placeholder="Breve descripción..."
+                                value={nuevaMateria.descripcion}
+                                onChange={(e) =>
+                                    setNuevaMateria({
+                                        ...nuevaMateria,
+                                        descripcion: e.target.value
+                                    })
+                                }
+                                style={estilos.textarea}
+                            />
 
                             <div style={estilos.botonesForm}>
                                 <button
                                     type="button"
-                                    onClick={cerrarModalEliminar}
+                                    onClick={() => setMostrarModal(false)}
                                     style={estilos.btnCancelar}
                                 >
                                     Cancelar
                                 </button>
 
-                                <button
-                                    type="button"
-                                    onClick={confirmarEliminarMateria}
-                                    style={estilos.btnConfirmarEliminar}
-                                >
-                                    Sí, eliminar
+                                <button type="submit" style={estilos.btnGuardar}>
+                                    Guardar Materia
                                 </button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {materiaAEliminar && (
+                <div style={estilos.overlayModal}>
+                    <div style={estilos.modalConfirmacion}>
+                        <h3 style={estilos.tituloModal}>Eliminar materia</h3>
+
+                        <p style={estilos.textoConfirmacion}>
+                            ¿Estás seguro de que querés eliminar la materia{' '}
+                            <strong>{obtenerNombreMateria(materiaAEliminar)}</strong>?
+                        </p>
+
+                        <div style={estilos.botonesForm}>
+                            <button
+                                type="button"
+                                onClick={cerrarModalEliminar}
+                                style={estilos.btnCancelar}
+                            >
+                                Cancelar
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={confirmarEliminarMateria}
+                                style={estilos.btnConfirmarEliminar}
+                            >
+                                Sí, eliminar
+                            </button>
                         </div>
                     </div>
-                )}
+                </div>
+            )}
 
-                {/* Modal editar materia */}
-                {materiaEditando && (
-                    <div style={estilos.overlayModal}>
-                        <div style={estilos.modal}>
-                            <h3 style={estilos.tituloModal}>Editar Materia</h3>
+            {materiaEditando && (
+                <div style={estilos.overlayModal}>
+                    <div style={estilos.modal}>
+                        <h3 style={estilos.tituloModal}>Editar Materia</h3>
 
-                            <form onSubmit={guardarEdicionMateria} style={estilos.formulario}>
-                                <input
-                                    type="text"
-                                    placeholder="Nombre de la materia"
-                                    required
-                                    value={formEditar.nombreMateria}
-                                    onChange={(e) =>
-                                        setFormEditar({
-                                            ...formEditar,
-                                            nombreMateria: e.target.value
-                                        })
-                                    }
-                                    style={estilos.input}
-                                />
+                        <form onSubmit={guardarEdicionMateria} style={estilos.formulario}>
+                            <input
+                                type="text"
+                                placeholder="Nombre de la materia"
+                                required
+                                value={formEditar.nombreMateria}
+                                onChange={(e) =>
+                                    setFormEditar({
+                                        ...formEditar,
+                                        nombreMateria: e.target.value
+                                    })
+                                }
+                                style={estilos.input}
+                            />
 
-                                <textarea
-                                    placeholder="Descripción"
-                                    value={formEditar.descripcion}
-                                    onChange={(e) =>
-                                        setFormEditar({
-                                            ...formEditar,
-                                            descripcion: e.target.value
-                                        })
-                                    }
-                                    style={estilos.textarea}
-                                />
+                            <textarea
+                                placeholder="Descripción"
+                                value={formEditar.descripcion}
+                                onChange={(e) =>
+                                    setFormEditar({
+                                        ...formEditar,
+                                        descripcion: e.target.value
+                                    })
+                                }
+                                style={estilos.textarea}
+                            />
 
-                                <div style={estilos.botonesForm}>
-                                    <button
-                                        type="button"
-                                        onClick={cerrarModalEditar}
-                                        style={estilos.btnCancelar}
-                                    >
-                                        Cancelar
-                                    </button>
+                            <div style={estilos.botonesForm}>
+                                <button
+                                    type="button"
+                                    onClick={cerrarModalEditar}
+                                    style={estilos.btnCancelar}
+                                >
+                                    Cancelar
+                                </button>
 
-                                    <button type="submit" style={estilos.btnGuardar}>
-                                        Guardar Cambios
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                                <button type="submit" style={estilos.btnGuardar}>
+                                    Guardar Cambios
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                )}
+                </div>
+            )}
         </div>
     );
 };
@@ -365,6 +399,7 @@ const estilos = {
         flexDirection: 'column',
         overflow: 'hidden'
     },
+
     cabecera: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -372,6 +407,7 @@ const estilos = {
         marginBottom: '30px',
         flexShrink: 0
     },
+
     tituloSeccion: {
         color: '#2D3247',
         margin: 0,
@@ -391,6 +427,7 @@ const estilos = {
         gap: '8px',
         transition: 'all 0.2s'
     },
+
     iconoPlus: {
         fontSize: '1.4rem',
         lineHeight: '1'
@@ -410,6 +447,7 @@ const estilos = {
         gap: '25px',
         paddingBottom: '24px'
     },
+
     tarjeta: {
         backgroundColor: 'white',
         borderRadius: '15px',
@@ -420,17 +458,20 @@ const estilos = {
         flexDirection: 'column',
         minHeight: '180px'
     },
+
     tituloMateria: {
         fontSize: '1.4rem',
         color: '#3A56AF',
         margin: '0 0 10px 0'
     },
+
     descMateria: {
         fontSize: '0.9rem',
         color: '#6A7185',
         margin: '0 0 20px 0',
         lineHeight: '1.4'
     },
+
     footerTarjeta: {
         marginTop: 'auto',
         display: 'flex',
@@ -442,22 +483,28 @@ const estilos = {
         backgroundColor: '#F0F3FF',
         color: '#3A56AF',
         border: '1px solid #C9D3FF',
-        padding: '8px 12px',
+        width: '36px',
+        height: '36px',
         borderRadius: '8px',
         cursor: 'pointer',
-        fontWeight: '600',
-        fontSize: '0.85rem'
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 0
     },
 
     btnEliminar: {
         backgroundColor: '#FFF1F1',
         color: '#D64545',
         border: '1px solid #FFD0D0',
-        padding: '8px 12px',
+        width: '36px',
+        height: '36px',
         borderRadius: '8px',
         cursor: 'pointer',
-        fontWeight: '600',
-        fontSize: '0.85rem'
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 0
     },
 
     overlayModal: {
@@ -472,6 +519,7 @@ const estilos = {
         alignItems: 'center',
         zIndex: 1000
     },
+
     modal: {
         backgroundColor: 'white',
         padding: '40px',
@@ -499,21 +547,12 @@ const estilos = {
         marginBottom: '25px'
     },
 
-    btnConfirmarEliminar: {
-        backgroundColor: '#D64545',
-        color: 'white',
-        border: 'none',
-        padding: '10px 20px',
-        borderRadius: '8px',
-        cursor: 'pointer',
-        fontWeight: '600'
-    },
-
     formulario: {
         display: 'flex',
         flexDirection: 'column',
         gap: '15px'
     },
+
     input: {
         padding: '12px',
         borderRadius: '8px',
@@ -521,6 +560,7 @@ const estilos = {
         outline: 'none',
         fontSize: '1rem'
     },
+
     textarea: {
         padding: '12px',
         borderRadius: '8px',
@@ -530,21 +570,35 @@ const estilos = {
         minHeight: '80px',
         fontFamily: 'inherit'
     },
+
     botonesForm: {
         display: 'flex',
         justifyContent: 'flex-end',
         gap: '10px',
         marginTop: '10px'
     },
+
     btnCancelar: {
         background: 'none',
         border: 'none',
         color: '#6A7185',
         cursor: 'pointer',
-        fontWeight: '600'
+        fontWeight: '600',
+        padding: '10px 14px'
     },
+
     btnGuardar: {
         backgroundColor: '#3A56AF',
+        color: 'white',
+        border: 'none',
+        padding: '10px 20px',
+        borderRadius: '8px',
+        cursor: 'pointer',
+        fontWeight: '600'
+    },
+
+    btnConfirmarEliminar: {
+        backgroundColor: '#D64545',
         color: 'white',
         border: 'none',
         padding: '10px 20px',

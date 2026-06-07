@@ -60,11 +60,9 @@ const MantenerPresionadoEliminar = ({ onConfirmar, disabled }) => {
 
 const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
     const [apuntes, setApuntes] = useState([]);
-
     const [mostrarModalNuevo, setMostrarModalNuevo] = useState(false);
     const [tituloNuevoApunte, setTituloNuevoApunte] = useState('');
     const [creandoApunte, setCreandoApunte] = useState(false);
-
     const [apunteAEliminar, setApunteAEliminar] = useState(null);
     const [eliminandoApunte, setEliminandoApunte] = useState(false);
 
@@ -114,11 +112,9 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
 
     const obtenerTimestampModificacion = (apunte) => {
         const fecha = obtenerFechaModificacion(apunte);
-
         if (!fecha) return 0;
 
         const timestamp = new Date(fecha).getTime();
-
         return Number.isNaN(timestamp) ? 0 : timestamp;
     };
 
@@ -190,7 +186,7 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
 
             if (!apunteCreado || !obtenerIdApunte(apunteCreado)) {
                 const apuntesActualizados = await apunteService.obtenerPorMateria(idMateria);
-                setApuntes(apuntesActualizados);
+                setApuntes(ordenarApuntesPorModificacion(apuntesActualizados));
 
                 apunteCreado =
                     [...apuntesActualizados]
@@ -292,7 +288,8 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
             <div style={estilos.cabecera}>
                 <div style={estilos.grupoIzquierdo}>
                     <button style={estilos.btnVolver} onClick={onVolver}>
-                        ← Volver a Materias
+                        <span style={estilos.iconoVolver}>arrow_back</span>
+                        Volver
                     </button>
 
                     <h2 style={estilos.tituloSeccion}>
@@ -345,8 +342,26 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
                                         type="button"
                                         style={estilos.btnEliminarTarjeta}
                                         onClick={() => abrirModalEliminar(apunte)}
+                                        title="Eliminar apunte"
+                                        aria-label="Eliminar apunte"
                                     >
-                                        Eliminar
+                                        <svg
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <polyline points="3 6 5 6 21 6" />
+                                            <path d="M19 6l-1 14H6L5 6" />
+                                            <path d="M10 11v6" />
+                                            <path d="M14 11v6" />
+                                            <path d="M9 6V4h6v2" />
+                                        </svg>
                                     </button>
                                 </div>
                             </div>
@@ -464,11 +479,23 @@ const estilos = {
     btnVolver: {
         background: 'none',
         border: 'none',
-        color: '#6A7185',
+        color: '#64748B',
         cursor: 'pointer',
         textAlign: 'left',
         fontSize: '0.9rem',
-        padding: 0
+        padding: 0,
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        fontWeight: '600',
+        width: 'fit-content'
+    },
+    iconoVolver: {
+        fontFamily: 'Material Symbols Outlined',
+        fontSize: '20px',
+        lineHeight: 1,
+        color: '#3A5A82',
+        fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24"
     },
     tituloSeccion: {
         color: '#2D3247',
@@ -532,11 +559,14 @@ const estilos = {
         backgroundColor: '#FFF1F1',
         color: '#D64545',
         border: '1px solid #FFD0D0',
-        padding: '8px 12px',
+        width: '36px',
+        height: '36px',
         borderRadius: '8px',
         cursor: 'pointer',
-        fontWeight: '700',
-        fontSize: '0.85rem'
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 0
     },
     vacio: {
         gridColumn: '1 / -1',
@@ -546,7 +576,6 @@ const estilos = {
         borderRadius: '15px',
         border: '1px dashed #C8D5EB'
     },
-
     overlayModal: {
         position: 'fixed',
         top: 0,
