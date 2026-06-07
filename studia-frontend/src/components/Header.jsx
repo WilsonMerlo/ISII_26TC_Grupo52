@@ -52,6 +52,11 @@ const Header = ({ nombreUsuario = "Usuario", onLogout, onNavegar }) => {
         onNavegar?.('misDatos');
     };
 
+    const irAMenu = () => {
+        setMenuAbierto(false);
+        onNavegar?.('menu');
+    };
+
     const cerrarSesion = () => {
         setMenuAbierto(false);
         onLogout?.();
@@ -61,13 +66,18 @@ const Header = ({ nombreUsuario = "Usuario", onLogout, onNavegar }) => {
 
     return (
         <header style={estilos.header}>
-            <div style={estilos.logoSeccion}>
+            <button
+                type="button"
+                style={estilos.logoSeccion}
+                onClick={irAMenu}
+                title="Ir al menú"
+            >
                 <span style={estilos.logoIcono}>S</span>
                 <div>
                     <h1 style={estilos.logoNombre}>StudIA</h1>
                     <p style={estilos.logoSubtitulo}>Deep Work</p>
                 </div>
-            </div>
+            </button>
 
             <div style={estilos.acciones} ref={dropdownRef}>
                 <button
@@ -122,6 +132,12 @@ const estilos = {
         display: 'flex',
         alignItems: 'center',
         gap: '10px',
+        backgroundColor: 'transparent',
+        border: 'none',
+        padding: 0,
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        textAlign: 'left',
     },
     logoIcono: {
         width: '32px',
