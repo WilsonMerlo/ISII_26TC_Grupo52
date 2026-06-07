@@ -1,7 +1,6 @@
 import React from 'react';
 
 // --- Íconos SVG ---
-
 const IconMenu = () => (
     <svg
         width="20"
@@ -13,10 +12,10 @@ const IconMenu = () => (
         strokeLinecap="round"
         strokeLinejoin="round"
     >
-        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-        <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+        <rect x="3" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="3" width="7" height="7" rx="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1.5" />
+        <rect x="14" y="14" width="7" height="7" rx="1.5" />
     </svg>
 );
 
@@ -101,6 +100,10 @@ const Sidebar = ({ nombreUsuario = "Usuario", onLogout, onNavegar, vistaActual }
             return true;
         }
 
+        if (item.vista === 'dashboard' && vistaActual === 'pomodoro') {
+            return true;
+        }
+
         return item.vista === vistaActual;
     };
 
@@ -111,8 +114,9 @@ const Sidebar = ({ nombreUsuario = "Usuario", onLogout, onNavegar, vistaActual }
                     const activo = esItemActivo(item);
 
                     return (
-                        <div
+                        <button
                             key={index}
+                            type="button"
                             style={
                                 activo
                                     ? { ...estilos.menuItem, ...estilos.itemActivo }
@@ -128,7 +132,7 @@ const Sidebar = ({ nombreUsuario = "Usuario", onLogout, onNavegar, vistaActual }
                                 {item.icono}
                             </span>
                             <span>{item.nombre}</span>
-                        </div>
+                        </button>
                     );
                 })}
             </nav>
@@ -169,6 +173,7 @@ const estilos = {
         gap: '4px',
     },
     menuItem: {
+        width: '100%',
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
@@ -179,6 +184,10 @@ const estilos = {
         fontSize: '0.9rem',
         fontWeight: '500',
         transition: 'background-color 0.15s, color 0.15s',
+        border: 'none',
+        backgroundColor: 'transparent',
+        fontFamily: 'inherit',
+        textAlign: 'left',
     },
     itemActivo: {
         backgroundColor: '#F0F3FF',
