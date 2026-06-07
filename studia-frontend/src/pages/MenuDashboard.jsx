@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { materiaService } from '../services/materiaService';
 import { apunteService } from '../services/apunteService';
 import { estadisticaService } from '../services/estadisticaService';
@@ -74,6 +74,7 @@ const MenuDashboard = ({ onNavegar }) => {
         nombreMateria: '',
         descripcion: ''
     });
+    const modalMateriaRef = useRef(null);
 
     const nombreUsuario = localStorage.getItem('nombreUsuario') || 'Usuario';
 
@@ -81,15 +82,7 @@ const MenuDashboard = ({ onNavegar }) => {
         setCargando(true);
 
         try {
-            const idUsuario = Number(localStorage.getItem('idUsuario'));
-
-            if (!idUsuario) {
-                setMaterias([]);
-                setApuntesRecientes([]);
-                return;
-            }
-
-            const materiasData = await materiaService.obtenerPorUsuario(idUsuario);
+            const materiasData = await materiaService.obtenerTodas();
             const materiasNormalizadas = Array.isArray(materiasData) ? materiasData : [];
             setMaterias(materiasNormalizadas);
 
@@ -158,9 +151,15 @@ const MenuDashboard = ({ onNavegar }) => {
     const maxMinutos = Math.max(...diasSemana.map((dia) => Number(dia.minutos) || 0), 1);
     const totalHorasSemana = ((estadisticas?.totalSemanaMinutos || 0) / 60).toFixed(1);
 
-    const manejarCrearMateria = async (event) => {
-        event.preventDefault();
+    const cerrarModalMateria = () => {
+        setMostrarModalMateria(false);
+        setNuevaMateria({
+            nombreMateria: '',
+            descripcion: ''
+        });
+    };
 
+    const guardarNuevaMateria = async () => {
         if (!nuevaMateria.nombreMateria.trim()) {
             alert('El nombre de la materia es obligatorio.');
             return;
@@ -180,14 +179,55 @@ const MenuDashboard = ({ onNavegar }) => {
                 descripcion: nuevaMateria.descripcion.trim()
             });
 
-            setNuevaMateria({ nombreMateria: '', descripcion: '' });
-            setMostrarModalMateria(false);
+            cerrarModalMateria();
             await cargarDatos();
         } catch (error) {
             console.error('Error al crear materia:', error);
             alert('Error al crear la materia. Revisá la conexión con el servidor.');
         }
     };
+
+    const manejarCrearMateria = async (event) => {
+        event?.preventDefault();
+        await guardarNuevaMateria();
+    };
+
+    useEffect(() => {
+        if (!mostrarModalMateria) return;
+
+        const manejarClickFuera = (event) => {
+            if (
+                modalMateriaRef.current &&
+                !modalMateriaRef.current.contains(event.target)
+            ) {
+                cerrarModalMateria();
+            }
+        };
+
+        const manejarTeclado = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                cerrarModalMateria();
+                return;
+            }
+
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                event.stopPropagation();
+                guardarNuevaMateria();
+            }
+        };
+
+        document.addEventListener('mousedown', manejarClickFuera);
+        document.addEventListener('touchstart', manejarClickFuera);
+        document.addEventListener('keydown', manejarTeclado, true);
+
+        return () => {
+            document.removeEventListener('mousedown', manejarClickFuera);
+            document.removeEventListener('touchstart', manejarClickFuera);
+            document.removeEventListener('keydown', manejarTeclado, true);
+        };
+    }, [mostrarModalMateria, nuevaMateria]);
 
     const abrirMateria = (materia) => {
         onNavegar?.('apuntes', materia);
@@ -243,7 +283,6 @@ const MenuDashboard = ({ onNavegar }) => {
                                     onClick={() => abrirMateria(materia)}
                                 >
                                     <div style={estilos.iconoMateria}>Σ</div>
-                                    <span style={estilos.estadoMateria}>Activa</span>
                                     <h3 style={estilos.nombreMateria}>{obtenerNombreMateria(materia)}</h3>
                                     {obtenerDescripcionMateria(materia) && (
                                         <p style={estilos.descripcionMateria}>{obtenerDescripcionMateria(materia)}</p>
@@ -336,7 +375,11 @@ const MenuDashboard = ({ onNavegar }) => {
 
             {mostrarModalMateria && (
                 <div style={estilos.overlayModal}>
-                    <div style={estilos.modal}>
+                    <div
+                        style={estilos.modal}
+                        ref={modalMateriaRef}
+                        onClick={(event) => event.stopPropagation()}
+                    >
                         <h3 style={estilos.tituloModal}>Nueva Materia</h3>
 
                         <form onSubmit={manejarCrearMateria} style={estilos.formulario}>
@@ -365,7 +408,7 @@ const MenuDashboard = ({ onNavegar }) => {
                                 <button
                                     type="button"
                                     style={estilos.btnCancelar}
-                                    onClick={() => setMostrarModalMateria(false)}
+                                    onClick={cerrarModalMateria}
                                 >
                                     Cancelar
                                 </button>
@@ -514,18 +557,6 @@ const estilos = {
         justifyContent: 'center',
         fontWeight: 900,
         marginBottom: '16px'
-    },
-    estadoMateria: {
-        position: 'absolute',
-        top: '20px',
-        right: '20px',
-        backgroundColor: '#EAEFF1',
-        color: '#3A5A82',
-        borderRadius: '6px',
-        padding: '5px 8px',
-        fontSize: '0.65rem',
-        textTransform: 'uppercase',
-        fontWeight: 900
     },
     nombreMateria: {
         margin: 0,

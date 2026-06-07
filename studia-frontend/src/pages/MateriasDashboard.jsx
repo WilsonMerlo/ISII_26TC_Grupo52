@@ -38,6 +38,104 @@ const IconoBasurero = () => (
     </svg>
 );
 
+const MantenerPresionadoEliminar = ({ onConfirmar, disabled }) => {
+    const [presionando, setPresionando] = useState(false);
+    const timerRef = useRef(null);
+    const botonRef = useRef(null);
+
+    const limpiarTimer = () => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+
+        setPresionando(false);
+    };
+
+    const iniciarPresionado = () => {
+        if (disabled || timerRef.current) return;
+
+        setPresionando(true);
+
+        timerRef.current = setTimeout(() => {
+            timerRef.current = null;
+            setPresionando(false);
+            onConfirmar?.();
+        }, 1200);
+    };
+
+    const esTeclaMantener = (event) => {
+        return (
+            event.key === 'Enter' ||
+            event.code === 'Enter' ||
+            event.key === ' ' ||
+            event.code === 'Space'
+        );
+    };
+
+    const manejarKeyDown = (event) => {
+        if (!esTeclaMantener(event)) return;
+
+        event.preventDefault();
+
+        if (event.repeat) return;
+
+        iniciarPresionado();
+    };
+
+    const manejarKeyUp = (event) => {
+        if (!esTeclaMantener(event)) return;
+
+        event.preventDefault();
+        limpiarTimer();
+    };
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            botonRef.current?.focus();
+        }, 0);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    useEffect(() => {
+        return () => limpiarTimer();
+    }, []);
+
+    return (
+        <button
+            type="button"
+            ref={botonRef}
+            style={disabled ? { ...estilos.btnEliminarFinal, ...estilos.btnDisabled } : estilos.btnEliminarFinal}
+            onMouseDown={iniciarPresionado}
+            onMouseUp={limpiarTimer}
+            onMouseLeave={limpiarTimer}
+            onTouchStart={iniciarPresionado}
+            onTouchEnd={limpiarTimer}
+            onTouchCancel={limpiarTimer}
+            onKeyDown={manejarKeyDown}
+            onKeyUp={manejarKeyUp}
+            onBlur={limpiarTimer}
+            onClick={(event) => event.preventDefault()}
+            disabled={disabled}
+        >
+            <span style={estilos.progresoEliminarWrap}>
+                <span
+                    style={{
+                        ...estilos.progresoEliminar,
+                        width: presionando ? '100%' : '0%'
+                    }}
+                />
+            </span>
+
+            <span style={estilos.textoBotonEliminarFinal}>
+                {disabled ? 'Eliminando...' : 'Mantener presionado para eliminar'}
+            </span>
+        </button>
+    );
+};
+
+
 const MateriasDashboard = ({ onNavegar }) => {
     const [materias, setMaterias] = useState([]);
     const [mostrarModal, setMostrarModal] = useState(false);
@@ -48,6 +146,7 @@ const MateriasDashboard = ({ onNavegar }) => {
     });
 
     const [materiaAEliminar, setMateriaAEliminar] = useState(null);
+    const [eliminandoMateria, setEliminandoMateria] = useState(false);
     const [materiaEditando, setMateriaEditando] = useState(null);
 
     const [formEditar, setFormEditar] = useState({
@@ -58,6 +157,11 @@ const MateriasDashboard = ({ onNavegar }) => {
     const [busqueda, setBusqueda] = useState('');
     const [buscadorActivo, setBuscadorActivo] = useState(false);
     const buscadorRef = useRef(null);
+    const modalCrearMateriaRef = useRef(null);
+    const inputNombreCrearRef = useRef(null);
+    const modalEliminarMateriaRef = useRef(null);
+    const modalEditarMateriaRef = useRef(null);
+    const inputNombreEditarRef = useRef(null);
 
     useEffect(() => {
         cargarMaterias();
@@ -106,8 +210,16 @@ const MateriasDashboard = ({ onNavegar }) => {
         }
     };
 
+    const cerrarModalCrearMateria = () => {
+        setMostrarModal(false);
+        setNuevaMateria({
+            nombreMateria: '',
+            descripcion: ''
+        });
+    };
+
     const manejarCrearMateria = async (e) => {
-        e.preventDefault();
+        e?.preventDefault();
 
         if (!nuevaMateria.nombreMateria.trim()) {
             alert("El nombre de la materia es obligatorio.");
@@ -130,12 +242,7 @@ const MateriasDashboard = ({ onNavegar }) => {
 
             await materiaService.crear(materiaAGuardar);
 
-            setMostrarModal(false);
-            setNuevaMateria({
-                nombreMateria: '',
-                descripcion: ''
-            });
-
+            cerrarModalCrearMateria();
             cargarMaterias();
         } catch (error) {
             console.error("Error al crear materia:", error);
@@ -148,15 +255,19 @@ const MateriasDashboard = ({ onNavegar }) => {
     };
 
     const cerrarModalEliminar = () => {
+        if (eliminandoMateria) return;
+
         setMateriaAEliminar(null);
     };
 
     const confirmarEliminarMateria = async () => {
-        if (!materiaAEliminar) return;
+        if (!materiaAEliminar || eliminandoMateria) return;
 
         const id = obtenerIdMateria(materiaAEliminar);
 
         try {
+            setEliminandoMateria(true);
+
             await materiaService.eliminar(id);
 
             setMaterias((prevMaterias) =>
@@ -167,6 +278,8 @@ const MateriasDashboard = ({ onNavegar }) => {
         } catch (error) {
             console.error("Error al borrar materia:", error);
             alert("Hubo un problema al borrar la materia.");
+        } finally {
+            setEliminandoMateria(false);
         }
     };
 
@@ -189,7 +302,7 @@ const MateriasDashboard = ({ onNavegar }) => {
     };
 
     const guardarEdicionMateria = async (e) => {
-        e.preventDefault();
+        e?.preventDefault();
 
         if (!materiaEditando) return;
 
@@ -223,6 +336,125 @@ const MateriasDashboard = ({ onNavegar }) => {
             alert("Error al editar la materia. Revisa la conexión con el servidor.");
         }
     };
+
+
+    useEffect(() => {
+        if (!mostrarModal) return;
+
+        const timer = setTimeout(() => {
+            inputNombreCrearRef.current?.focus();
+            inputNombreCrearRef.current?.select();
+        }, 0);
+
+        return () => clearTimeout(timer);
+    }, [mostrarModal]);
+
+    useEffect(() => {
+        if (!mostrarModal) return;
+
+        const manejarClickFuera = (event) => {
+            if (
+                modalCrearMateriaRef.current &&
+                !modalCrearMateriaRef.current.contains(event.target)
+            ) {
+                cerrarModalCrearMateria();
+            }
+        };
+
+        const manejarTeclado = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                cerrarModalCrearMateria();
+                return;
+            }
+
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                manejarCrearMateria();
+            }
+        };
+
+        document.addEventListener('mousedown', manejarClickFuera);
+        document.addEventListener('keydown', manejarTeclado);
+
+        return () => {
+            document.removeEventListener('mousedown', manejarClickFuera);
+            document.removeEventListener('keydown', manejarTeclado);
+        };
+    }, [mostrarModal, nuevaMateria]);
+
+    useEffect(() => {
+        if (!materiaAEliminar) return;
+
+        const manejarClickFuera = (event) => {
+            if (
+                modalEliminarMateriaRef.current &&
+                !modalEliminarMateriaRef.current.contains(event.target)
+            ) {
+                cerrarModalEliminar();
+            }
+        };
+
+        const manejarTeclado = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                cerrarModalEliminar();
+            }
+        };
+
+        document.addEventListener('mousedown', manejarClickFuera);
+        document.addEventListener('keydown', manejarTeclado);
+
+        return () => {
+            document.removeEventListener('mousedown', manejarClickFuera);
+            document.removeEventListener('keydown', manejarTeclado);
+        };
+    }, [materiaAEliminar, eliminandoMateria]);
+
+    useEffect(() => {
+        if (!materiaEditando) return;
+
+        const timer = setTimeout(() => {
+            inputNombreEditarRef.current?.focus();
+            inputNombreEditarRef.current?.select();
+        }, 0);
+
+        return () => clearTimeout(timer);
+    }, [materiaEditando]);
+
+    useEffect(() => {
+        if (!materiaEditando) return;
+
+        const manejarClickFuera = (event) => {
+            if (
+                modalEditarMateriaRef.current &&
+                !modalEditarMateriaRef.current.contains(event.target)
+            ) {
+                cerrarModalEditar();
+            }
+        };
+
+        const manejarTeclado = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                cerrarModalEditar();
+                return;
+            }
+
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                guardarEdicionMateria();
+            }
+        };
+
+        document.addEventListener('mousedown', manejarClickFuera);
+        document.addEventListener('keydown', manejarTeclado);
+
+        return () => {
+            document.removeEventListener('mousedown', manejarClickFuera);
+            document.removeEventListener('keydown', manejarTeclado);
+        };
+    }, [materiaEditando, formEditar]);
 
     const normalizarTexto = (texto) => {
         return String(texto || '')
@@ -370,11 +602,12 @@ const MateriasDashboard = ({ onNavegar }) => {
 
             {mostrarModal && (
                 <div style={estilos.overlayModal}>
-                    <div style={estilos.modal}>
+                    <div style={estilos.modal} ref={modalCrearMateriaRef}>
                         <h3 style={estilos.tituloModal}>Nueva Materia</h3>
 
                         <form onSubmit={manejarCrearMateria} style={estilos.formulario}>
                             <input
+                                ref={inputNombreCrearRef}
                                 type="text"
                                 placeholder="Nombre de la materia (ej: Cálculo)"
                                 required
@@ -403,7 +636,7 @@ const MateriasDashboard = ({ onNavegar }) => {
                             <div style={estilos.botonesForm}>
                                 <button
                                     type="button"
-                                    onClick={() => setMostrarModal(false)}
+                                    onClick={cerrarModalCrearMateria}
                                     style={estilos.btnCancelar}
                                 >
                                     Cancelar
@@ -420,7 +653,7 @@ const MateriasDashboard = ({ onNavegar }) => {
 
             {materiaAEliminar && (
                 <div style={estilos.overlayModal}>
-                    <div style={estilos.modalConfirmacion}>
+                    <div style={estilos.modalConfirmacion} ref={modalEliminarMateriaRef}>
                         <h3 style={estilos.tituloModal}>Eliminar materia</h3>
 
                         <p style={estilos.textoConfirmacion}>
@@ -428,22 +661,24 @@ const MateriasDashboard = ({ onNavegar }) => {
                             <strong>{obtenerNombreMateria(materiaAEliminar)}</strong>?
                         </p>
 
+                        <p style={estilos.textoAdvertencia}>
+                            Esta acción es irreversible. Para confirmar, mantené presionado el botón eliminar con click, Enter o la barra espaciadora.
+                        </p>
+
                         <div style={estilos.botonesForm}>
                             <button
                                 type="button"
                                 onClick={cerrarModalEliminar}
                                 style={estilos.btnCancelar}
+                                disabled={eliminandoMateria}
                             >
                                 Cancelar
                             </button>
 
-                            <button
-                                type="button"
-                                onClick={confirmarEliminarMateria}
-                                style={estilos.btnConfirmarEliminar}
-                            >
-                                Sí, eliminar
-                            </button>
+                            <MantenerPresionadoEliminar
+                                disabled={eliminandoMateria}
+                                onConfirmar={confirmarEliminarMateria}
+                            />
                         </div>
                     </div>
                 </div>
@@ -451,11 +686,12 @@ const MateriasDashboard = ({ onNavegar }) => {
 
             {materiaEditando && (
                 <div style={estilos.overlayModal}>
-                    <div style={estilos.modal}>
+                    <div style={estilos.modal} ref={modalEditarMateriaRef}>
                         <h3 style={estilos.tituloModal}>Editar Materia</h3>
 
                         <form onSubmit={guardarEdicionMateria} style={estilos.formulario}>
                             <input
+                                ref={inputNombreEditarRef}
                                 type="text"
                                 placeholder="Nombre de la materia"
                                 required
@@ -804,6 +1040,57 @@ const estilos = {
         borderRadius: '8px',
         cursor: 'pointer',
         fontWeight: '600'
+    },
+
+    textoAdvertencia: {
+        color: '#D64545',
+        backgroundColor: '#FFF1F1',
+        border: '1px solid #FFD0D0',
+        borderRadius: '10px',
+        padding: '12px',
+        lineHeight: '1.4',
+        fontSize: '0.9rem',
+        fontWeight: '600',
+        margin: '0 0 22px 0'
+    },
+
+    btnEliminarFinal: {
+        position: 'relative',
+        overflow: 'hidden',
+        backgroundColor: '#D64545',
+        color: 'white',
+        border: 'none',
+        padding: '10px 18px',
+        borderRadius: '9px',
+        cursor: 'pointer',
+        fontWeight: '800',
+        minWidth: '245px',
+        fontFamily: 'inherit'
+    },
+
+    btnDisabled: {
+        opacity: 0.7,
+        cursor: 'not-allowed'
+    },
+
+    progresoEliminarWrap: {
+        position: 'absolute',
+        inset: 0,
+        backgroundColor: 'rgba(255,255,255,0.08)'
+    },
+
+    progresoEliminar: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(255,255,255,0.25)',
+        transition: 'width 1.2s linear'
+    },
+
+    textoBotonEliminarFinal: {
+        position: 'relative',
+        zIndex: 1
     },
 
     btnConfirmarEliminar: {
