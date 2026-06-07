@@ -86,6 +86,18 @@ namespace StudIA.Business
 
             await _context.SaveChangesAsync();
             return pomodoro;
+           }
+        public async Task<bool> ActualizarDuracionesAsync(int id, int duracionEstudio, int duracionDescanso)
+        {
+            var pomodoro = await _context.Pomodoros.FindAsync(id);
+            if (pomodoro == null) return false;
+
+            // Se pisan los valores con el total acumulado exacto enviado por el front
+            pomodoro.DuracionEstudio = duracionEstudio;
+            pomodoro.DuracionDescanso = duracionDescanso;
+
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

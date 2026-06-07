@@ -97,7 +97,27 @@ namespace StudIA.API.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+        // PUT: api/pomodoros/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPomodoro(int id, [FromBody] ActualizarDuracionesDto dto)
+        {
+            if (id != dto.IdPomodoro)
+            {
+                return BadRequest(new { mensaje = "El ID de la ruta no coincide con el ID del cuerpo." });
+            }
+
+            var modificado = await _pomodoroService.ActualizarDuracionesAsync(id, dto.DuracionEstudio, dto.DuracionDescanso);
+
+            if (!modificado)
+            {
+                return NotFound(new { mensaje = "Pomodoro no encontrado." });
+            }
+
+            return NoContent(); // Retorna 204 Exito sin contenido
+        }
     }
+
+
 
     // DTO para recibir las duraciones opcionales desde el frontend
     public class ActionPomodoroDto
@@ -105,4 +125,15 @@ namespace StudIA.API.Controllers
         public int? DuracionEstudio { get; set; }
         public int? DuracionDescanso { get; set; }
     }
+
+    public class ActualizarDuracionesDto
+    {
+        public int IdPomodoro { get; set; }
+        public int DuracionEstudio { get; set; }
+        public int DuracionDescanso { get; set; }
+    }
+
+
+
+
 }
