@@ -14,6 +14,8 @@ import EditorApunte from './components/EditorApunte'
 import ApuntesDashboard from './pages/ApuntesDashboard'
 import VerApunte from './pages/VerApunte'
 import EstadisticasDashboard from './pages/EstadisticasDashboard'
+import MenuDashboard from './pages/MenuDashboard'
+import MisDatosDashboard from './pages/MisDatosDashboard'
 import { eliminarPomodoro } from './services/pomodoroService'
 
 function App() {
@@ -22,7 +24,7 @@ function App() {
 
       if (!idUsuario) return 'login';
 
-      return localStorage.getItem('vistaActual') || 'dashboard';
+      return localStorage.getItem('vistaActual') || 'menu';
   });
 
   // Memorias de la aplicación
@@ -118,7 +120,15 @@ function App() {
             localStorage.setItem('materiaActiva', JSON.stringify(datosExtra));
         }
     } else if (nuevaVista === 'verApunte') {
-        if (datosExtra) {
+        if (datosExtra?.apunte) {
+            setApunteActivo(datosExtra.apunte);
+            localStorage.setItem('apunteActivo', JSON.stringify(datosExtra.apunte));
+
+            if (datosExtra.materia) {
+                setMateriaActiva(datosExtra.materia);
+                localStorage.setItem('materiaActiva', JSON.stringify(datosExtra.materia));
+            }
+        } else if (datosExtra) {
             setApunteActivo(datosExtra);
             localStorage.setItem('apunteActivo', JSON.stringify(datosExtra));
         }
@@ -252,6 +262,13 @@ function App() {
     case 'recuperar':
       return <RecuperarPassword onNavegar={navegarA} />;
 
+    case 'menu':
+      return envolverConAvisoPomodoro(
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
+          <MenuDashboard onNavegar={navegarA} />
+        </DashboardLayout>
+      );
+
     case 'materias':
       return envolverConAvisoPomodoro(
         <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
@@ -291,6 +308,14 @@ function App() {
             onVolver={() => navegarA('apuntes', materiaActiva)}
             onEstadoPomodoroChange={setPomodoroEnCurso}
           />
+        </DashboardLayout>
+      );
+
+
+    case 'misDatos':
+      return envolverConAvisoPomodoro(
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
+          <MisDatosDashboard />
         </DashboardLayout>
       );
 

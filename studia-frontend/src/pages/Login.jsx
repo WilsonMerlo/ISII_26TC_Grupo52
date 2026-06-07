@@ -35,11 +35,21 @@ const Login = ({ onNavegar }) => {
 
         const usuarioLogueado = JSON.parse(textoRespuesta);
 
+        const correoNormalizado =
+          usuarioLogueado.correo ||
+          usuarioLogueado.Correo ||
+          usuarioLogueado.email ||
+          usuarioLogueado.Email ||
+          email;
+
         localStorage.setItem("idUsuario", usuarioLogueado.idUsuario);
         localStorage.setItem("nombreUsuario", usuarioLogueado.nombre);
+        localStorage.setItem("correoUsuario", correoNormalizado);
+        localStorage.setItem("emailUsuario", correoNormalizado);
+        localStorage.setItem("vistaActual", "menu");
 
         alert(`¡Hola ${usuarioLogueado.nombre}! Entrando a StudIA...`);
-        onNavegar("dashboard");
+        onNavegar("menu");
       } else if (response.status === 401) {
         setError("Correo o contraseña incorrectos.");
       } else {

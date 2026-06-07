@@ -5,7 +5,7 @@ import Sidebar from './Sidebar';
 const DashboardLayout = ({ children, nombreUsuario, onLogout, onNavegar, vistaActual }) => {
     return (
         <div style={estilos.mainWrap}>
-            <Header nombreUsuario={nombreUsuario} />
+            <Header nombreUsuario={nombreUsuario} onLogout={onLogout} onNavegar={onNavegar} />
             <div style={estilos.seccionInferiorWrap}>
                 <Sidebar
                     nombreUsuario={nombreUsuario}
