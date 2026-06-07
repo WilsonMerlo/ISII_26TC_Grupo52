@@ -15,28 +15,9 @@ const GraficoBarrasSemana = ({ datos = [], maxEscalaMinutos }) => {
     const maxDatos = Math.max(...datos.map((d) => Number(d.minutos) || 0), 0);
     const maxEscala = Math.max(Number(maxEscalaMinutos) || maxDatos || 1, 1);
 
-    const marcasY = Array.from({ length: 5 }, (_, index) => {
-        const valor = maxEscala - (maxEscala / 4) * index;
-        return Math.round(valor);
-    });
-
     return (
         <div style={estilos.wrapper}>
-            <div style={estilos.ejeY}>
-                {marcasY.map((minutos, index) => (
-                    <span key={index} style={estilos.marcaY}>
-                        {formatearHoras(minutos)}
-                    </span>
-                ))}
-            </div>
-
             <div style={estilos.areaGrafico}>
-                <div style={estilos.lineas}>
-                    {marcasY.map((_, index) => (
-                        <div key={index} style={estilos.linea} />
-                    ))}
-                </div>
-
                 <div style={estilos.barras}>
                     {datos.map((item) => {
                         const minutos = Number(item.minutos) || 0;
@@ -70,45 +51,16 @@ const GraficoBarrasSemana = ({ datos = [], maxEscalaMinutos }) => {
 const estilos = {
     wrapper: {
         display: 'grid',
-        gridTemplateColumns: 'clamp(54px, 7vw, 76px) 1fr',
-        gap: 'clamp(10px, 2vw, 18px)',
+        gridTemplateColumns: '1fr',
         width: '100%',
         height: 'clamp(280px, 38vw, 380px)',
         marginTop: 'clamp(20px, 4vw, 30px)'
-    },
-    ejeY: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        padding: '14px 0 clamp(48px, 6vw, 58px) 0',
-        color: '#8B95A7',
-        fontSize: 'clamp(0.65rem, 1vw, 0.78rem)',
-        fontWeight: 600
-    },
-    marcaY: {
-        lineHeight: 1,
-        whiteSpace: 'nowrap'
     },
     areaGrafico: {
         position: 'relative',
         height: '100%',
         paddingTop: '14px',
         minWidth: 0
-    },
-    lineas: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: '14px',
-        bottom: 'clamp(48px, 6vw, 58px)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        zIndex: 1
-    },
-    linea: {
-        borderBottom: '1px solid #E3E9EC'
     },
     barras: {
         position: 'relative',

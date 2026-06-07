@@ -54,6 +54,9 @@ const SelectorSemana = ({ semanaSeleccionada, onAplicar }) => {
     const [mesVisible, setMesVisible] = useState(() => new Date(semanaSeleccionada?.inicio || new Date()));
     const [fechaTemporal, setFechaTemporal] = useState(() => new Date(semanaSeleccionada?.inicio || new Date()));
 
+    const hoy = new Date();
+    hoy.setHours(23, 59, 59, 999);
+
     const semanaTemporal = useMemo(() => {
         const inicio = inicioDeSemana(fechaTemporal);
         const fin = finDeSemana(fechaTemporal);
@@ -79,6 +82,15 @@ const SelectorSemana = ({ semanaSeleccionada, onAplicar }) => {
         });
     }, [mesVisible]);
 
+    const esMesActual = () => {
+        const actual = new Date();
+
+        return (
+            mesVisible.getFullYear() === actual.getFullYear() &&
+            mesVisible.getMonth() === actual.getMonth()
+        );
+    };
+
     const cambiarMes = (cantidad) => {
         setMesVisible((actual) => {
             const nuevo = new Date(actual);
@@ -88,10 +100,10 @@ const SelectorSemana = ({ semanaSeleccionada, onAplicar }) => {
     };
 
     const irAHoy = () => {
-        const hoy = new Date();
+        const hoyActual = new Date();
 
-        setMesVisible(hoy);
-        setFechaTemporal(hoy);
+        setMesVisible(hoyActual);
+        setFechaTemporal(hoyActual);
     };
 
     const aplicarSemana = () => {
@@ -118,8 +130,22 @@ const SelectorSemana = ({ semanaSeleccionada, onAplicar }) => {
                             <button type="button" style={estilos.btnHoy} onClick={irAHoy}>
                                 Hoy
                             </button>
-                            <button type="button" style={estilos.btnMes} onClick={() => cambiarMes(-1)}>‹</button>
-                            <button type="button" style={estilos.btnMes} onClick={() => cambiarMes(1)}>›</button>
+
+                            <button type="button" style={estilos.btnMes} onClick={() => cambiarMes(-1)}>
+                                ‹
+                            </button>
+
+                            <button
+                                type="button"
+                                style={{
+                                    ...estilos.btnMes,
+                                    ...(esMesActual() ? estilos.btnMesDeshabilitado : {})
+                                }}
+                                disabled={esMesActual()}
+                                onClick={() => cambiarMes(1)}
+                            >
+                                ›
+                            </button>
                         </div>
                     </div>
 
@@ -129,25 +155,27 @@ const SelectorSemana = ({ semanaSeleccionada, onAplicar }) => {
                         ))}
 
                         {diasCalendario.map((fecha) => {
-                            const hoy = new Date();
                             const fueraDeMes = fecha.getMonth() !== mesVisible.getMonth();
                             const esHoy = mismoDia(fecha, hoy);
                             const esInicio = mismoDia(fecha, semanaTemporal.inicio);
                             const esFin = mismoDia(fecha, semanaTemporal.fin);
                             const enRango = estaEntre(fecha, semanaTemporal.inicio, semanaTemporal.fin);
+                            const esFuturo = fecha > hoy;
 
                             return (
                                 <button
                                     key={fecha.toISOString()}
                                     type="button"
+                                    disabled={esFuturo}
                                     style={{
                                         ...estilos.diaBoton,
                                         ...(fueraDeMes ? estilos.fueraMes : {}),
                                         ...(esHoy ? estilos.diaHoy : {}),
                                         ...(enRango ? estilos.diaEnRango : {}),
-                                        ...(esInicio || esFin ? estilos.diaExtremo : {})
+                                        ...(esInicio || esFin ? estilos.diaExtremo : {}),
+                                        ...(esFuturo ? estilos.diaDeshabilitado : {})
                                     }}
-                                    onClick={() => setFechaTemporal(fecha)}
+                                    onClick={() => !esFuturo && setFechaTemporal(fecha)}
                                 >
                                     {fecha.getDate()}
                                 </button>
@@ -157,7 +185,9 @@ const SelectorSemana = ({ semanaSeleccionada, onAplicar }) => {
 
                     <div style={estilos.footer}>
                         <p style={estilos.labelSemana}>Semana seleccionada</p>
-                        <strong style={estilos.rango}>{formatearRango(semanaTemporal.inicio, semanaTemporal.fin)}</strong>
+                        <strong style={estilos.rango}>
+                            {formatearRango(semanaTemporal.inicio, semanaTemporal.fin)}
+                        </strong>
 
                         <div style={estilos.acciones}>
                             <button style={estilos.btnAplicar} onClick={aplicarSemana}>
@@ -244,6 +274,10 @@ const estilos = {
         fontSize: '1.5rem',
         color: '#2B3437'
     },
+    btnMesDeshabilitado: {
+        opacity: 0.35,
+        cursor: 'not-allowed'
+    },
     gridDias: {
         display: 'grid',
         gridTemplateColumns: 'repeat(7, 1fr)',
@@ -279,6 +313,11 @@ const estilos = {
     fueraMes: {
         color: '#C8D0D6',
         opacity: 0.7
+    },
+    diaDeshabilitado: {
+        opacity: 0.35,
+        cursor: 'not-allowed',
+        pointerEvents: 'none'
     },
     footer: {
         borderTop: '1px solid #E3E9EC',
