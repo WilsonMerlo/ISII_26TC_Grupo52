@@ -1,4 +1,3 @@
-// src/pages/VerApunte.jsx
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { apunteService } from '../services/apunteService';
 
@@ -95,6 +94,7 @@ const Toast = ({ status }) => {
 // ---------------------------------------------------------------------------
 const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
     const editorRef = useRef(null);
+    const tituloRef = useRef(null);
     const seleccionEditorRef = useRef(null);
     const activeFormats = useFormatState(editorRef);
 
@@ -139,6 +139,16 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
 
         setHayCambiosSinGuardar(false);
     }, [apunteSeleccionado]);
+
+    // Ajustar alto del título cuando ocupa más de una línea
+    useEffect(() => {
+        const tituloEl = tituloRef.current;
+
+        if (!tituloEl) return;
+
+        tituloEl.style.height = 'auto';
+        tituloEl.style.height = `${tituloEl.scrollHeight}px`;
+    }, [titulo]);
 
     // Limpiar toast automáticamente
     useEffect(() => {
@@ -515,12 +525,20 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar }) => {
                     </div>
 
                     {/* Título editable */}
-                    <input
-                        className="w-full bg-transparent border-none focus:ring-0 text-5xl font-extrabold font-['Manrope'] tracking-tight text-[#2b3437] mb-8 block outline-none placeholder-slate-300"
-                        type="text"
+                    <textarea
+                        ref={tituloRef}
+                        className="w-full bg-transparent border-none focus:ring-0 font-extrabold font-['Manrope'] tracking-tight text-[#2b3437] mb-8 block outline-none placeholder-slate-300 resize-none overflow-hidden"
                         value={titulo}
                         onChange={handleCambioTitulo}
                         placeholder="Sin título"
+                        rows={1}
+                        style={{
+                            fontSize: 'clamp(2rem, 5vw, 3rem)',
+                            lineHeight: 1.12,
+                            wordBreak: 'break-word',
+                            overflowWrap: 'anywhere',
+                            padding: 0,
+                        }}
                     />
 
                     {/* Cuerpo editable */}
