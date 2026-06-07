@@ -251,6 +251,141 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
   };
 
   const [historial, setHistorial] = useState([]);
+  const [mesCalendario, setMesCalendario] = useState(() => new Date());
+  const [fechaSeleccionadaKey, setFechaSeleccionadaKey] = useState(null);
+  const [modalSesionesDiaAbierto, setModalSesionesDiaAbierto] = useState(false);
+
+  const obtenerClaveFecha = (fecha) => {
+    const date = fecha instanceof Date ? fecha : new Date(fecha);
+    if (Number.isNaN(date.getTime())) return "";
+
+    const anio = date.getFullYear();
+    const mes = String(date.getMonth() + 1).padStart(2, "0");
+    const dia = String(date.getDate()).padStart(2, "0");
+
+    return `${anio}-${mes}-${dia}`;
+  };
+
+  const fechaHoyKey = obtenerClaveFecha(new Date());
+
+  const obtenerNombreMes = (fecha) => {
+    return fecha.toLocaleDateString("es-ES", { month: "long" });
+  };
+
+  const formatearHoraSesion = (fecha) => {
+    const date = new Date(fecha);
+    if (Number.isNaN(date.getTime())) return "--:--";
+
+    return date.toLocaleTimeString("es-AR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  };
+
+  const obtenerTituloSesion = (item) => {
+    return (
+      item?.nombreMateria ||
+      item?.materiaNombre ||
+      item?.materia?.nombreMateria ||
+      item?.materia?.nombre_materia ||
+      item?.tituloApunte ||
+      item?.apunteTitulo ||
+      item?.apunte?.titulo ||
+      "Sesión Pomodoro"
+    );
+  };
+
+  const agruparHistorialPorDia = () => {
+    return historial.reduce((acumulador, item) => {
+      if (!item.fechaKey) return acumulador;
+
+      if (!acumulador[item.fechaKey]) {
+        acumulador[item.fechaKey] = [];
+      }
+
+      acumulador[item.fechaKey].push(item);
+      return acumulador;
+    }, {});
+  };
+
+  const sesionesPorDia = agruparHistorialPorDia();
+  const sesionesDiaSeleccionado = fechaSeleccionadaKey
+    ? sesionesPorDia[fechaSeleccionadaKey] || []
+    : [];
+
+  const obtenerDiasCalendario = () => {
+    const anio = mesCalendario.getFullYear();
+    const mes = mesCalendario.getMonth();
+    const primerDiaMes = new Date(anio, mes, 1);
+    const ultimoDiaMes = new Date(anio, mes + 1, 0);
+    const offsetLunes = (primerDiaMes.getDay() + 6) % 7;
+    const dias = [];
+
+    for (let i = offsetLunes; i > 0; i -= 1) {
+      const fecha = new Date(anio, mes, 1 - i);
+      const key = obtenerClaveFecha(fecha);
+
+      dias.push({
+        fecha,
+        key,
+        dia: fecha.getDate(),
+        esMesActual: false,
+        tieneSesiones: Boolean(sesionesPorDia[key]),
+      });
+    }
+
+    for (let dia = 1; dia <= ultimoDiaMes.getDate(); dia += 1) {
+      const fecha = new Date(anio, mes, dia);
+      const key = obtenerClaveFecha(fecha);
+
+      dias.push({
+        fecha,
+        key,
+        dia,
+        esMesActual: true,
+        tieneSesiones: Boolean(sesionesPorDia[key]),
+      });
+    }
+
+    while (dias.length % 7 !== 0) {
+      const siguiente = dias.length - offsetLunes + 1;
+      const fecha = new Date(anio, mes, siguiente);
+      const key = obtenerClaveFecha(fecha);
+
+      dias.push({
+        fecha,
+        key,
+        dia: fecha.getDate(),
+        esMesActual: false,
+        tieneSesiones: Boolean(sesionesPorDia[key]),
+      });
+    }
+
+    return dias;
+  };
+
+  const cambiarMesCalendario = (direccion) => {
+    setMesCalendario((fechaActual) => {
+      const nuevoMes = new Date(fechaActual);
+      nuevoMes.setMonth(nuevoMes.getMonth() + direccion);
+      return nuevoMes;
+    });
+  };
+
+  const seleccionarDiaCalendario = (dia) => {
+    setFechaSeleccionadaKey(dia.key);
+
+    if (dia.tieneSesiones) {
+      setModalSesionesDiaAbierto(true);
+    }
+  };
+
+  const cerrarModalSesionesDia = () => {
+    setModalSesionesDiaAbierto(false);
+  };
+
+  const diasCalendario = obtenerDiasCalendario();
 
   useEffect(() => {
     const hayPomodoroEnCurso =
@@ -293,17 +428,30 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
             month: "long",
             year: "numeric",
           };
-          const historialMapeado = data.map((item) => ({
-            id: item.idPomodoro,
-            fecha: new Date(item.fecha).toLocaleDateString(
-              "es-ES",
-              opcionesFecha,
-            ),
-            tiempoConcentrado: formatearTiempoHistorial(item.duracionEstudio),
-            tiempoDescanso: formatearTiempoHistorial(item.duracionDescanso),
-            resumenTiempos: crearResumenTiempos(item.duracionEstudio, item.duracionDescanso),
-          }));
+          const historialMapeado = data.map((item) => {
+            const fechaSesion = new Date(item.fecha);
+
+            return {
+              id: item.idPomodoro,
+              fecha: fechaSesion.toLocaleDateString("es-ES", opcionesFecha),
+              fechaISO: item.fecha,
+              fechaKey: obtenerClaveFecha(fechaSesion),
+              hora: formatearHoraSesion(item.fecha),
+              tiempoConcentrado: formatearTiempoHistorial(item.duracionEstudio),
+              tiempoDescanso: formatearTiempoHistorial(item.duracionDescanso),
+              resumenTiempos: crearResumenTiempos(item.duracionEstudio, item.duracionDescanso),
+              titulo: obtenerTituloSesion(item),
+            };
+          });
           setHistorial(historialMapeado);
+
+          if (historialMapeado.length > 0) {
+            const primeraFecha = new Date(historialMapeado[0].fechaISO);
+            if (!Number.isNaN(primeraFecha.getTime())) {
+              setMesCalendario(primeraFecha);
+              setFechaSeleccionadaKey(historialMapeado[0].fechaKey);
+            }
+          }
         }
       } catch (error) {
         console.error("Error al cargar el historial desde la API:", error);
@@ -362,17 +510,21 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
           month: "long",
           year: "numeric",
         };
+        const fechaSesion = new Date(data.fecha);
         const registroVisual = {
           id: data.idPomodoro,
-          fecha: new Date(data.fecha).toLocaleDateString(
-            "es-ES",
-            opcionesFecha,
-          ),
+          fecha: fechaSesion.toLocaleDateString("es-ES", opcionesFecha),
+          fechaISO: data.fecha,
+          fechaKey: obtenerClaveFecha(fechaSesion),
+          hora: formatearHoraSesion(data.fecha),
           tiempoConcentrado: formatearTiempoHistorial(data.duracionEstudio),
           tiempoDescanso: formatearTiempoHistorial(data.duracionDescanso),
           resumenTiempos: crearResumenTiempos(data.duracionEstudio, data.duracionDescanso),
+          titulo: obtenerTituloSesion(data),
         };
         setHistorial([registroVisual, ...historial]);
+        setMesCalendario(fechaSesion);
+        setFechaSeleccionadaKey(registroVisual.fechaKey);
         setSegundosAcumuladosEstudio(0);
         setSegundosAcumuladosDescanso(0);
       } else {
@@ -513,15 +665,37 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                 .pom-root {
                     font-family: 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
                     width: 100%;
-                    min-height: 100%;
+                    height: calc(100vh - 64px);
+                    min-height: 0;
                     display: flex;
                     justify-content: center;
                     padding: 36px 24px 48px;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    scrollbar-width: thin;
+                    scrollbar-color: #D6E0FF transparent;
+                }
+
+                .pom-root::-webkit-scrollbar {
+                    width: 8px;
+                }
+
+                .pom-root::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+
+                .pom-root::-webkit-scrollbar-thumb {
+                    background-color: #D6E0FF;
+                    border-radius: 999px;
+                }
+
+                .pom-root::-webkit-scrollbar-thumb:hover {
+                    background-color: #B8C8F8;
                 }
 
                 .pom-inner {
                     width: 100%;
-                    max-width: 520px;
+                    max-width: 980px;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -647,6 +821,15 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                 .history-section {
                     width: 100%;
                     margin-bottom: 36px;
+                    background-color: white;
+                    border: 1px solid #EEF1FF;
+                    border-radius: 10px;
+                    padding: 24px;
+                    box-shadow: 0 10px 26px rgba(58, 86, 175, 0.06);
+                    box-sizing: border-box;
+                    display: flex;
+                    flex-direction: column;
+                    min-height: 100%;
                 }
                 .history-header {
                     display: flex;
@@ -661,11 +844,34 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                     letter-spacing: -0.01em;
                 }
                 .history-list {
-                    max-height: 220px;
+                    flex: 1;
+                    max-height: 344px;
+                    min-height: 344px;
                     overflow-y: auto;
+                    overflow-x: hidden;
                     display: flex;
                     flex-direction: column;
-                    gap: '8px';
+                    gap: 8px;
+                    padding-right: 6px;
+                    scrollbar-width: thin;
+                    scrollbar-color: #D6E0FF transparent;
+                }
+
+                .history-list::-webkit-scrollbar {
+                    width: 8px;
+                }
+
+                .history-list::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+
+                .history-list::-webkit-scrollbar-thumb {
+                    background-color: #D6E0FF;
+                    border-radius: 999px;
+                }
+
+                .history-list::-webkit-scrollbar-thumb:hover {
+                    background-color: #B8C8F8;
                 }
                 .empty-history {
                     text-align: center;
@@ -678,10 +884,9 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    background-color: white;
+                    background-color: #F6F8FE;
                     padding: 13px 16px;
-                    border-radius: 6px;
-                    margin-bottom: 8px;
+                    border-radius: 8px;
                     border: 1px solid #EEF1FF;
                 }
                 .history-info { display: flex; flex-direction: column; gap: 7px; }
@@ -694,6 +899,11 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                     color: #2D3247;
                 }
                 .history-date svg { color: #9EA5BA; }
+                .history-hour {
+                    color: #64748B;
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                }
                 .history-times { display: flex; gap: 8px; flex-wrap: wrap; }
                 .time-summary {
                     display: inline-flex;
@@ -740,6 +950,345 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                     transition: color 0.15s, background-color 0.15s;
                 }
                 .delete-btn:hover { color: #E53E3E; background-color: #FFF5F5; }
+
+                .focus-bottom-grid {
+                    width: 100%;
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 24px;
+                    align-items: stretch;
+                    margin-bottom: 36px;
+                }
+
+                .focus-bottom-grid .history-section {
+                    margin-bottom: 0;
+                }
+
+                .calendar-card {
+                    width: 100%;
+                    height: 100%;
+                    background-color: white;
+                    border: 1px solid #EEF1FF;
+                    border-radius: 10px;
+                    padding: 24px;
+                    box-shadow: 0 10px 26px rgba(58, 86, 175, 0.06);
+                    box-sizing: border-box;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .calendar-top {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-bottom: 22px;
+                }
+
+                .calendar-month {
+                    font-size: 1.05rem;
+                    font-weight: 800;
+                    color: #2D3247;
+                    text-transform: capitalize;
+                    margin: 0;
+                }
+
+                .calendar-year {
+                    color: #9EA5BA;
+                    font-size: 0.72rem;
+                    font-weight: 600;
+                    margin-top: 2px;
+                }
+
+                .calendar-nav {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+
+                .calendar-today-btn {
+                    height: 30px;
+                    border: 1px solid #D6E0FF;
+                    border-radius: 8px;
+                    background-color: #F6F8FE;
+                    color: #3A56AF;
+                    cursor: pointer;
+                    padding: 0 10px;
+                    font-size: 0.76rem;
+                    font-weight: 800;
+                    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+                }
+
+                .calendar-today-btn:hover {
+                    background-color: #EEF1FF;
+                    border-color: #B8C8F8;
+                }
+
+                .calendar-nav-btn {
+                    width: 30px;
+                    height: 30px;
+                    border: none;
+                    border-radius: 7px;
+                    background-color: transparent;
+                    color: #64748B;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    transition: background-color 0.15s, color 0.15s;
+                }
+
+                .calendar-nav-btn:hover {
+                    background-color: #F0F3FF;
+                    color: #3A56AF;
+                }
+
+                .calendar-grid {
+                    display: grid;
+                    grid-template-columns: repeat(7, 1fr);
+                    row-gap: 8px;
+                    column-gap: 4px;
+                    text-align: center;
+                }
+
+                .calendar-weekday {
+                    color: #9EA5BA;
+                    font-size: 0.62rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 0.03em;
+                    margin-bottom: 4px;
+                }
+
+                .calendar-day {
+                    position: relative;
+                    height: 34px;
+                    border: none;
+                    border-radius: 8px;
+                    background-color: transparent;
+                    color: #2D3247;
+                    font-size: 0.82rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: background-color 0.15s, color 0.15s;
+                }
+
+                .calendar-day:hover {
+                    background-color: #F0F3FF;
+                    color: #3A56AF;
+                }
+
+                .calendar-day.is-muted {
+                    color: #D0D6E6;
+                    cursor: default;
+                }
+
+                .calendar-day.is-muted:hover {
+                    background-color: transparent;
+                    color: #D0D6E6;
+                }
+
+                .calendar-day.is-today {
+                    background-color: #EEF1FF;
+                    color: #3A56AF;
+                    font-weight: 800;
+                    box-shadow: inset 0 0 0 1px #D6E0FF;
+                }
+
+                .calendar-dot {
+                    position: absolute;
+                    bottom: 4px;
+                    left: 50%;
+                    width: 4px;
+                    height: 4px;
+                    transform: translateX(-50%);
+                    border-radius: 50%;
+                    background-color: #3A56AF;
+                }
+
+                .calendar-legend {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    margin-top: 22px;
+                    padding-top: 18px;
+                    border-top: 1px solid #EEF1FF;
+                    color: #64748B;
+                    font-size: 0.78rem;
+                    font-weight: 600;
+                }
+
+                .calendar-legend-dot {
+                    width: 7px;
+                    height: 7px;
+                    border-radius: 50%;
+                    background-color: #3A56AF;
+                }
+
+                .day-modal-content {
+                    background-color: white;
+                    width: 100%;
+                    max-width: 460px;
+                    border-radius: 18px;
+                    padding: 30px;
+                    box-shadow: 0 18px 46px rgba(0,0,0,0.18);
+                }
+
+                .day-modal-header {
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                    gap: 16px;
+                    margin-bottom: 20px;
+                }
+
+                .day-modal-title {
+                    margin: 0 0 6px 0;
+                    color: #2D3247;
+                    font-size: 1.15rem;
+                    font-weight: 800;
+                }
+
+                .day-modal-subtitle {
+                    margin: 0;
+                    color: #9EA5BA;
+                    font-size: 0.85rem;
+                    line-height: 1.45;
+                }
+
+                .day-session-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    max-height: 360px;
+                    overflow-y: auto;
+                    overflow-x: hidden;
+                    padding-right: 6px;
+                    scrollbar-width: thin;
+                    scrollbar-color: #D6E0FF transparent;
+                }
+
+                .day-session-list::-webkit-scrollbar {
+                    width: 8px;
+                }
+
+                .day-session-list::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+
+                .day-session-list::-webkit-scrollbar-thumb {
+                    background-color: #D6E0FF;
+                    border-radius: 999px;
+                }
+
+                .day-session-list::-webkit-scrollbar-thumb:hover {
+                    background-color: #B8C8F8;
+                }
+
+                .day-session-item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    background-color: #F6F8FE;
+                    border: 1px solid #EEF1FF;
+                    border-radius: 12px;
+                    padding: 13px 14px;
+                }
+
+                .day-session-main {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    min-width: 0;
+                }
+
+                .day-session-icon {
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 8px;
+                    background-color: #EEF1FF;
+                    color: #3A56AF;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                }
+
+                .day-session-title {
+                    color: #2D3247;
+                    font-size: 0.88rem;
+                    font-weight: 800;
+                    margin: 0 0 4px 0;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .day-session-meta {
+                    color: #64748B;
+                    font-size: 0.74rem;
+                    font-weight: 600;
+                }
+
+                .day-session-actions {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    flex-shrink: 0;
+                }
+
+                .day-session-delete {
+                    width: 28px;
+                    height: 28px;
+                    border: none;
+                    border-radius: 7px;
+                    background-color: transparent;
+                    color: #C8CEDE;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0;
+                    transition: color 0.15s, background-color 0.15s;
+                    flex-shrink: 0;
+                }
+
+                .day-session-delete:hover {
+                    color: #E53E3E;
+                    background-color: #FFF5F5;
+                }
+
+                .day-modal-actions {
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 10px;
+                    margin-top: 22px;
+                }
+
+                .btn-cerrar-dia {
+                    background: none;
+                    border: none;
+                    color: #64748B;
+                    cursor: pointer;
+                    font-weight: 700;
+                    padding: 10px 14px;
+                }
+
+                @media (max-width: 860px) {
+                    .focus-bottom-grid {
+                        grid-template-columns: 1fr;
+                    }
+
+                    .pom-root {
+                        padding-left: 16px;
+                        padding-right: 16px;
+                    }
+                }
 
                 /* Cita footer */
                 .quote-section {
@@ -1087,41 +1636,116 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
             </button>
           </div>
 
-          {/* Historial */}
-          <div className="history-section">
-            <div className="history-header">
-              <span className="history-title">Historial de Enfoque</span>
-            </div>
-            <div className="history-list">
-              {historial.length === 0 ? (
-                <p className="empty-history">
-                  No hay sesiones completadas aún.
-                </p>
-              ) : (
-                historial.map((item) => (
-                  <div key={item.id} className="history-card">
-                    <div className="history-info">
-                      <div className="history-date">
-                        <IconCalendar />
-                        {item.fecha}
+          {/* Historial + calendario */}
+          <div className="focus-bottom-grid">
+            <div className="history-section">
+              <div className="history-header">
+                <span className="history-title">Historial de Enfoque</span>
+              </div>
+              <div className="history-list">
+                {historial.length === 0 ? (
+                  <p className="empty-history">
+                    No hay sesiones completadas aún.
+                  </p>
+                ) : (
+                  historial.map((item) => (
+                    <div key={item.id} className="history-card">
+                      <div className="history-info">
+                        <div className="history-date">
+                          <IconCalendar />
+                          <span>{item.fecha}</span>
+                          <span className="history-hour">· {item.hora}</span>
+                        </div>
+                        <div className="history-times">
+                          <span className="time-summary">
+                            {item.resumenTiempos || `Estudio: ${item.tiempoConcentrado} - Descanso: ${item.tiempoDescanso}`}
+                          </span>
+                        </div>
                       </div>
-                      <div className="history-times">
-                        <span className="time-summary">
-                          {item.resumenTiempos || `Estudio: ${item.tiempoConcentrado} - Descanso: ${item.tiempoDescanso}`}
-                        </span>
-                      </div>
+                      <button
+                        className="delete-btn"
+                        onClick={() => intentarEliminar(item.id)}
+                        title="Eliminar registro"
+                      >
+                        <IconTrash />
+                      </button>
                     </div>
-                    <button
-                      className="delete-btn"
-                      onClick={() => intentarEliminar(item.id)}
-                      title="Eliminar registro"
-                    >
-                      <IconTrash />
-                    </button>
-                  </div>
-                ))
-              )}
+                  ))
+                )}
+              </div>
             </div>
+
+            <aside className="calendar-card">
+              <div className="calendar-top">
+                <div>
+                  <h3 className="calendar-month">{obtenerNombreMes(mesCalendario)}</h3>
+                  <div className="calendar-year">{mesCalendario.getFullYear()}</div>
+                </div>
+
+                <div className="calendar-nav">
+                  <button
+                    type="button"
+                    className="calendar-today-btn"
+                    onClick={() => setMesCalendario(new Date())}
+                    title="Volver al mes actual"
+                  >
+                    Hoy
+                  </button>
+
+                  <button
+                    type="button"
+                    className="calendar-nav-btn"
+                    onClick={() => cambiarMesCalendario(-1)}
+                    title="Mes anterior"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    className="calendar-nav-btn"
+                    onClick={() => cambiarMesCalendario(1)}
+                    title="Mes siguiente"
+                  >
+                    ›
+                  </button>
+                </div>
+              </div>
+
+              <div className="calendar-grid">
+                {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((dia) => (
+                  <div key={dia} className="calendar-weekday">
+                    {dia}
+                  </div>
+                ))}
+
+                {diasCalendario.map((dia) => (
+                  <button
+                    key={dia.key}
+                    type="button"
+                    className={[
+                      "calendar-day",
+                      !dia.esMesActual ? "is-muted" : "",
+                      dia.key === fechaHoyKey ? "is-today" : "",
+                    ].join(" ")}
+                    onClick={() => dia.esMesActual && seleccionarDiaCalendario(dia)}
+                    disabled={!dia.esMesActual}
+                    title={
+                      dia.tieneSesiones
+                        ? `${sesionesPorDia[dia.key].length} sesión(es) completada(s)`
+                        : "Sin sesiones"
+                    }
+                  >
+                    {dia.dia}
+                    {dia.tieneSesiones && <span className="calendar-dot" />}
+                  </button>
+                ))}
+              </div>
+
+              <div className="calendar-legend">
+                <span className="calendar-legend-dot" />
+                <span>Sesiones completadas</span>
+              </div>
+            </aside>
           </div>
 
           {/* Cita */}
@@ -1227,6 +1851,66 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                   </button>
                   <button className="btn-cancelar" onClick={cerrarConfig}>
                     Cancelar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── MODAL SESIONES DEL DÍA ── */}
+          {modalSesionesDiaAbierto && (
+            <div className="modal-overlay">
+              <div className="day-modal-content">
+                <div className="day-modal-header">
+                  <div>
+                    <h3 className="day-modal-title">
+                      Sesiones del {sesionesDiaSeleccionado[0]?.fecha || "día seleccionado"}
+                    </h3>
+                    <p className="day-modal-subtitle">
+                      Completaste {sesionesDiaSeleccionado.length} sesión(es) de enfoque ese día.
+                    </p>
+                  </div>
+                  <button className="close-modal-btn" onClick={cerrarModalSesionesDia}>
+                    <IconClose />
+                  </button>
+                </div>
+
+                <div className="day-session-list">
+                  {sesionesDiaSeleccionado.map((sesion) => (
+                    <div key={sesion.id} className="day-session-item">
+                      <div className="day-session-main">
+                        <div className="day-session-icon">
+                          <IconCalendar />
+                        </div>
+                        <div>
+                          <p className="day-session-title">{sesion.titulo}</p>
+                          <div className="day-session-meta">
+                            {sesion.hora} · {sesion.resumenTiempos}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="day-session-actions">
+                        <button
+                          type="button"
+                          className="day-session-delete"
+                          onClick={() => intentarEliminar(sesion.id)}
+                          title="Eliminar sesión"
+                          aria-label="Eliminar sesión"
+                        >
+                          <IconTrash />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="day-modal-actions">
+                  <button
+                    type="button"
+                    className="btn-cerrar-dia"
+                    onClick={cerrarModalSesionesDia}
+                  >
+                    Cerrar
                   </button>
                 </div>
               </div>
