@@ -197,7 +197,7 @@ const IconClose = () => (
 
 // ──────────────────────────────────────────────────────────────────────────
 
-const PomodoroTimer = () => {
+const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
   // --- ESTADOS DE CONFIGURACIÓN ---
   const [tiempoSesion, setTiempoSesion] = useState(25);
   const [tiempoDescanso, setTiempoDescanso] = useState(5);
@@ -246,15 +246,30 @@ const PomodoroTimer = () => {
     return `${horas} h, ${minutos} min, ${segundos} seg`;
   };
 
-  const obtenerDuracionEstudio = (item) => {
-    return item.duracionEstudio ?? item.DuracionEstudio ?? item.duracion_estudio ?? 0;
-  };
-
-  const obtenerDuracionDescanso = (item) => {
-    return item.duracionDescanso ?? item.DuracionDescanso ?? item.duracion_descanso ?? 0;
+  const crearResumenTiempos = (tiempoEstudio, tiempoDescansoTotal) => {
+    return `Estudio: ${formatearTiempoHistorial(tiempoEstudio)} - Descanso: ${formatearTiempoHistorial(tiempoDescansoTotal)}`;
   };
 
   const [historial, setHistorial] = useState([]);
+
+  useEffect(() => {
+    const hayPomodoroEnCurso =
+      estaActivo ||
+      segundosAcumuladosEstudio > 0 ||
+      segundosAcumuladosDescanso > 0;
+
+    if (onEstadoPomodoroChange) {
+      onEstadoPomodoroChange(hayPomodoroEnCurso);
+    }
+  }, [estaActivo, segundosAcumuladosEstudio, segundosAcumuladosDescanso, onEstadoPomodoroChange]);
+
+  useEffect(() => {
+    return () => {
+      if (onEstadoPomodoroChange) {
+        onEstadoPomodoroChange(false);
+      }
+    };
+  }, [onEstadoPomodoroChange]);
 
   // --- CARGA INICIAL DESDE LA BASE DE DATOS ---
   useEffect(() => {
@@ -278,21 +293,16 @@ const PomodoroTimer = () => {
             month: "long",
             year: "numeric",
           };
-          const historialMapeado = data.map((item) => {
-            const duracionEstudio = obtenerDuracionEstudio(item);
-            const duracionDescanso = obtenerDuracionDescanso(item);
-
-            return {
-              id: item.idPomodoro,
-              fecha: new Date(item.fecha).toLocaleDateString(
-                "es-ES",
-                opcionesFecha,
-              ),
-              tiempoConcentrado: formatearTiempoHistorial(duracionEstudio),
-              tiempoDescanso: formatearTiempoHistorial(duracionDescanso),
-              detalleDuracion: `Estudio: ${formatearTiempoHistorial(duracionEstudio)} - Descanso: ${formatearTiempoHistorial(duracionDescanso)}`,
-            };
-          });
+          const historialMapeado = data.map((item) => ({
+            id: item.idPomodoro,
+            fecha: new Date(item.fecha).toLocaleDateString(
+              "es-ES",
+              opcionesFecha,
+            ),
+            tiempoConcentrado: formatearTiempoHistorial(item.duracionEstudio),
+            tiempoDescanso: formatearTiempoHistorial(item.duracionDescanso),
+            resumenTiempos: crearResumenTiempos(item.duracionEstudio, item.duracionDescanso),
+          }));
           setHistorial(historialMapeado);
         }
       } catch (error) {
@@ -352,18 +362,15 @@ const PomodoroTimer = () => {
           month: "long",
           year: "numeric",
         };
-        const duracionEstudio = obtenerDuracionEstudio(data);
-        const duracionDescanso = obtenerDuracionDescanso(data);
-
         const registroVisual = {
           id: data.idPomodoro,
           fecha: new Date(data.fecha).toLocaleDateString(
             "es-ES",
             opcionesFecha,
           ),
-          tiempoConcentrado: formatearTiempoHistorial(duracionEstudio),
-          tiempoDescanso: formatearTiempoHistorial(duracionDescanso),
-          detalleDuracion: `Estudio: ${formatearTiempoHistorial(duracionEstudio)} - Descanso: ${formatearTiempoHistorial(duracionDescanso)}`,
+          tiempoConcentrado: formatearTiempoHistorial(data.duracionEstudio),
+          tiempoDescanso: formatearTiempoHistorial(data.duracionDescanso),
+          resumenTiempos: crearResumenTiempos(data.duracionEstudio, data.duracionDescanso),
         };
         setHistorial([registroVisual, ...historial]);
         setSegundosAcumuladosEstudio(0);
@@ -408,27 +415,6 @@ const PomodoroTimer = () => {
     setIsDeleteModalOpen(false);
     setItemToDelete(null);
   };
-
-  // ── ALERTA DE CIERRE DE SESIÓN SI EL TEMPORIZADOR ESTÁ ACTIVO ──
-  useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      // Solo activamos la alerta si el temporizador está corriendo
-      if (estaActivo) {
-        event.preventDefault();
-        // Chrome requiere que se asigne un valor para mostrar el prompt
-        event.returnValue = ""; 
-        return "";
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    // Limpieza: quitamos el evento cuando el componente se desmonta 
-    // o cuando cambia el estado de 'estaActivo'
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [estaActivo]);
 
   // --- LÓGICA DEL RELOJ ---
   useEffect(() => {
@@ -708,7 +694,18 @@ const PomodoroTimer = () => {
                     color: #2D3247;
                 }
                 .history-date svg { color: #9EA5BA; }
-                .history-times { display: flex; gap: 8px; }
+                .history-times { display: flex; gap: 8px; flex-wrap: wrap; }
+                .time-summary {
+                    display: inline-flex;
+                    align-items: center;
+                    background-color: #EEF1FF;
+                    color: #3A56AF;
+                    padding: 4px 10px;
+                    border-radius: 4px;
+                    font-size: 0.72rem;
+                    font-weight: 700;
+                    line-height: 1.35;
+                }
                 .time-badge-focus {
                     display: inline-flex;
                     align-items: center;
@@ -730,17 +727,6 @@ const PomodoroTimer = () => {
                     border-radius: 4px;
                     font-size: 0.72rem;
                     font-weight: 700;
-                }
-                .time-summary-badge {
-                    display: inline-flex;
-                    align-items: center;
-                    background-color: #F0F3FF;
-                    color: #3A56AF;
-                    padding: 3px 9px;
-                    border-radius: 4px;
-                    font-size: 0.72rem;
-                    font-weight: 700;
-                    line-height: 1.4;
                 }
                 .delete-btn {
                     background: none;
@@ -1120,9 +1106,8 @@ const PomodoroTimer = () => {
                         {item.fecha}
                       </div>
                       <div className="history-times">
-                        <span className="time-summary-badge">
-                          {item.detalleDuracion ||
-                            `Estudio: ${item.tiempoConcentrado} - Descanso: ${item.tiempoDescanso}`}
+                        <span className="time-summary">
+                          {item.resumenTiempos || `Estudio: ${item.tiempoConcentrado} - Descanso: ${item.tiempoDescanso}`}
                         </span>
                       </div>
                     </div>
