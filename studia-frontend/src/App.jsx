@@ -13,6 +13,7 @@ import MateriasDashboard from './pages/MateriasDashboard'
 import EditorApunte from './components/EditorApunte'
 import ApuntesDashboard from './pages/ApuntesDashboard'
 import VerApunte from './pages/VerApunte'
+import EstadisticasDashboard from './pages/EstadisticasDashboard'
 import { eliminarPomodoro } from './services/pomodoroService'
 
 function App() {
@@ -290,6 +291,13 @@ function App() {
             onVolver={() => navegarA('apuntes', materiaActiva)}
             onEstadoPomodoroChange={setPomodoroEnCurso}
           />
+        </DashboardLayout>
+      );
+
+    case 'estadisticas':
+      return envolverConAvisoPomodoro(
+        <DashboardLayout nombreUsuario={nombreParaAvatar} onLogout={manejarCerrarSesion} onNavegar={navegarA} vistaActual={vistaActual}>
+          <EstadisticasDashboard />
         </DashboardLayout>
       );
 
