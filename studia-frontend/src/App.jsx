@@ -18,12 +18,30 @@ import { eliminarPomodoro } from './services/pomodoroService'
 function App() {
   const [vistaActual, setVistaActual] = useState(() => {
       const idUsuario = localStorage.getItem('idUsuario');
-      return idUsuario ? 'dashboard' : 'login';
+
+      if (!idUsuario) return 'login';
+
+      return localStorage.getItem('vistaActual') || 'dashboard';
   });
 
   // Memorias de la aplicación
-  const [materiaActiva, setMateriaActiva] = useState(null);
-  const [apunteActivo, setApunteActivo] = useState(null);
+  const [materiaActiva, setMateriaActiva] = useState(() => {
+      try {
+          const materiaGuardada = localStorage.getItem('materiaActiva');
+          return materiaGuardada ? JSON.parse(materiaGuardada) : null;
+      } catch {
+          return null;
+      }
+  });
+
+  const [apunteActivo, setApunteActivo] = useState(() => {
+      try {
+          const apunteGuardado = localStorage.getItem('apunteActivo');
+          return apunteGuardado ? JSON.parse(apunteGuardado) : null;
+      } catch {
+          return null;
+      }
+  });
 
   // Estado global para advertir si hay un Pomodoro en curso
   const [pomodoroEnCurso, setPomodoroEnCurso] = useState(false);
@@ -91,10 +109,18 @@ function App() {
   }, [pomodoroEnCurso, BASE_URL]);
 
   const ejecutarNavegacion = (nuevaVista, datosExtra = null) => {
+    localStorage.setItem('vistaActual', nuevaVista);
+
     if (nuevaVista === 'apuntes' || nuevaVista === 'editor') {
-        setMateriaActiva(datosExtra);
+        if (datosExtra) {
+            setMateriaActiva(datosExtra);
+            localStorage.setItem('materiaActiva', JSON.stringify(datosExtra));
+        }
     } else if (nuevaVista === 'verApunte') {
-        setApunteActivo(datosExtra);
+        if (datosExtra) {
+            setApunteActivo(datosExtra);
+            localStorage.setItem('apunteActivo', JSON.stringify(datosExtra));
+        }
     }
 
     setVistaActual(nuevaVista);
@@ -121,6 +147,9 @@ function App() {
   const cerrarSesionDirecto = () => {
       localStorage.removeItem('idUsuario');
       localStorage.removeItem('nombreUsuario');
+      localStorage.removeItem('vistaActual');
+      localStorage.removeItem('materiaActiva');
+      localStorage.removeItem('apunteActivo');
       localStorage.removeItem(POMODORO_APUNTE_STORAGE_KEY);
       setPomodoroEnCurso(false);
       setVistaActual('login');
