@@ -26,10 +26,34 @@ const finDeSemana = (fecha) => {
 };
 
 const formatearTotal = (minutos) => {
-    const h = Math.floor(minutos / 60);
-    const m = minutos % 60;
+    const total = Math.max(0, Math.round(Number(minutos) || 0));
+    const h = Math.floor(total / 60);
+    const m = total % 60;
 
-    return `${h}h ${String(m).padStart(2, '0')}min`;
+    if (h === 0) return `${m}min`;
+    if (m === 0) return `${h}h`;
+
+    return `${h}h ${m}min`;
+};
+
+const formatearRango = (inicio, fin) => {
+    if (!inicio || !fin) return '';
+
+    const inicioDate = new Date(inicio);
+    const finDate = new Date(fin);
+
+    const inicioTexto = inicioDate.toLocaleDateString('es-AR', {
+        day: 'numeric',
+        month: 'numeric'
+    });
+
+    const finTexto = finDate.toLocaleDateString('es-AR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit'
+    });
+
+    return `${inicioTexto} - ${finTexto}`;
 };
 
 const EstadisticasDashboard = () => {
@@ -42,22 +66,31 @@ const EstadisticasDashboard = () => {
         };
     });
 
+    const [tipoPeriodoMateria, setTipoPeriodoMateria] = useState('semanas');
+    const [indicePeriodoMateria, setIndicePeriodoMateria] = useState(0);
+
     const [datos, setDatos] = useState({
         totalSemanaMinutos: 0,
+        totalPeriodoMateriaMinutos: 0,
+        maxEscalaSemanaMinutos: 1,
         porDia: [],
         porMateria: []
     });
 
     const [cargando, setCargando] = useState(true);
 
+    const maxPeriodosMateria = tipoPeriodoMateria === 'meses' ? 12 : 52;
+
     useEffect(() => {
         const cargarDatos = async () => {
             try {
                 setCargando(true);
 
-                const resultado = await estadisticaService.obtenerEstadisticasSemana({
-                    fechaInicio: semanaSeleccionada.inicio.toISOString(),
-                    fechaFin: semanaSeleccionada.fin.toISOString()
+                const resultado = await estadisticaService.obtenerEstadisticas({
+                    fechaInicioSemana: semanaSeleccionada.inicio.toISOString(),
+                    fechaFinSemana: semanaSeleccionada.fin.toISOString(),
+                    tipoPeriodoMateria,
+                    indicePeriodoMateria
                 });
 
                 setDatos(resultado);
@@ -69,18 +102,31 @@ const EstadisticasDashboard = () => {
         };
 
         cargarDatos();
-    }, [semanaSeleccionada]);
+    }, [semanaSeleccionada, tipoPeriodoMateria, indicePeriodoMateria]);
 
     const rangoSemana = useMemo(() => {
-        return `${semanaSeleccionada.inicio.toLocaleDateString('es-AR', {
-            day: '2-digit',
-            month: '2-digit'
-        })} - ${semanaSeleccionada.fin.toLocaleDateString('es-AR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: '2-digit'
-        })}`;
+        return formatearRango(semanaSeleccionada.inicio, semanaSeleccionada.fin);
     }, [semanaSeleccionada]);
+
+    const rangoPeriodoMateria = useMemo(() => {
+        return formatearRango(
+            datos.fechaInicioPeriodoMateria,
+            datos.fechaFinPeriodoMateria
+        );
+    }, [datos.fechaInicioPeriodoMateria, datos.fechaFinPeriodoMateria]);
+
+    const cambiarTipoPeriodoMateria = (nuevoTipo) => {
+        setTipoPeriodoMateria(nuevoTipo);
+        setIndicePeriodoMateria(0);
+    };
+
+    const irPeriodoAnteriorMateria = () => {
+        setIndicePeriodoMateria((actual) => Math.min(actual + 1, maxPeriodosMateria - 1));
+    };
+
+    const irPeriodoSiguienteMateria = () => {
+        setIndicePeriodoMateria((actual) => Math.max(actual - 1, 0));
+    };
 
     return (
         <div style={estilos.contenedor}>
@@ -108,10 +154,24 @@ const EstadisticasDashboard = () => {
                     />
                 </div>
 
-                <GraficoBarrasSemana datos={datos.porDia} />
+                <GraficoBarrasSemana
+                    datos={datos.porDia}
+                    maxEscalaMinutos={datos.maxEscalaSemanaMinutos}
+                />
             </section>
 
-            <GraficoTortaMaterias datos={datos.porMateria} />
+            <GraficoTortaMaterias
+                datos={datos.porMateria}
+                tipoPeriodo={tipoPeriodoMateria}
+                onTipoPeriodoChange={cambiarTipoPeriodoMateria}
+                rangoPeriodo={rangoPeriodoMateria}
+                totalPeriodoMinutos={datos.totalPeriodoMateriaMinutos}
+                cargando={cargando}
+                indicePeriodo={indicePeriodoMateria}
+                maxPeriodos={maxPeriodosMateria}
+                onPeriodoAnterior={irPeriodoAnteriorMateria}
+                onPeriodoSiguiente={irPeriodoSiguienteMateria}
+            />
         </div>
     );
 };

@@ -3,8 +3,9 @@ import React from 'react';
 const colores = ['#3A5A82', '#536073', '#5B5D78', '#7A8FB5', '#A7B7D7', '#C8D5EB'];
 
 const formatearHoras = (minutos) => {
-    const h = Math.floor(minutos / 60);
-    const m = minutos % 60;
+    const total = Math.max(0, Math.round(Number(minutos) || 0));
+    const h = Math.floor(total / 60);
+    const m = total % 60;
 
     if (h === 0) return `${m}min`;
     if (m === 0) return `${h}h`;
@@ -20,6 +21,7 @@ const crearSegmentos = (datos, total) => {
     return datos.map((item, index) => {
         const porcentaje = total > 0 ? item.minutos / total : 0;
         const longitud = porcentaje * circunferencia;
+
         const segmento = {
             ...item,
             color: colores[index % colores.length],
@@ -33,15 +35,50 @@ const crearSegmentos = (datos, total) => {
     });
 };
 
-const GraficoTortaMaterias = ({ datos = [] }) => {
+const GraficoTortaMaterias = ({
+    datos = [],
+    tipoPeriodo = 'semanas',
+    onTipoPeriodoChange,
+    rangoPeriodo = '',
+    totalPeriodoMinutos,
+    cargando = false,
+    indicePeriodo = 0,
+    maxPeriodos = 52,
+    onPeriodoAnterior,
+    onPeriodoSiguiente
+}) => {
     const total = datos.reduce((acc, item) => acc + item.minutos, 0);
+    const totalMostrado = totalPeriodoMinutos ?? total;
     const segmentos = crearSegmentos(datos, total);
+    const etiquetaPeriodo = tipoPeriodo === 'meses' ? 'Meses' : 'Semanas';
 
     return (
         <section style={estilos.card}>
-            <div style={estilos.header}>
-                <h3 style={estilos.titulo}>Distribución por Materia</h3>
-                <p style={estilos.subtitulo}>Porcentaje de tiempo dedicado a cada materia.</p>
+            <div style={estilos.headerSuperior}>
+                <div>
+                    <h3 style={estilos.titulo}>Distribución por materia</h3>
+                    <p style={estilos.subtitulo}>
+                        {etiquetaPeriodo}
+                        {rangoPeriodo ? ` · ${rangoPeriodo}` : ''}
+                    </p>
+                </div>
+
+                <div style={estilos.selectorPeriodoWrap}>
+                    <label style={estilos.labelPeriodo}>Periodo</label>
+                    <select
+                        value={tipoPeriodo}
+                        onChange={(e) => onTipoPeriodoChange?.(e.target.value)}
+                        style={estilos.selectorPeriodo}
+                    >
+                        <option value="semanas">Semanas</option>
+                        <option value="meses">Meses</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style={estilos.totalPeriodo}>
+                Total del periodo:{' '}
+                <strong>{cargando ? 'Cargando...' : formatearHoras(totalMostrado)}</strong>
             </div>
 
             {datos.length === 0 || total === 0 ? (
@@ -99,6 +136,43 @@ const GraficoTortaMaterias = ({ datos = [] }) => {
                     </div>
                 </div>
             )}
+
+            <div style={estilos.navegacionPeriodo}>
+                <button
+                    type="button"
+                    style={{
+                        ...estilos.btnPeriodo,
+                        ...(indicePeriodo >= maxPeriodos - 1 ? estilos.btnPeriodoDisabled : {})
+                    }}
+                    onClick={onPeriodoAnterior}
+                    disabled={indicePeriodo >= maxPeriodos - 1}
+                    title="Periodo anterior"
+                >
+                    ‹
+                </button>
+
+                <div style={estilos.indicadorPeriodo}>
+                    <span style={estilos.indicadorPrincipal}>{rangoPeriodo || 'Periodo actual'}</span>
+                    <span style={estilos.indicadorSecundario}>
+                        {tipoPeriodo === 'meses'
+                            ? `${Math.min(indicePeriodo + 1, maxPeriodos)} de 12 meses`
+                            : `${Math.min(indicePeriodo + 1, maxPeriodos)} de 52 semanas`}
+                    </span>
+                </div>
+
+                <button
+                    type="button"
+                    style={{
+                        ...estilos.btnPeriodo,
+                        ...(indicePeriodo <= 0 ? estilos.btnPeriodoDisabled : {})
+                    }}
+                    onClick={onPeriodoSiguiente}
+                    disabled={indicePeriodo <= 0}
+                    title="Periodo siguiente"
+                >
+                    ›
+                </button>
+            </div>
         </section>
     );
 };
@@ -112,19 +186,55 @@ const estilos = {
         padding: 'clamp(22px, 4vw, 32px)',
         marginTop: '24px'
     },
-    header: {
-        marginBottom: 'clamp(20px, 4vw, 28px)'
+    headerSuperior: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        gap: '20px',
+        flexWrap: 'wrap',
+        marginBottom: '14px'
     },
     titulo: {
         margin: 0,
         color: '#2B3437',
         fontSize: 'clamp(1.1rem, 2.4vw, 1.4rem)',
-        fontWeight: 800
+        fontWeight: 800,
+        textTransform: 'none'
     },
     subtitulo: {
         margin: '6px 0 0',
         color: '#586064',
-        fontSize: 'clamp(0.85rem, 1.6vw, 1rem)'
+        fontSize: 'clamp(0.85rem, 1.6vw, 1rem)',
+        fontWeight: 600
+    },
+    selectorPeriodoWrap: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '6px',
+        minWidth: '180px'
+    },
+    labelPeriodo: {
+        color: '#8B95A7',
+        textTransform: 'uppercase',
+        letterSpacing: '0.12em',
+        fontSize: '0.68rem',
+        fontWeight: 900
+    },
+    selectorPeriodo: {
+        backgroundColor: 'white',
+        color: '#2B3437',
+        border: '1px solid #DDE5F4',
+        borderRadius: '12px',
+        padding: '12px 16px',
+        fontWeight: 800,
+        cursor: 'pointer',
+        outline: 'none'
+    },
+    totalPeriodo: {
+        color: '#586064',
+        fontSize: '0.92rem',
+        fontWeight: 700,
+        marginBottom: 'clamp(20px, 4vw, 28px)'
     },
     contenido: {
         display: 'flex',
@@ -204,6 +314,54 @@ const estilos = {
         color: '#3A5A82',
         fontWeight: 800,
         fontSize: 'clamp(0.8rem, 1.3vw, 0.9rem)'
+    },
+    navegacionPeriodo: {
+        marginTop: 'clamp(22px, 4vw, 30px)',
+        paddingTop: '20px',
+        borderTop: '1px solid #E3E9EC',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '16px'
+    },
+    btnPeriodo: {
+        width: '42px',
+        height: '42px',
+        border: '1px solid #DDE5F4',
+        backgroundColor: '#F6F8FE',
+        color: '#3A5A82',
+        borderRadius: '12px',
+        cursor: 'pointer',
+        fontSize: '1.8rem',
+        fontWeight: 900,
+        lineHeight: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    btnPeriodoDisabled: {
+        opacity: 0.4,
+        cursor: 'not-allowed'
+    },
+    indicadorPeriodo: {
+        minWidth: 'min(100%, 220px)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '4px',
+        textAlign: 'center'
+    },
+    indicadorPrincipal: {
+        color: '#2B3437',
+        fontSize: '0.95rem',
+        fontWeight: 900
+    },
+    indicadorSecundario: {
+        color: '#8B95A7',
+        fontSize: '0.74rem',
+        fontWeight: 800,
+        textTransform: 'uppercase',
+        letterSpacing: '0.08em'
     },
     vacio: {
         color: '#8B95A7',
