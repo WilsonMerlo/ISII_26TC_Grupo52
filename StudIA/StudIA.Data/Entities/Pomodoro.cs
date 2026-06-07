@@ -35,9 +35,8 @@ namespace StudIA.Data.Entities
         [Column("id_usuario")]
         public int IdUsuario { get; set; }
 
-        [Required]
         [Column("id_materia")]
-        public int IdMateria { get; set; }
+        public int? IdMateria { get; set; }
 
         [Column("id_apunte")]
         public int? IdApunte { get; set; }

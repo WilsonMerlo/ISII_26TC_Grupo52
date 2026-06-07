@@ -21,16 +21,14 @@ public class StudIAContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         // =========================================================
-        // 1. REGLAS DE RELACIONES Y BORRADO (INTACTAS)
+        // 1. REGLAS DE RELACIONES Y BORRADO
         // =========================================================
 
-        // Relaciones existentes
         modelBuilder.Entity<Materia>()
             .HasOne(m => m.Usuario)
             .WithMany(u => u.Materias)
             .HasForeignKey(m => m.IdUsuario);
 
-        // --- SOLUCIÓN AL ERROR DE CASCADA ORIGINAL ---
         modelBuilder.Entity<Progreso>()
             .HasOne(p => p.Usuario)
             .WithMany()
@@ -42,25 +40,19 @@ public class StudIAContext : DbContext
             .WithMany()
             .HasForeignKey(p => p.IdUsuario)
             .OnDelete(DeleteBehavior.Restrict);
-        // ------------------------------------
 
-        // --- NUEVAS REGLAS DE NEGOCIO (Sprint 3) ---
-
-        // REGLA 1: Si se elimina un Apunte, los Pomodoros NO se borran. Pasan a NULL.
         modelBuilder.Entity<Pomodoro>()
             .HasOne(p => p.Apunte)
             .WithMany(a => a.Pomodoros)
             .HasForeignKey(p => p.IdApunte)
             .OnDelete(DeleteBehavior.Restrict);
 
-        // REGLA 2: Si se elimina una Materia, se borran en cascada sus Apuntes.
         modelBuilder.Entity<Apunte>()
             .HasOne(a => a.Materia)
             .WithMany(m => m.Apuntes)
             .HasForeignKey(a => a.IdMateria)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // REGLA 3: Si se elimina una Materia, se borran en cascada sus Pomodoros.
         modelBuilder.Entity<Pomodoro>()
             .HasOne(p => p.Materia)
             .WithMany()
@@ -75,10 +67,9 @@ public class StudIAContext : DbContext
 
 
         // =========================================================
-        // 2. GENERACIÓN DE SEED DATA (DATOS MASIVOS)
+        // 2. GENERACIÓN DE SEED DATA
         // =========================================================
 
-        // A. SEMILLA DE USUARIOS
         var usuarios = new List<Usuario>
         {
             new Usuario { IdUsuario = 1, Nombre = "Wilson Merlo", Correo = "wilson@test.com", Contrasena = "1234" },
@@ -86,17 +77,13 @@ public class StudIAContext : DbContext
         };
         modelBuilder.Entity<Usuario>().HasData(usuarios);
 
-        // B. SEMILLA DE MATERIAS (5 para Wilson, 5 para Karen)
         var materias = new List<Materia>
         {
-            // Materias de Wilson
             new Materia { IdMateria = 1, IdUsuario = 1, NombreMateria = "Ingeniería de Software II", Descripcion = "Proyecto StudIA" },
             new Materia { IdMateria = 2, IdUsuario = 1, NombreMateria = "Cálculo", Descripcion = "Preparación de finales" },
             new Materia { IdMateria = 3, IdUsuario = 1, NombreMateria = "Estadística", Descripcion = "Modelos probabilísticos" },
             new Materia { IdMateria = 4, IdUsuario = 1, NombreMateria = "Sistemas Operativos", Descripcion = "Concurrencia y memoria" },
             new Materia { IdMateria = 5, IdUsuario = 1, NombreMateria = "Bases de Datos", Descripcion = "SQL y NoSQL" },
-            
-            // Materias de Karen
             new Materia { IdMateria = 6, IdUsuario = 2, NombreMateria = "Programación Web", Descripcion = "React y Node.js" },
             new Materia { IdMateria = 7, IdUsuario = 2, NombreMateria = "Arquitectura de Software", Descripcion = "Patrones de diseño" },
             new Materia { IdMateria = 8, IdUsuario = 2, NombreMateria = "Matemática Discreta", Descripcion = "Grafos y lógica" },
@@ -105,7 +92,6 @@ public class StudIAContext : DbContext
         };
         modelBuilder.Entity<Materia>().HasData(materias);
 
-        // C. SEMILLA DE APUNTES (10 por materia, 2 párrafos c/u)
         var apuntes = new List<Apunte>();
         int apunteId = 1;
         string contenidoApunte = "Este es el primer párrafo del apunte. Aquí se establecen los fundamentos teóricos que se discutieron en la materia, abarcando las definiciones principales, los casos de uso básicos y los diagramas estructurales que aplican a esta unidad específica.\n\nEn este segundo párrafo, se desarrollan los conceptos más avanzados y ejemplos prácticos. Repasar esta sección es fundamental para poder resolver los ejercicios de la guía práctica, entender la bibliografía recomendada y estar bien preparado para el examen integrador.";
@@ -127,32 +113,35 @@ public class StudIAContext : DbContext
         }
         modelBuilder.Entity<Apunte>().HasData(apuntes);
 
-        // D. SEMILLA DE POMODOROS (18 Mayo a 10 Junio, 4 a 6 hrs diarias)
         var pomodoros = new List<Pomodoro>();
         int pomodoroId = 1;
 
         DateTime fechaInicio = new DateTime(2026, 5, 18);
         DateTime fechaFin = new DateTime(2026, 6, 10);
 
-        Random random = new Random(123); // Semilla fija para evitar cambios en migraciones posteriores
+        Random random = new Random(123);
 
         var materiasWilson = materias.Where(m => m.IdUsuario == 1).ToList();
         var materiasKaren = materias.Where(m => m.IdUsuario == 2).ToList();
+        var apuntesWilson = apuntes.Where(a => materiasWilson.Select(m => m.IdMateria).Contains(a.IdMateria)).ToList();
+        var apuntesKaren = apuntes.Where(a => materiasKaren.Select(m => m.IdMateria).Contains(a.IdMateria)).ToList();
 
         for (DateTime fecha = fechaInicio; fecha <= fechaFin; fecha = fecha.AddDays(1))
         {
-            if (fecha.DayOfWeek == DayOfWeek.Sunday) continue; // Descanso los domingos
+            if (fecha.DayOfWeek == DayOfWeek.Sunday) continue;
 
-            GenerarPomodorosDiarios(1, materiasWilson, fecha, ref pomodoroId, pomodoros, random);
-            GenerarPomodorosDiarios(2, materiasKaren, fecha, ref pomodoroId, pomodoros, random);
+            GenerarPomodorosDiarios(1, materiasWilson, apuntesWilson, fecha, ref pomodoroId, pomodoros, random);
+            GenerarPomodorosDiarios(2, materiasKaren, apuntesKaren, fecha, ref pomodoroId, pomodoros, random);
         }
         modelBuilder.Entity<Pomodoro>().HasData(pomodoros);
 
-        // E. SEMILLA DE PROGRESOS (Cálculo exacto basado en los pomodoros)
         var progresos = new List<Progreso>();
         int progresoId = 1;
 
-        var pomodorosAgrupados = pomodoros.GroupBy(p => new { p.IdUsuario, p.IdMateria });
+        var pomodorosAgrupados = pomodoros
+            .Where(p => p.IdMateria != null)
+            .GroupBy(p => new { p.IdUsuario, IdMateria = p.IdMateria.Value });
+
         foreach (var grupo in pomodorosAgrupados)
         {
             progresos.Add(new Progreso
@@ -169,28 +158,45 @@ public class StudIAContext : DbContext
     // =========================================================
     // 3. MÉTODOS AUXILIARES
     // =========================================================
-    private void GenerarPomodorosDiarios(int idUsuario, List<Materia> materiasUsuario, DateTime fecha, ref int pomodoroId, List<Pomodoro> pomodoros, Random random)
+    private void GenerarPomodorosDiarios(int idUsuario, List<Materia> materiasUsuario, List<Apunte> apuntesUsuario, DateTime fecha, ref int pomodoroId, List<Pomodoro> pomodoros, Random random)
     {
-        int cantidadSesiones = random.Next(10, 15); // Entre 4 y ~6 horas (cada sesión es 25+5 min)
-        int minutosDelDia = 14 * 60; // Arrancan a estudiar a las 14:00
+        int cantidadSesiones = random.Next(10, 15);
+        int minutosDelDia = 14 * 60;
 
         for (int i = 0; i < cantidadSesiones; i++)
         {
-            var materiaAleatoria = materiasUsuario[random.Next(materiasUsuario.Count)];
+            int tipo = random.Next(100);
+            int? idMateriaSeleccionada = null;
+            int? idApunteSeleccionado = null;
+
+            if (tipo >= 20)
+            {
+                var materiaAleatoria = materiasUsuario[random.Next(materiasUsuario.Count)];
+                idMateriaSeleccionada = materiaAleatoria.IdMateria;
+
+                if (tipo >= 60)
+                {
+                    var apuntesMateria = apuntesUsuario.Where(a => a.IdMateria == idMateriaSeleccionada).ToList();
+                    if (apuntesMateria.Any())
+                    {
+                        idApunteSeleccionado = apuntesMateria[random.Next(apuntesMateria.Count)].IdApunte;
+                    }
+                }
+            }
 
             pomodoros.Add(new Pomodoro
             {
                 IdPomodoro = pomodoroId++,
                 IdUsuario = idUsuario,
-                IdMateria = materiaAleatoria.IdMateria,
-                IdApunte = null,
+                IdMateria = idMateriaSeleccionada,
+                IdApunte = idApunteSeleccionado,
                 Fecha = fecha.AddMinutes(minutosDelDia),
-                DuracionEstudio = 1500, // 25 minutos
-                DuracionDescanso = 300, // 5 minutos
+                DuracionEstudio = 1500,
+                DuracionDescanso = 300,
                 EstadoFase = FasePomodoro.Completado
             });
 
-            minutosDelDia += 30; // Salto temporal para el próximo pomodoro
+            minutosDelDia += 30;
         }
     }
 }
