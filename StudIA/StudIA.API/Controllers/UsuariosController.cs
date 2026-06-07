@@ -41,12 +41,13 @@ namespace StudIA.API.Controllers
             return Ok(usuario);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Usuario>> ActualizarUsuario(int id, Usuario usuarioActualizado)
+        [HttpPut("{id}/datos")]
+        public async Task<ActionResult<Usuario>> ActualizarDatosUsuario(int id, [FromBody] Usuario usuarioActualizado)
         {
-            var usuario = await _usuarioService.ActualizarUsuarioAsync(
+            var usuario = await _usuarioService.ActualizarDatosUsuarioAsync(
                 id,
-                usuarioActualizado
+                usuarioActualizado.Nombre,
+                usuarioActualizado.Correo
             );
 
             if (usuario == null)
@@ -57,6 +58,25 @@ namespace StudIA.API.Controllers
             return Ok(usuario);
         }
 
+        [HttpPut("{id}/contrasena")]
+        public async Task<ActionResult> CambiarContrasena(
+            int id,
+            [FromBody] CambiarContrasenaRequest request)
+        {
+            var resultado = await _usuarioService.CambiarContrasenaAsync(
+                id,
+                request.ContrasenaActual,
+                request.NuevaContrasena
+            );
+
+            if (!resultado.Exito)
+            {
+                return BadRequest(new { error = resultado.Mensaje });
+            }
+
+            return Ok(new { mensaje = "Contraseña actualizada correctamente" });
+        }
+
     }
 
     // --- CLASE PARA RECIBIR EL JSON DE LOGIN ---
@@ -65,4 +85,11 @@ namespace StudIA.API.Controllers
         public string Correo { get; set; }
         public string Contrasena { get; set; }
     }
+
+    public class CambiarContrasenaRequest
+    {
+        public string ContrasenaActual { get; set; } = string.Empty;
+        public string NuevaContrasena { get; set; } = string.Empty;
+    }
+
 }

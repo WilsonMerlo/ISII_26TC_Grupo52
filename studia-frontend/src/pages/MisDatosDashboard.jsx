@@ -1,272 +1,388 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { usuarioService } from '../services/usuarioService';
 
-const MisDatosDashboard = () => {
-    const [editando, setEditando] = useState(false);
-    const [guardando, setGuardando] = useState(false);
+const obtenerCorreoGuardado = () => {
+    return (
+        localStorage.getItem('correoUsuario') ||
+        localStorage.getItem('emailUsuario') ||
+        localStorage.getItem('correo') ||
+        localStorage.getItem('email') ||
+        ''
+    );
+};
 
-    const [nombre, setNombre] = useState(localStorage.getItem('nombreUsuario') || '');
-    const [correo, setCorreo] = useState(localStorage.getItem('correoUsuario') || '');
-    const [contrasenaActual, setContrasenaActual] = useState('');
-    const [nuevaContrasena, setNuevaContrasena] = useState('');
+const MisDatosDashboard = () => {
+    const nombreGuardado = localStorage.getItem('nombreUsuario') || 'Usuario';
+    const correoGuardado = obtenerCorreoGuardado();
+
+    const nombreSeparado = useMemo(() => {
+        const partes = nombreGuardado.trim().split(/\s+/);
+
+        return {
+            nombres: partes.slice(0, 1).join(' ') || nombreGuardado,
+            apellidos: partes.slice(1).join(' ')
+        };
+    }, [nombreGuardado]);
+
+    const [nombres, setNombres] = useState(nombreSeparado.nombres);
+    const [apellidos, setApellidos] = useState(nombreSeparado.apellidos);
+    const [correo, setCorreo] = useState(correoGuardado);
+
+    const [passwordActual, setPasswordActual] = useState('');
+    const [passwordNueva, setPasswordNueva] = useState('');
+
+    const [editandoDatos, setEditandoDatos] = useState(false);
+    const [guardandoDatos, setGuardandoDatos] = useState(false);
+    const [guardandoPassword, setGuardandoPassword] = useState(false);
+
+    const descartarCambios = () => {
+        setNombres(nombreSeparado.nombres);
+        setApellidos(nombreSeparado.apellidos);
+        setCorreo(correoGuardado);
+        setEditandoDatos(false);
+    };
 
     const guardarCambios = async () => {
         try {
-            setGuardando(true);
+            setGuardandoDatos(true);
+
+            const idUsuario = localStorage.getItem('idUsuario');
+            const nombreCompleto = `${nombres} ${apellidos}`.trim();
+
+            if (!nombreCompleto) {
+                alert('El nombre no puede estar vacío.');
+                return;
+            }
+
+            if (!correo.trim()) {
+                alert('El correo no puede estar vacío.');
+                return;
+            }
+
+            const usuarioActualizado = await usuarioService.actualizarDatos(
+                idUsuario,
+                {
+                    nombre: nombreCompleto,
+                    correo,
+                    contrasena: 'sin-cambios'
+                }
+            );
+
+            localStorage.setItem('nombreUsuario', usuarioActualizado.nombre);
+            localStorage.setItem('correoUsuario', usuarioActualizado.correo);
+            localStorage.setItem('emailUsuario', usuarioActualizado.correo);
+
+            window.dispatchEvent(new Event('datosUsuarioActualizados'));
+
+            setEditandoDatos(false);
+
+            alert('Datos actualizados correctamente.');
+        } catch (error) {
+            alert(error.message || 'No se pudieron actualizar los datos.');
+        } finally {
+            setGuardandoDatos(false);
+        }
+    };
+
+    const cambiarContrasena = async () => {
+        try {
+            setGuardandoPassword(true);
 
             const idUsuario = localStorage.getItem('idUsuario');
 
-            await usuarioService.actualizar(idUsuario, {
-                idUsuario: Number(idUsuario),
-                nombre,
-                correo,
-                contrasena: nuevaContrasena || ''
-            });
+            if (!passwordActual.trim()) {
+                alert('Ingresá tu contraseña actual.');
+                return;
+            }
 
-            localStorage.setItem('nombreUsuario', nombre);
-            localStorage.setItem('correoUsuario', correo);
+            if (!passwordNueva.trim()) {
+                alert('Ingresá una nueva contraseña.');
+                return;
+            }
 
-            setContrasenaActual('');
-            setNuevaContrasena('');
-            setEditando(false);
+            await usuarioService.cambiarContrasena(
+                idUsuario,
+                passwordActual,
+                passwordNueva
+            );
+
+            setPasswordActual('');
+            setPasswordNueva('');
+
+            alert('Contraseña actualizada correctamente.');
         } catch (error) {
-            console.error('Error guardando datos:', error);
-            alert('No se pudieron guardar los datos.');
+            alert(error.message || 'No se pudo cambiar la contraseña.');
         } finally {
-            setGuardando(false);
+            setGuardandoPassword(false);
         }
     };
 
     return (
-        <div style={estilos.contenedor}>
-            <div style={estilos.encabezado}>
-                <p style={estilos.subtitulo}>Panel de Usuario</p>
+        <div style={estilos.page}>
+            <section style={estilos.hero}>
+                <p style={estilos.kicker}>Panel de usuario</p>
                 <h2 style={estilos.titulo}>
                     Tu espacio, <span style={estilos.tituloAzul}>tus reglas.</span>
                 </h2>
                 <p style={estilos.descripcion}>
-                    Ajusta tu entorno de aprendizaje para maximizar la concentración y el rendimiento cognitivo.
+                    Ajustá tus datos personales y la información básica de tu cuenta.
                 </p>
-            </div>
+            </section>
 
             <div style={estilos.grid}>
-                <section style={estilos.cardGrande}>
-                    <div style={estilos.cardHeader}>
-                        <div style={estilos.iconoCaja}>
-                            <span className="material-symbols-outlined">person</span>
+                <section style={{ ...estilos.card, ...estilos.cardPrincipal }}>
+                    <div style={estilos.cardHeaderConAccion}>
+                        <div style={estilos.cardHeader}>
+                            <div style={estilos.iconoCard}>👤</div>
+                            <h3 style={estilos.cardTitulo}>Datos Personales</h3>
                         </div>
-                        <h3 style={estilos.cardTitulo}>Datos Personales</h3>
+
+                        <span style={editandoDatos ? estilos.estadoEditando : estilos.estadoLectura}>
+                            {editandoDatos ? 'Edición habilitada' : 'Sólo lectura'}
+                        </span>
                     </div>
 
-                    <div style={estilos.formulario}>
-                        <div style={estilos.fila}>
-                            <div style={estilos.campo}>
-                                <label style={estilos.label}>Nombre</label>
-                                <input
-                                    style={{
-                                        ...estilos.input,
-                                        ...(editando ? {} : estilos.inputDeshabilitado)
-                                    }}
-                                    type="text"
-                                    value={nombre}
-                                    disabled={!editando}
-                                    onChange={(e) => setNombre(e.target.value)}
-                                />
-                            </div>
+                    <div style={estilos.formGridDos}>
+                        <label style={estilos.campo}>
+                            <span style={estilos.label}>Nombres</span>
+                            <input
+                                style={{
+                                    ...estilos.input,
+                                    ...(!editandoDatos ? estilos.inputDeshabilitado : {})
+                                }}
+                                value={nombres}
+                                onChange={(e) => setNombres(e.target.value)}
+                                placeholder="Ej: Alejandro"
+                                disabled={!editandoDatos}
+                            />
+                        </label>
 
-                            <div style={estilos.campo}>
-                                <label style={estilos.label}>Correo Electrónico</label>
-                                <input
-                                    style={{
-                                        ...estilos.input,
-                                        ...(editando ? {} : estilos.inputDeshabilitado)
-                                    }}
-                                    type="email"
-                                    value={correo}
-                                    disabled={!editando}
-                                    onChange={(e) => setCorreo(e.target.value)}
-                                />
-                            </div>
-                        </div>
+                        <label style={estilos.campo}>
+                            <span style={estilos.label}>Apellidos</span>
+                            <input
+                                style={{
+                                    ...estilos.input,
+                                    ...(!editandoDatos ? estilos.inputDeshabilitado : {})
+                                }}
+                                value={apellidos}
+                                onChange={(e) => setApellidos(e.target.value)}
+                                placeholder="Ej: García"
+                                disabled={!editandoDatos}
+                            />
+                        </label>
+                    </div>
 
-                        {!editando && (
+                    <label style={estilos.campo}>
+                        <span style={estilos.label}>Correo Electrónico</span>
+                        <input
+                            style={{
+                                ...estilos.input,
+                                ...(!editandoDatos ? estilos.inputDeshabilitado : {})
+                            }}
+                            value={correo}
+                            onChange={(e) => setCorreo(e.target.value)}
+                            type="email"
+                            placeholder="usuario@correo.com"
+                            disabled={!editandoDatos}
+                        />
+                    </label>
+
+                    <div style={estilos.accionesDatosPersonales}>
+                        {!editandoDatos ? (
                             <button
                                 type="button"
-                                style={estilos.btnEditar}
-                                onClick={() => setEditando(true)}
+                                style={estilos.btnEditarDatos}
+                                onClick={() => setEditandoDatos(true)}
                             >
                                 Habilitar edición
                             </button>
+                        ) : (
+                            <>
+                                <button
+                                    type="button"
+                                    style={estilos.btnDescartarDatos}
+                                    onClick={descartarCambios}
+                                    disabled={guardandoDatos}
+                                >
+                                    Cancelar edición
+                                </button>
+
+                                <button
+                                    type="button"
+                                    style={estilos.btnGuardarDatos}
+                                    onClick={guardarCambios}
+                                    disabled={guardandoDatos}
+                                >
+                                    {guardandoDatos ? 'Guardando...' : 'Guardar datos'}
+                                </button>
+                            </>
                         )}
                     </div>
                 </section>
 
-                <section style={estilos.cardChica}>
+                <section style={estilos.card}>
                     <div style={estilos.cardHeader}>
-                        <div style={estilos.iconoCajaSecundaria}>
-                            <span className="material-symbols-outlined">lock</span>
-                        </div>
-                        <h3 style={estilos.cardTitulo}>Seguridad</h3>
+                        <div style={estilos.iconoCardSecundario}>🔒</div>
+                        <h3 style={estilos.cardTitulo}>Cambiar contraseña</h3>
                     </div>
 
-                    <div style={estilos.formulario}>
-                        <div style={estilos.campo}>
-                            <label style={estilos.label}>Contraseña actual</label>
-                            <input
-                                style={{
-                                    ...estilos.input,
-                                    ...(editando ? {} : estilos.inputDeshabilitado)
-                                }}
-                                type="password"
-                                placeholder="••••••••"
-                                value={contrasenaActual}
-                                disabled={!editando}
-                                onChange={(e) => setContrasenaActual(e.target.value)}
-                            />
-                        </div>
+                    <label style={estilos.campo}>
+                        <span style={estilos.label}>Contraseña actual</span>
+                        <input
+                            style={estilos.input}
+                            value={passwordActual}
+                            onChange={(e) => setPasswordActual(e.target.value)}
+                            type="password"
+                            placeholder="••••••••"
+                        />
+                    </label>
 
-                        <div style={estilos.campo}>
-                            <label style={estilos.label}>Nueva contraseña</label>
-                            <input
-                                style={{
-                                    ...estilos.input,
-                                    ...(editando ? {} : estilos.inputDeshabilitado)
-                                }}
-                                type="password"
-                                placeholder="Mínimo 8 caracteres"
-                                value={nuevaContrasena}
-                                disabled={!editando}
-                                onChange={(e) => setNuevaContrasena(e.target.value)}
-                            />
-                        </div>
+                    <label style={estilos.campo}>
+                        <span style={estilos.label}>Nueva contraseña</span>
+                        <input
+                            style={estilos.input}
+                            value={passwordNueva}
+                            onChange={(e) => setPasswordNueva(e.target.value)}
+                            type="password"
+                            placeholder="••••••••"
+                        />
+                    </label>
+
+                    <div style={estilos.accionesPassword}>
+                        <button
+                            type="button"
+                            style={estilos.btnGuardarPassword}
+                            onClick={cambiarContrasena}
+                            disabled={guardandoPassword}
+                        >
+                            {guardandoPassword ? 'Guardando...' : 'Cambiar contraseña'}
+                        </button>
                     </div>
                 </section>
-
-                <div style={estilos.acciones}>
-                    {editando && (
-                        <>
-                            <button
-                                type="button"
-                                style={estilos.btnCancelar}
-                                disabled={guardando}
-                                onClick={() => {
-                                    setNombre(localStorage.getItem('nombreUsuario') || '');
-                                    setCorreo(localStorage.getItem('correoUsuario') || '');
-                                    setContrasenaActual('');
-                                    setNuevaContrasena('');
-                                    setEditando(false);
-                                }}
-                            >
-                                Descartar
-                            </button>
-
-                            <button
-                                type="button"
-                                style={estilos.btnGuardar}
-                                disabled={guardando}
-                                onClick={guardarCambios}
-                            >
-                                {guardando ? 'Guardando...' : 'Guardar Cambios'}
-                            </button>
-                        </>
-                    )}
-                </div>
             </div>
         </div>
     );
 };
 
 const estilos = {
-    contenedor: {
-        maxWidth: '1050px',
-        margin: '0 auto',
-        padding: '40px 48px'
+    page: {
+        flex: 1,
+        overflowY: 'auto',
+        padding: '46px 56px 64px',
+        backgroundColor: '#F6F8FE',
+        fontFamily: "'IBM Plex Sans', 'Helvetica Neue', sans-serif"
     },
-    encabezado: {
-        marginBottom: '42px'
+    hero: {
+        marginBottom: '38px'
     },
-    subtitulo: {
-        color: '#3A5A82',
+    kicker: {
+        color: '#3A56AF',
         fontWeight: 800,
         letterSpacing: '0.14em',
         textTransform: 'uppercase',
         fontSize: '0.75rem',
-        marginBottom: '8px'
+        margin: '0 0 10px'
     },
     titulo: {
+        margin: 0,
+        color: '#2D3247',
         fontSize: '2.6rem',
+        lineHeight: 1.1,
         fontWeight: 900,
-        color: '#2B3437',
-        margin: 0
+        letterSpacing: '-0.04em'
     },
     tituloAzul: {
-        color: '#3A5A82'
+        color: '#3A56AF'
     },
     descripcion: {
-        color: '#586064',
+        color: '#6A7185',
         fontSize: '1.05rem',
-        marginTop: '14px',
         maxWidth: '620px',
-        lineHeight: 1.6
+        lineHeight: 1.6,
+        margin: '16px 0 0'
     },
     grid: {
         display: 'grid',
-        gridTemplateColumns: '7fr 5fr',
-        gap: '28px'
+        gridTemplateColumns: 'minmax(0, 7fr) minmax(320px, 5fr)',
+        gap: '26px',
+        maxWidth: '1060px'
     },
-    cardGrande: {
-        backgroundColor: '#FFFFFF',
+    card: {
+        backgroundColor: 'white',
         borderRadius: '18px',
-        padding: '32px',
-        boxShadow: '0 18px 45px rgba(63, 95, 146, 0.06)'
+        padding: '30px',
+        border: '1px solid #E8EBFF',
+        boxShadow: '0 16px 34px rgba(58, 86, 175, 0.06)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '22px'
     },
-    cardChica: {
-        backgroundColor: '#FFFFFF',
-        borderRadius: '18px',
-        padding: '32px',
-        boxShadow: '0 18px 45px rgba(63, 95, 146, 0.06)'
+    cardPrincipal: {
+        minHeight: '300px'
+    },
+    cardHeaderConAccion: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: '16px',
+        marginBottom: '4px'
     },
     cardHeader: {
         display: 'flex',
         alignItems: 'center',
-        gap: '14px',
-        marginBottom: '28px'
+        gap: '12px',
+        marginBottom: '4px'
     },
-    iconoCaja: {
+    iconoCard: {
         width: '42px',
         height: '42px',
-        borderRadius: '14px',
-        backgroundColor: '#D6E3FF',
-        color: '#3A5A82',
+        borderRadius: '50%',
+        backgroundColor: '#DDE6FF',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
     },
-    iconoCajaSecundaria: {
+    iconoCardSecundario: {
         width: '42px',
         height: '42px',
-        borderRadius: '14px',
-        backgroundColor: '#DCDDFF',
-        color: '#5B5D78',
+        borderRadius: '50%',
+        backgroundColor: '#ECECFF',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
     },
     cardTitulo: {
         margin: 0,
-        color: '#2B3437',
+        color: '#2D3247',
         fontSize: '1.25rem',
         fontWeight: 800
     },
-    formulario: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '22px'
+    estadoLectura: {
+        backgroundColor: '#F1F4F6',
+        color: '#8E96AE',
+        borderRadius: '999px',
+        padding: '7px 11px',
+        fontSize: '0.7rem',
+        fontWeight: 900,
+        textTransform: 'uppercase',
+        letterSpacing: '0.06em',
+        whiteSpace: 'nowrap'
     },
-    fila: {
+    estadoEditando: {
+        backgroundColor: '#DDE6FF',
+        color: '#3A56AF',
+        borderRadius: '999px',
+        padding: '7px 11px',
+        fontSize: '0.7rem',
+        fontWeight: 900,
+        textTransform: 'uppercase',
+        letterSpacing: '0.06em',
+        whiteSpace: 'nowrap'
+    },
+    formGridDos: {
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: '20px'
+        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+        gap: '18px'
     },
     campo: {
         display: 'flex',
@@ -274,60 +390,83 @@ const estilos = {
         gap: '8px'
     },
     label: {
+        color: '#6A7185',
         fontSize: '0.72rem',
         fontWeight: 800,
-        color: '#586064',
         textTransform: 'uppercase',
         letterSpacing: '0.08em'
     },
     input: {
+        width: '100%',
         border: 'none',
+        outline: 'none',
         backgroundColor: '#F1F4F6',
-        borderRadius: '14px',
+        color: '#2D3247',
+        borderRadius: '12px',
         padding: '14px 16px',
-        color: '#2B3437',
         fontSize: '0.95rem',
-        outline: 'none'
+        fontFamily: 'inherit'
     },
     inputDeshabilitado: {
-        opacity: 0.75,
-        cursor: 'not-allowed'
+        backgroundColor: '#F8FAFF',
+        color: '#5E667A',
+        cursor: 'not-allowed',
+        opacity: 0.9
     },
-    acciones: {
-        gridColumn: '1 / -1',
+    accionesDatosPersonales: {
         display: 'flex',
         justifyContent: 'flex-end',
-        gap: '14px',
-        marginTop: '8px'
+        alignItems: 'center',
+        gap: '12px',
+        paddingTop: '4px',
+        marginTop: 'auto'
     },
-    btnEditar: {
-        alignSelf: 'flex-start',
+    accionesPassword: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        marginTop: 'auto'
+    },
+    btnEditarDatos: {
         border: 'none',
-        backgroundColor: '#3A5A82',
+        backgroundColor: '#3A56AF',
         color: 'white',
         borderRadius: '999px',
-        padding: '12px 22px',
-        fontWeight: 800,
-        cursor: 'pointer'
+        padding: '12px 20px',
+        fontWeight: 900,
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        boxShadow: '0 12px 22px rgba(58, 86, 175, 0.18)'
     },
-    btnCancelar: {
-        border: 'none',
-        backgroundColor: 'transparent',
-        color: '#586064',
+    btnDescartarDatos: {
+        border: '1px solid #E8EBFF',
+        backgroundColor: 'white',
+        color: '#6A7185',
         borderRadius: '999px',
-        padding: '12px 24px',
-        fontWeight: 800,
-        cursor: 'pointer'
-    },
-    btnGuardar: {
-        border: 'none',
-        backgroundColor: '#3A5A82',
-        color: 'white',
-        borderRadius: '999px',
-        padding: '12px 28px',
+        padding: '11px 18px',
         fontWeight: 800,
         cursor: 'pointer',
-        boxShadow: '0 10px 20px rgba(63, 95, 146, 0.15)'
+        fontFamily: 'inherit'
+    },
+    btnGuardarDatos: {
+        border: 'none',
+        backgroundColor: '#3A56AF',
+        color: 'white',
+        borderRadius: '999px',
+        padding: '12px 20px',
+        fontWeight: 900,
+        cursor: 'pointer',
+        fontFamily: 'inherit'
+    },
+    btnGuardarPassword: {
+        border: 'none',
+        background: 'linear-gradient(135deg, #3A56AF 0%, #2F478F 100%)',
+        color: 'white',
+        padding: '13px 24px',
+        borderRadius: '999px',
+        fontWeight: 900,
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        boxShadow: '0 14px 26px rgba(58, 86, 175, 0.18)'
     }
 };
 
