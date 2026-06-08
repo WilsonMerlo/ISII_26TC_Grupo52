@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { obtenerFechaLocalISO } from "../utils/fechaUtils";
 
 // ── SVG ICONS ──────────────────────────────────────────────────────────────
 const IconPlay = () => (
@@ -487,7 +488,7 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
     const nuevoPomodoroDB = {
       idUsuario: parseInt(localStorage.getItem("idUsuario")) || 1,
       idMateria: 1,
-      fecha: new Date().toISOString(),
+      fecha: obtenerFechaLocalISO(),
       duracionEstudio: segundosAcumuladosEstudio,
       duracionDescanso: segundosAcumuladosDescanso,
       estado: false,

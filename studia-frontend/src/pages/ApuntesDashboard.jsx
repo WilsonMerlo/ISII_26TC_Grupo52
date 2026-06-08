@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { apunteService } from '../services/apunteService';
+import { obtenerFechaLocalISO } from '../utils/fechaUtils';
 
 const MantenerPresionadoEliminar = ({ onConfirmar, disabled }) => {
     const [presionando, setPresionando] = useState(false);
@@ -184,7 +185,7 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
         setCreandoApunte(true);
 
         try {
-            const fechaActual = new Date().toISOString();
+            const fechaActual = obtenerFechaLocalISO();
 
             const nuevoApunte = {
                 idMateria,

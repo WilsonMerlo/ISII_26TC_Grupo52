@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { apunteService } from '../services/apunteService';
-import { crearPomodoro, ejecutarAccion, eliminarPomodoro } from '../services/pomodoroService';
+import { crearPomodoro, ejecutarAccion, actualizarPomodoro, eliminarPomodoro } from '../services/pomodoroService';
+import { obtenerFechaLocalISO } from '../utils/fechaUtils';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -128,10 +129,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
     const [modalPomodoroFinalizadoAbierto, setModalPomodoroFinalizadoAbierto] = useState(false);
 
     const POMODORO_APUNTE_STORAGE_KEY = 'pomodoroApunteActivoId';
-    const RAW_BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7068';
-    const API_BASE_URL = RAW_BASE_URL.endsWith('/api')
-        ? RAW_BASE_URL
-        : `${RAW_BASE_URL}/api`;
+    const BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7068';
 
     const obtenerIdApunteActual = () => {
         return (
@@ -220,7 +218,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
             if (!idPomodoro) return;
 
             try {
-                fetch(`${API_BASE_URL}/Pomodoros/${idPomodoro}`, {
+                fetch(`${BASE_URL}/api/Pomodoros/${idPomodoro}`, {
                     method: 'DELETE',
                     keepalive: true,
                 });
@@ -238,7 +236,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
             window.removeEventListener('beforeunload', advertirRecarga);
             window.removeEventListener('pagehide', eliminarSiLaPaginaSeAbandona);
         };
-    }, [pomodoroActivo, segundosEstudioAcumulados, segundosDescansoAcumulados, API_BASE_URL]);
+    }, [pomodoroActivo, segundosEstudioAcumulados, segundosDescansoAcumulados, BASE_URL]);
 
     const cerrarModalPomodoroFinalizado = () => {
         setModalPomodoroFinalizadoAbierto(false);
@@ -256,11 +254,21 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
         }
     };
 
-    const obtenerDuracionesPomodoroMini = () => {
-        return {
+    const actualizarTiemposPomodoro = async (idPomodoro) => {
+        if (!idPomodoro) return;
+
+        const idMateria = obtenerIdMateriaActual();
+        const idApunte = obtenerIdApunteActual();
+
+        await actualizarPomodoro(idPomodoro, {
+            idPomodoro,
+            idUsuario: parseInt(localStorage.getItem('idUsuario'), 10) || 1,
+            idMateria: idMateria ? Number(idMateria) : null,
+            idApunte: idApunte ? Number(idApunte) : null,
+            fecha: obtenerFechaLocalISO(),
             duracionEstudio: segundosEstudioAcumulados,
             duracionDescanso: segundosDescansoAcumulados,
-        };
+        });
     };
 
     const finalizarPomodoroMini = async () => {
@@ -270,12 +278,8 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
 
         try {
             if (idActual) {
-                await ejecutarAccion(
-                    idActual,
-                    'finalizar',
-                    obtenerDuracionesPomodoroMini()
-                );
-
+                await actualizarTiemposPomodoro(idActual);
+                await ejecutarAccion(idActual, 'finalizar');
                 localStorage.removeItem(POMODORO_APUNTE_STORAGE_KEY);
             }
 
@@ -294,11 +298,6 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
     };
 
     const avanzarFasePomodoroMini = async () => {
-        // El backend actual representa una sola secuencia:
-        // Pendiente -> EnCurso -> EnDescanso -> Completado.
-        // El mini Pomodoro permite varios ciclos visuales, por eso las fases
-        // internas se manejan localmente y el backend se finaliza al terminar
-        // todos los ciclos.
         if (!pomodoroEnDescanso) {
             setPomodoroEnDescanso(true);
             setSegundosPomodoro(tiempoDescanso * 60);
@@ -334,11 +333,11 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
     }, [pomodoroActivo, segundosPomodoro, pomodoroEnDescanso]);
 
     useEffect(() => {
-        if (!pomodoroActivo || segundosPomodoro !== 0) return;
+        if (segundosPomodoro !== 0) return;
 
         avanzarFasePomodoroMini();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [segundosPomodoro, pomodoroActivo]);
+    }, [segundosPomodoro]);
 
     const iniciarPomodoroMini = async () => {
         try {
@@ -355,7 +354,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
                     idUsuario: parseInt(localStorage.getItem('idUsuario'), 10) || 1,
                     idMateria: Number(idMateria),
                     idApunte: Number(idApunte),
-                    fecha: new Date().toISOString(),
+                    fecha: obtenerFechaLocalISO(),
                     duracionEstudio: 0,
                     duracionDescanso: 0,
                     estadoFase: 0,
@@ -375,7 +374,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
                 return;
             }
 
-            await ejecutarAccion(pomodoroActivoId, 'iniciar');
+            await ejecutarAccion(pomodoroActivoId, 'reanudar');
             setPomodoroActivo(true);
         } catch (error) {
             console.error('Error al iniciar/reanudar Pomodoro del apunte:', error);
@@ -386,11 +385,8 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
     const pausarPomodoroMini = async () => {
         try {
             if (pomodoroActivoId) {
-                await ejecutarAccion(
-                    pomodoroActivoId,
-                    'pausar',
-                    obtenerDuracionesPomodoroMini()
-                );
+                await actualizarTiemposPomodoro(pomodoroActivoId);
+                await ejecutarAccion(pomodoroActivoId, 'pausar');
             }
 
             setPomodoroActivo(false);
@@ -411,10 +407,13 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
 
     const saltarFasePomodoroMini = async () => {
         try {
-            // No se llama a la acción "saltarfase" del backend en cada cambio
-            // visual porque el backend completa el Pomodoro al salir de descanso.
-            // Para varios ciclos, el frontend administra las fases y el backend
-            // recibe los acumulados al pausar o finalizar.
+            if (pomodoroActivoId) {
+                await actualizarTiemposPomodoro(pomodoroActivoId);
+            }
+
+            // Se mantiene la misma lógica visual/local del Pomodoro principal:
+            // saltar fase cambia entre estudio y descanso sin cerrar el registro
+            // hasta que se completan todos los ciclos.
             await avanzarFasePomodoroMini();
         } catch (error) {
             console.error('Error al saltar fase del Pomodoro del apunte:', error);

@@ -95,6 +95,147 @@ function App() {
     );
 }
 
+
+const RedireccionInicial = () => {
+    const idUsuario = localStorage.getItem('idUsuario');
+
+    if (idUsuario) {
+        return <Navigate to="/menu" replace />;
+    }
+
+    return <Navigate to="/login" replace />;
+};
+
+const PaginaApuntes = ({ materiaActiva, navegarA, renderDashboard }) => {
+    const { idMateria } = useParams();
+
+    const materiaRuta =
+        materiaActiva && String(obtenerIdMateria(materiaActiva)) === String(idMateria)
+            ? materiaActiva
+            : {
+                idMateria: Number(idMateria),
+                nombreMateria: obtenerNombreMateria(materiaActiva) || `Materia ${idMateria}`
+            };
+
+    return renderDashboard(
+        <ApuntesDashboard
+            materia={materiaRuta}
+            onVolver={() => navegarA('materias')}
+            onNuevoApunte={() => navegarA('editor', materiaRuta)}
+            onVerApunte={(apunte) => navegarA('verApunte', { apunte, materia: materiaRuta })}
+        />
+    );
+};
+
+const PaginaEditorApunte = ({ materiaActiva, navegarA, renderDashboard }) => {
+    const { idMateria } = useParams();
+
+    const materiaRuta =
+        materiaActiva && String(obtenerIdMateria(materiaActiva)) === String(idMateria)
+            ? materiaActiva
+            : {
+                idMateria: Number(idMateria),
+                nombreMateria: obtenerNombreMateria(materiaActiva) || `Materia ${idMateria}`
+            };
+
+    return renderDashboard(
+        <EditorApunte
+            idMateriaActiva={Number(idMateria)}
+            nombreMateria={obtenerNombreMateria(materiaRuta)}
+            onVolver={() => navegarA('apuntes', materiaRuta)}
+        />
+    );
+};
+
+const PaginaVerApunte = ({
+    materiaActiva,
+    apunteActivo,
+    guardarApunteActivo,
+    navegarA,
+    renderDashboard,
+    setPomodoroEnCurso
+}) => {
+    const { idMateria, idApunte } = useParams();
+
+    const [apunteCargado, setApunteCargado] = useState(() => {
+        if (apunteActivo && String(obtenerIdApunte(apunteActivo)) === String(idApunte)) {
+            return apunteActivo;
+        }
+
+        return null;
+    });
+
+    const [cargandoApunte, setCargandoApunte] = useState(!apunteCargado);
+
+    useEffect(() => {
+        let activo = true;
+
+        const cargarApunte = async () => {
+            if (
+                apunteActivo &&
+                String(obtenerIdApunte(apunteActivo)) === String(idApunte)
+            ) {
+                setApunteCargado(apunteActivo);
+                setCargandoApunte(false);
+                return;
+            }
+
+            try {
+                setCargandoApunte(true);
+                const data = await apunteService.obtenerPorId(idApunte);
+
+                if (!activo) return;
+
+                if (data) {
+                    setApunteCargado(data);
+                    guardarApunteActivo(data);
+                }
+            } catch (error) {
+                console.error('Error al cargar apunte por URL:', error);
+            } finally {
+                if (activo) {
+                    setCargandoApunte(false);
+                }
+            }
+        };
+
+        cargarApunte();
+
+        return () => {
+            activo = false;
+        };
+    }, [idApunte]);
+
+    const materiaRuta =
+        materiaActiva && String(obtenerIdMateria(materiaActiva)) === String(idMateria)
+            ? materiaActiva
+            : {
+                idMateria: Number(idMateria),
+                nombreMateria:
+                    apunteCargado?.nombreMateria ||
+                    apunteCargado?.NombreMateria ||
+                    obtenerNombreMateria(materiaActiva) ||
+                    `Materia ${idMateria}`
+            };
+
+    if (cargandoApunte) {
+        return renderDashboard(
+            <div style={estilosCarga.contenedor}>
+                <p style={estilosCarga.texto}>Cargando apunte...</p>
+            </div>
+        );
+    }
+
+    return renderDashboard(
+        <VerApunte
+            apunteSeleccionado={apunteCargado}
+            materiaActiva={materiaRuta}
+            onVolver={() => navegarA('apuntes', materiaRuta)}
+            onEstadoPomodoroChange={setPomodoroEnCurso}
+        />
+    );
+};
+
 function AppRoutes() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -131,7 +272,10 @@ function AppRoutes() {
     });
 
     const nombreParaAvatar = localStorage.getItem('nombreUsuario') || 'Usuario';
-    const BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7068';
+    const RAW_BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7068';
+    const API_BASE_URL = RAW_BASE_URL.endsWith('/api')
+        ? RAW_BASE_URL
+        : `${RAW_BASE_URL}/api`;
 
     const eliminarPomodoroActivoSinGuardar = async () => {
         const idPomodoro = localStorage.getItem(POMODORO_APUNTE_STORAGE_KEY);
@@ -162,7 +306,7 @@ function AppRoutes() {
             if (!idPomodoro) return;
 
             try {
-                fetch(`${BASE_URL}/api/Pomodoros/${idPomodoro}`, {
+                fetch(`${API_BASE_URL}/Pomodoros/${idPomodoro}`, {
                     method: 'DELETE',
                     keepalive: true,
                 });
@@ -180,7 +324,7 @@ function AppRoutes() {
             window.removeEventListener('beforeunload', advertirRecarga);
             window.removeEventListener('pagehide', eliminarSiLaPaginaSeAbandona);
         };
-    }, [pomodoroEnCurso, BASE_URL]);
+    }, [pomodoroEnCurso, API_BASE_URL]);
 
     const guardarMateriaActiva = (materia) => {
         if (!materia) return;
@@ -437,137 +581,6 @@ function AppRoutes() {
         );
     };
 
-    const RedireccionInicial = () => {
-        const idUsuario = localStorage.getItem('idUsuario');
-
-        if (idUsuario) {
-            return <Navigate to="/menu" replace />;
-        }
-
-        return <Navigate to="/login" replace />;
-    };
-
-    const PaginaApuntes = () => {
-        const { idMateria } = useParams();
-
-        const materiaRuta =
-            materiaActiva && String(obtenerIdMateria(materiaActiva)) === String(idMateria)
-                ? materiaActiva
-                : {
-                    idMateria: Number(idMateria),
-                    nombreMateria: obtenerNombreMateria(materiaActiva) || `Materia ${idMateria}`
-                };
-
-        return renderDashboard(
-            <ApuntesDashboard
-                materia={materiaRuta}
-                onVolver={() => navegarA('materias')}
-                onNuevoApunte={() => navegarA('editor', materiaRuta)}
-                onVerApunte={(apunte) => navegarA('verApunte', { apunte, materia: materiaRuta })}
-            />
-        );
-    };
-
-    const PaginaEditorApunte = () => {
-        const { idMateria } = useParams();
-
-        const materiaRuta =
-            materiaActiva && String(obtenerIdMateria(materiaActiva)) === String(idMateria)
-                ? materiaActiva
-                : {
-                    idMateria: Number(idMateria),
-                    nombreMateria: obtenerNombreMateria(materiaActiva) || `Materia ${idMateria}`
-                };
-
-        return renderDashboard(
-            <EditorApunte
-                idMateriaActiva={Number(idMateria)}
-                nombreMateria={obtenerNombreMateria(materiaRuta)}
-                onVolver={() => navegarA('apuntes', materiaRuta)}
-            />
-        );
-    };
-
-    const PaginaVerApunte = () => {
-        const { idMateria, idApunte } = useParams();
-        const [apunteCargado, setApunteCargado] = useState(() => {
-            if (apunteActivo && String(obtenerIdApunte(apunteActivo)) === String(idApunte)) {
-                return apunteActivo;
-            }
-
-            return null;
-        });
-
-        const [cargandoApunte, setCargandoApunte] = useState(!apunteCargado);
-
-        useEffect(() => {
-            let activo = true;
-
-            const cargarApunte = async () => {
-                if (
-                    apunteActivo &&
-                    String(obtenerIdApunte(apunteActivo)) === String(idApunte)
-                ) {
-                    setApunteCargado(apunteActivo);
-                    setCargandoApunte(false);
-                    return;
-                }
-
-                try {
-                    setCargandoApunte(true);
-                    const data = await apunteService.obtenerPorId(idApunte);
-
-                    if (!activo) return;
-
-                    if (data) {
-                        setApunteCargado(data);
-                        guardarApunteActivo(data);
-                    }
-                } catch (error) {
-                    console.error('Error al cargar apunte por URL:', error);
-                } finally {
-                    if (activo) {
-                        setCargandoApunte(false);
-                    }
-                }
-            };
-
-            cargarApunte();
-
-            return () => {
-                activo = false;
-            };
-        }, [idApunte]);
-
-        const materiaRuta =
-            materiaActiva && String(obtenerIdMateria(materiaActiva)) === String(idMateria)
-                ? materiaActiva
-                : {
-                    idMateria: Number(idMateria),
-                    nombreMateria:
-                        apunteCargado?.nombreMateria ||
-                        apunteCargado?.NombreMateria ||
-                        obtenerNombreMateria(materiaActiva) ||
-                        `Materia ${idMateria}`
-                };
-
-        if (cargandoApunte) {
-            return renderDashboard(
-                <div style={estilosCarga.contenedor}>
-                    <p style={estilosCarga.texto}>Cargando apunte...</p>
-                </div>
-            );
-        }
-
-        return renderDashboard(
-            <VerApunte
-                apunteSeleccionado={apunteCargado}
-                materiaActiva={materiaRuta}
-                onVolver={() => navegarA('apuntes', materiaRuta)}
-                onEstadoPomodoroChange={setPomodoroEnCurso}
-            />
-        );
-    };
 
     return (
         <Routes>
@@ -589,22 +602,52 @@ function AppRoutes() {
 
             <Route
                 path="/materias/:idMateria"
-                element={<PaginaApuntes />}
+                element={(
+                    <PaginaApuntes
+                        materiaActiva={materiaActiva}
+                        navegarA={navegarA}
+                        renderDashboard={renderDashboard}
+                    />
+                )}
             />
 
             <Route
                 path="/materias/:idMateria/nuevo-apunte"
-                element={<PaginaEditorApunte />}
+                element={(
+                    <PaginaEditorApunte
+                        materiaActiva={materiaActiva}
+                        navegarA={navegarA}
+                        renderDashboard={renderDashboard}
+                    />
+                )}
             />
 
             <Route
                 path="/materias/:idMateria/apuntes/:idApunte"
-                element={<PaginaVerApunte />}
+                element={(
+                    <PaginaVerApunte
+                        materiaActiva={materiaActiva}
+                        apunteActivo={apunteActivo}
+                        guardarApunteActivo={guardarApunteActivo}
+                        navegarA={navegarA}
+                        renderDashboard={renderDashboard}
+                        setPomodoroEnCurso={setPomodoroEnCurso}
+                    />
+                )}
             />
 
             <Route
                 path="/materias/:idMateria/:idApunte"
-                element={<PaginaVerApunte />}
+                element={(
+                    <PaginaVerApunte
+                        materiaActiva={materiaActiva}
+                        apunteActivo={apunteActivo}
+                        guardarApunteActivo={guardarApunteActivo}
+                        navegarA={navegarA}
+                        renderDashboard={renderDashboard}
+                        setPomodoroEnCurso={setPomodoroEnCurso}
+                    />
+                )}
             />
 
             <Route
