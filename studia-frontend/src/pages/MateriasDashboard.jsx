@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { materiaService } from '../services/materiaService';
+import { apunteService } from '../services/apunteService';
 
 const IconoEditar = () => (
     <svg
@@ -193,6 +194,60 @@ const MateriasDashboard = ({ onNavegar }) => {
         return materia?.descripcion || materia?.Descripcion || '';
     };
 
+    const formatearCantidadApuntes = (cantidad = 0) => {
+        const total = Number(cantidad) || 0;
+        return `${total} ${total === 1 ? 'apunte creado' : 'apuntes creados'}`;
+    };
+
+    const obtenerFechaActividadApunte = (apunte) => {
+        return (
+            apunte?.fechaModificacion ||
+            apunte?.FechaModificacion ||
+            apunte?.fecha_modificacion ||
+            apunte?.fechaActualizacion ||
+            apunte?.FechaActualizacion ||
+            apunte?.fecha_actualizacion ||
+            apunte?.updatedAt ||
+            apunte?.fechaCreacion ||
+            apunte?.FechaCreacion ||
+            apunte?.fecha_creacion ||
+            null
+        );
+    };
+
+    const obtenerTiempoFecha = (fechaValor) => {
+        if (!fechaValor) return 0;
+
+        const fecha = new Date(fechaValor);
+        return Number.isNaN(fecha.getTime()) ? 0 : fecha.getTime();
+    };
+
+    const obtenerUltimaActividadApuntes = (apuntes) => {
+        if (!Array.isArray(apuntes) || apuntes.length === 0) return 0;
+
+        return Math.max(
+            0,
+            ...apuntes.map((apunte) =>
+                obtenerTiempoFecha(obtenerFechaActividadApunte(apunte))
+            )
+        );
+    };
+
+    const ordenarMateriasPorActividad = (materiasParaOrdenar) => {
+        return [...materiasParaOrdenar].sort((a, b) => {
+            const fechaA = Number(a.ultimaActividadApunteMs) || 0;
+            const fechaB = Number(b.ultimaActividadApunteMs) || 0;
+
+            if (fechaB !== fechaA) return fechaB - fechaA;
+
+            return obtenerNombreMateria(a).localeCompare(
+                obtenerNombreMateria(b),
+                'es',
+                { sensitivity: 'base' }
+            );
+        });
+    };
+
     const cargarMaterias = async () => {
         try {
             const idUsuario = Number(localStorage.getItem('idUsuario'));
@@ -204,7 +259,32 @@ const MateriasDashboard = ({ onNavegar }) => {
             }
 
             const data = await materiaService.obtenerPorUsuario(idUsuario);
-            setMaterias(Array.isArray(data) ? data : []);
+            const materiasUsuario = Array.isArray(data) ? data : [];
+
+            const materiasConCantidad = await Promise.all(
+                materiasUsuario.map(async (materia) => {
+                    const idMateria = obtenerIdMateria(materia);
+
+                    if (!idMateria) {
+                        return {
+                            ...materia,
+                            cantidadApuntes: 0,
+                            ultimaActividadApunteMs: 0
+                        };
+                    }
+
+                    const apuntes = await apunteService.obtenerPorMateria(idMateria);
+                    const apuntesMateria = Array.isArray(apuntes) ? apuntes : [];
+
+                    return {
+                        ...materia,
+                        cantidadApuntes: apuntesMateria.length,
+                        ultimaActividadApunteMs: obtenerUltimaActividadApuntes(apuntesMateria)
+                    };
+                })
+            );
+
+            setMaterias(ordenarMateriasPorActividad(materiasConCantidad));
         } catch (error) {
             console.error("Error cargando materias:", error);
         }
@@ -575,25 +655,31 @@ const MateriasDashboard = ({ onNavegar }) => {
                             </p>
 
                             <div style={estilos.footerTarjeta} onClick={(e) => e.stopPropagation()}>
-                                <button
-                                    type="button"
-                                    style={estilos.btnEditar}
-                                    onClick={() => abrirModalEditar(materia)}
-                                    title="Editar materia"
-                                    aria-label="Editar materia"
-                                >
-                                    <IconoEditar />
-                                </button>
+                                <span style={estilos.cantidadApuntes}>
+                                    {formatearCantidadApuntes(materia.cantidadApuntes)}
+                                </span>
 
-                                <button
-                                    type="button"
-                                    style={estilos.btnEliminar}
-                                    onClick={() => abrirModalEliminar(materia)}
-                                    title="Borrar materia"
-                                    aria-label="Borrar materia"
-                                >
-                                    <IconoBasurero />
-                                </button>
+                                <div style={estilos.accionesTarjeta}>
+                                    <button
+                                        type="button"
+                                        style={estilos.btnEditar}
+                                        onClick={() => abrirModalEditar(materia)}
+                                        title="Editar materia"
+                                        aria-label="Editar materia"
+                                    >
+                                        <IconoEditar />
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        style={estilos.btnEliminar}
+                                        onClick={() => abrirModalEliminar(materia)}
+                                        title="Borrar materia"
+                                        aria-label="Borrar materia"
+                                    >
+                                        <IconoBasurero />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -662,7 +748,7 @@ const MateriasDashboard = ({ onNavegar }) => {
                         </p>
 
                         <p style={estilos.textoAdvertencia}>
-                            Esta acción es irreversible. Para confirmar, mantené presionado el botón eliminar con click, Enter o la barra espaciadora.
+                            Esta acción es irreversible. Para confirmar, mantén presionado el botón eliminar.
                         </p>
 
                         <div style={estilos.botonesForm}>
@@ -920,8 +1006,22 @@ const estilos = {
     footerTarjeta: {
         marginTop: 'auto',
         display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: '12px'
+    },
+
+    cantidadApuntes: {
+        color: '#8E96AE',
+        fontSize: '0.82rem',
+        fontWeight: 800
+    },
+
+    accionesTarjeta: {
+        display: 'flex',
         justifyContent: 'flex-end',
-        gap: '10px'
+        gap: '10px',
+        flexShrink: 0
     },
 
     btnEditar: {

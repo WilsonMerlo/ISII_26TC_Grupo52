@@ -586,7 +586,7 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
                         </p>
 
                         <p style={estilos.textoAdvertencia}>
-                            Esta acción es irreversible. Para confirmar, mantené presionado el botón eliminar con click, Espacio o Enter.
+                            Esta acción es irreversible. Para confirmar, mantén presionado el botón eliminar.
                         </p>
 
                         <div style={estilos.botonesModal}>

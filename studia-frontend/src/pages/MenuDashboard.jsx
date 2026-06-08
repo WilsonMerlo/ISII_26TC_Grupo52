@@ -27,6 +27,11 @@ const obtenerDescripcionMateria = (materia) => (
     materia?.descripcion || materia?.Descripcion || ''
 );
 
+const formatearCantidadApuntes = (cantidad = 0) => {
+    const total = Number(cantidad) || 0;
+    return `${total} ${total === 1 ? 'apunte creado' : 'apuntes creados'}`;
+};
+
 const obtenerIdApunte = (apunte) => (
     apunte?.id_apunte || apunte?.idApunte || apunte?.IdApunte || apunte?.id || apunte?.Id
 );
@@ -124,7 +129,11 @@ const MenuDashboard = ({ onNavegar }) => {
 
                     if (!idMateria) {
                         return {
-                            materia,
+                            materia: {
+                                ...materia,
+                                cantidadApuntes: 0,
+                                ultimaModificacionApunteMs: 0
+                            },
                             apuntes: [],
                             ultimaModificacionMs: 0
                         };
@@ -149,6 +158,7 @@ const MenuDashboard = ({ onNavegar }) => {
                     return {
                         materia: {
                             ...materia,
+                            cantidadApuntes: apuntesNormalizados.length,
                             ultimaModificacionApunteMs: ultimaModificacionMs
                         },
                         apuntes: apuntesNormalizados,
@@ -376,6 +386,10 @@ const MenuDashboard = ({ onNavegar }) => {
                                     {obtenerDescripcionMateria(materia) && (
                                         <p style={estilos.descripcionMateria}>{obtenerDescripcionMateria(materia)}</p>
                                     )}
+
+                                    <p style={estilos.cantidadApuntesMateria}>
+                                        {formatearCantidadApuntes(materia.cantidadApuntes)}
+                                    </p>
                                 </button>
                             ))}
                         </div>
@@ -634,7 +648,9 @@ const estilos = {
         backgroundColor: '#F8F9FA',
         borderRadius: '16px',
         padding: '20px',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column'
     },
     iconoMateria: {
         width: '40px',
@@ -659,6 +675,13 @@ const estilos = {
         color: '#586064',
         fontSize: '0.82rem',
         lineHeight: 1.4
+    },
+    cantidadApuntesMateria: {
+        margin: 'auto 0 0 0',
+        paddingTop: '14px',
+        color: '#8A93A5',
+        fontSize: '0.78rem',
+        fontWeight: 900
     },
     totalHoras: {
         color: '#3A5A82',
