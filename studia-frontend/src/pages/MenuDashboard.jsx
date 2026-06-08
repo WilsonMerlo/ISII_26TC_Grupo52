@@ -3,6 +3,18 @@ import { materiaService } from '../services/materiaService';
 import { apunteService } from '../services/apunteService';
 import { estadisticaService } from '../services/estadisticaService';
 
+
+const obtenerIdUsuario = (item) => (
+    Number(
+        item?.idUsuario ||
+        item?.IdUsuario ||
+        item?.id_usuario ||
+        item?.usuarioId ||
+        item?.UsuarioId ||
+        0
+    )
+);
+
 const obtenerIdMateria = (materia) => (
     materia?.id_materia || materia?.idMateria || materia?.IdMateria || materia?.id || materia?.Id
 );
@@ -40,6 +52,13 @@ const obtenerFechaModificacion = (apunte) => (
     apunte?.FechaCreacion ||
     null
 );
+
+const obtenerTiempoFecha = (fechaValor) => {
+    if (!fechaValor) return 0;
+
+    const fecha = new Date(fechaValor);
+    return Number.isNaN(fecha.getTime()) ? 0 : fecha.getTime();
+};
 
 const convertirHtmlATexto = (html) => {
     const texto = String(html || '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ');
@@ -82,35 +101,86 @@ const MenuDashboard = ({ onNavegar }) => {
         setCargando(true);
 
         try {
-            const materiasData = await materiaService.obtenerTodas();
-            const materiasNormalizadas = Array.isArray(materiasData) ? materiasData : [];
-            setMaterias(materiasNormalizadas);
+            const idUsuario = Number(localStorage.getItem('idUsuario'));
 
-            const apuntesPorMateria = await Promise.all(
+            if (!idUsuario) {
+                setMaterias([]);
+                setApuntesRecientes([]);
+                return;
+            }
+
+            const materiasData = await materiaService.obtenerPorUsuario(idUsuario);
+
+            const materiasNormalizadas = (Array.isArray(materiasData) ? materiasData : [])
+                .filter((materia) => {
+                    const idUsuarioMateria = obtenerIdUsuario(materia);
+                    return !idUsuarioMateria || idUsuarioMateria === idUsuario;
+                });
+
+            const datosPorMateria = await Promise.all(
                 materiasNormalizadas.map(async (materia) => {
                     const idMateria = obtenerIdMateria(materia);
-                    if (!idMateria) return [];
+
+                    if (!idMateria) {
+                        return {
+                            materia,
+                            apuntes: [],
+                            ultimaModificacionMs: 0
+                        };
+                    }
 
                     const apuntes = await apunteService.obtenerPorMateria(idMateria);
 
-                    return apuntes.map((apunte) => ({
+                    const apuntesNormalizados = (Array.isArray(apuntes) ? apuntes : []).map((apunte) => ({
                         ...apunte,
                         materiaOrigen: materia,
                         nombreMateria: obtenerNombreMateria(materia),
                         idMateria
                     }));
+
+                    const ultimaModificacionMs = Math.max(
+                        0,
+                        ...apuntesNormalizados.map((apunte) =>
+                            obtenerTiempoFecha(obtenerFechaModificacion(apunte))
+                        )
+                    );
+
+                    return {
+                        materia: {
+                            ...materia,
+                            ultimaModificacionApunteMs: ultimaModificacionMs
+                        },
+                        apuntes: apuntesNormalizados,
+                        ultimaModificacionMs
+                    };
                 })
             );
 
-            const ultimosApuntes = apuntesPorMateria
-                .flat()
+            const materiasOrdenadas = datosPorMateria
+                .map((item) => item.materia)
                 .sort((a, b) => {
-                    const fechaA = new Date(obtenerFechaModificacion(a) || 0).getTime();
-                    const fechaB = new Date(obtenerFechaModificacion(b) || 0).getTime();
+                    const fechaA = Number(a.ultimaModificacionApunteMs) || 0;
+                    const fechaB = Number(b.ultimaModificacionApunteMs) || 0;
+
+                    if (fechaB !== fechaA) return fechaB - fechaA;
+
+                    return obtenerNombreMateria(a).localeCompare(
+                        obtenerNombreMateria(b),
+                        'es',
+                        { sensitivity: 'base' }
+                    );
+                });
+
+            const ultimosApuntes = datosPorMateria
+                .flatMap((item) => item.apuntes)
+                .sort((a, b) => {
+                    const fechaA = obtenerTiempoFecha(obtenerFechaModificacion(a));
+                    const fechaB = obtenerTiempoFecha(obtenerFechaModificacion(b));
                     return fechaB - fechaA;
                 })
                 .slice(0, 3);
 
+            setMaterias(materiasOrdenadas);
             setApuntesRecientes(ultimosApuntes);
         } catch (error) {
             console.error('Error cargando datos del menú:', error);
