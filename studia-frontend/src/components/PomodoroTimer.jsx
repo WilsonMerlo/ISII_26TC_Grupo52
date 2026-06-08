@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { obtenerFechaLocalISO } from "../utils/fechaUtils";
+import { usePomodoroMachine } from "../pomodoro/usePomodoroMachine";
+import { EtiquetaFase } from "../pomodoro/pomodoroConstants";
 
 // ── SVG ICONS ──────────────────────────────────────────────────────────────
 const IconPlay = () => (
@@ -199,25 +201,17 @@ const IconClose = () => (
 // ──────────────────────────────────────────────────────────────────────────
 
 const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
-  // --- ESTADOS DE CONFIGURACIÓN ---
-  const [tiempoSesion, setTiempoSesion] = useState(25);
-  const [tiempoDescanso, setTiempoDescanso] = useState(5);
-  const [ciclosTotales, setCiclosTotales] = useState(4);
+  // --- MÁQUINA DE ESTADOS (Patrón State) ---
+  const pomodoro = usePomodoroMachine({
+    duracionSesion: 25,
+    duracionDescanso: 5,
+    ciclosTotales: 4,
+  });
 
+  // --- ESTADOS DE CONFIGURACIÓN (drafts para el modal) ---
   const [draftSesion, setDraftSesion] = useState(25);
   const [draftDescanso, setDraftDescanso] = useState(5);
   const [draftCiclos, setDraftCiclos] = useState(4);
-
-  // --- ESTADOS DEL TEMPORIZADOR ---
-  const [segundos, setSegundos] = useState(tiempoSesion * 60);
-  const [estaActivo, setEstaActivo] = useState(false);
-  const [sesionActual, setSesionActual] = useState(1);
-  const [esDescanso, setEsDescanso] = useState(false);
-
-  // --- ACUMULADORES DE TIEMPO REAL ---
-  const [segundosAcumuladosEstudio, setSegundosAcumuladosEstudio] = useState(0);
-  const [segundosAcumuladosDescanso, setSegundosAcumuladosDescanso] =
-    useState(0);
 
   // --- ESTADOS DE MODALES ---
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
@@ -390,14 +384,14 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
 
   useEffect(() => {
     const hayPomodoroEnCurso =
-      estaActivo ||
-      segundosAcumuladosEstudio > 0 ||
-      segundosAcumuladosDescanso > 0;
+      pomodoro.timerCorriendo ||
+      pomodoro.segundosAcumuladosEstudio > 0 ||
+      pomodoro.segundosAcumuladosDescanso > 0;
 
     if (onEstadoPomodoroChange) {
       onEstadoPomodoroChange(hayPomodoroEnCurso);
     }
-  }, [estaActivo, segundosAcumuladosEstudio, segundosAcumuladosDescanso, onEstadoPomodoroChange]);
+  }, [pomodoro.timerCorriendo, pomodoro.segundosAcumuladosEstudio, pomodoro.segundosAcumuladosDescanso, onEstadoPomodoroChange]);
 
   useEffect(() => {
     return () => {
@@ -459,27 +453,17 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
     cargarHistorial();
   }, []);
 
-  // --- LÓGICA DE FASES ---
-  const avanzarFase = () => {
-    setEstaActivo(true);
-    if (!esDescanso) {
-      setEsDescanso(true);
-      setSegundos(tiempoDescanso * 60);
-    } else {
-      setEsDescanso(false);
-      setSegundos(tiempoSesion * 60);
-      if (sesionActual < ciclosTotales) {
-        setSesionActual((s) => s + 1);
-      } else {
-        setEstaActivo(false);
-        setSesionActual(1);
-        guardarEnHistorial();
-        alert(
-          "¡Felicidades! Completaste todos tus ciclos y se guardó en tu historial.",
-        );
-      }
+  // --- DETECCIÓN DE COMPLETADO (Patrón State) ---
+  // Cuando la máquina de estados llega a Completado, guardamos en historial.
+  useEffect(() => {
+    if (pomodoro.estaCompletado) {
+      guardarEnHistorial();
+      alert(
+        "¡Felicidades! Completaste todos tus ciclos y se guardó en tu historial.",
+      );
+      pomodoro.resetear();
     }
-  };
+  }, [pomodoro.estaCompletado]);
 
   // --- LÓGICA DEL HISTORIAL ---
   const guardarEnHistorial = async () => {
@@ -487,8 +471,8 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
       idUsuario: parseInt(localStorage.getItem("idUsuario")) || 1,
       idMateria: 1,
       fecha: obtenerFechaLocalISO(),
-      duracionEstudio: segundosAcumuladosEstudio,
-      duracionDescanso: segundosAcumuladosDescanso,
+      duracionEstudio: pomodoro.segundosAcumuladosEstudio,
+      duracionDescanso: pomodoro.segundosAcumuladosDescanso,
       estado: false,
     };
 
@@ -522,8 +506,6 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
         setHistorial([registroVisual, ...historial]);
         setMesCalendario(fechaSesion);
         setFechaSeleccionadaKey(registroVisual.fechaKey);
-        setSegundosAcumuladosEstudio(0);
-        setSegundosAcumuladosDescanso(0);
       } else {
         console.error("El servidor rechazó el guardado.");
       }
@@ -563,40 +545,16 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
     setItemToDelete(null);
   };
 
-  // --- LÓGICA DEL RELOJ ---
-  useEffect(() => {
-    let intervalo = null;
-    if (estaActivo && segundos > 0) {
-      intervalo = setInterval(() => {
-        setSegundos((s) => s - 1);
-        if (esDescanso) {
-          setSegundosAcumuladosDescanso((prev) => prev + 1);
-        } else {
-          setSegundosAcumuladosEstudio((prev) => prev + 1);
-        }
-      }, 1000);
-    } else if (segundos === 0) {
-      clearInterval(intervalo);
-      avanzarFase();
-    } else {
-      clearInterval(intervalo);
-    }
-    return () => clearInterval(intervalo);
-  }, [estaActivo, segundos, esDescanso, sesionActual, ciclosTotales]);
-
+  // --- FORMATEADOR DE TIEMPO ---
   const formatearTiempo = (s) => {
     const mins = Math.floor(s / 60);
     const secs = s % 60;
     return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
+  // --- RESETEAR (delega al hook) ---
   const resetearReloj = () => {
-    setEstaActivo(false);
-    setEsDescanso(false);
-    setSegundos(tiempoSesion * 60);
-    setSesionActual(1);
-    setSegundosAcumuladosEstudio(0);
-    setSegundosAcumuladosDescanso(0);
+    pomodoro.resetear();
   };
 
   // --- FUNCIONES DEL MODAL CONFIG ---
@@ -611,41 +569,46 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
 
   const activarModoEdicion = () => {
     if (!isEditing) {
-      setDraftSesion(tiempoSesion);
-      setDraftDescanso(tiempoDescanso);
-      setDraftCiclos(ciclosTotales);
+      setDraftSesion(pomodoro.duracionSesion);
+      setDraftDescanso(pomodoro.duracionDescanso);
+      setDraftCiclos(pomodoro.ciclosTotales);
     } else {
-      setTiempoSesion(draftSesion);
-      setTiempoDescanso(draftDescanso);
-      setCiclosTotales(draftCiclos);
+      // Confirmar: aplicar drafts a la máquina de estados
+      pomodoro.configurar({
+        duracionSesion: draftSesion,
+        duracionDescanso: draftDescanso,
+        ciclosTotales: draftCiclos,
+      });
     }
     //(abre o cierra la edición)
     setIsEditing(!isEditing);
   };
 
   const aplicarConfiguracion = () => {
-    setEstaActivo(false);
-    setEsDescanso(false);
-    setSegundos(tiempoSesion * 60);
-    setSesionActual(1);
+    if (isEditing) {
+      pomodoro.configurar({
+        duracionSesion: draftSesion,
+        duracionDescanso: draftDescanso,
+        ciclosTotales: draftCiclos,
+      });
+    }
+    pomodoro.resetear();
     setIsEditing(false);
     setIsConfigModalOpen(false);
-    setSegundosAcumuladosEstudio(0);
-    setSegundosAcumuladosDescanso(0);
   };
 
   // --- CÁLCULOS SVG ---
   const radio = 110;
   const circunferencia = 2 * Math.PI * radio;
-  const tiempoTotalFaseActual = esDescanso
-    ? tiempoDescanso * 60
-    : tiempoSesion * 60;
-  const porcentaje = segundos / tiempoTotalFaseActual;
+  const tiempoTotalFaseActual = pomodoro.esDescanso
+    ? pomodoro.duracionDescanso * 60
+    : pomodoro.duracionSesion * 60;
+  const porcentaje = pomodoro.segundosRestantes / tiempoTotalFaseActual;
   const offset = circunferencia - porcentaje * circunferencia;
 
-  const colorActivo = esDescanso ? "#219653" : "#3A56AF";
-  const bgBadge = esDescanso ? "#E5F6ED" : "#EEF1FF";
-  const colorBadge = esDescanso ? "#219653" : "#3A56AF";
+  const colorActivo = pomodoro.esDescanso ? "#219653" : "#3A56AF";
+  const bgBadge = pomodoro.esDescanso ? "#E5F6ED" : "#EEF1FF";
+  const colorBadge = pomodoro.esDescanso ? "#219653" : "#3A56AF";
 
   return (
     <>
@@ -1554,11 +1517,11 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
             className="session-badge"
             style={{ backgroundColor: bgBadge, color: colorBadge }}
           >
-            {esDescanso ? "Tiempo de Descanso" : "Sesión de Trabajo"}
+            {pomodoro.esDescanso ? "Tiempo de Descanso" : "Sesión de Trabajo"}
           </span>
 
           <div className="session-counter">
-            Ciclo {sesionActual} de {ciclosTotales}
+            Ciclo {pomodoro.cicloActual} de {pomodoro.ciclosTotales}
           </div>
 
           {/* Círculo temporizador */}
@@ -1589,10 +1552,10 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
             </svg>
             <div className="time-display">
               <div className="clock-text" style={{ color: colorActivo }}>
-                {formatearTiempo(segundos)}
+                {formatearTiempo(pomodoro.segundosRestantes)}
               </div>
               <div className="status-label">
-                {estaActivo ? "En curso" : "Pausado"}
+                {EtiquetaFase[pomodoro.fase]}
               </div>
             </div>
           </div>
@@ -1608,13 +1571,17 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
             </button>
             <button
               className="play-btn"
-              onClick={() => setEstaActivo(!estaActivo)}
+              onClick={() => {
+                if (pomodoro.puedePausar) pomodoro.pausar();
+                else if (pomodoro.puedeReanudar) pomodoro.reanudar();
+              }}
             >
-              {estaActivo ? <IconPause /> : <IconPlay />}
+              {pomodoro.timerCorriendo ? <IconPause /> : <IconPlay />}
             </button>
             <button
               className="ctrl-icon-btn"
-              onClick={avanzarFase}
+              onClick={() => pomodoro.saltarFase()}
+              disabled={!pomodoro.puedeSaltarFase}
               title="Saltar fase"
             >
               <IconSkip />
@@ -1788,7 +1755,7 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                           min="1"
                         />
                       ) : (
-                        <p className="preset-value">{tiempoSesion}</p>
+                        <p className="preset-value">{pomodoro.duracionSesion}</p>
                       )}
                     </div>
                     <div className="grid-item-center">
@@ -1804,7 +1771,7 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                           min="1"
                         />
                       ) : (
-                        <p className="preset-value">{tiempoDescanso}</p>
+                        <p className="preset-value">{pomodoro.duracionDescanso}</p>
                       )}
                     </div>
                     <div className="ciclos-wrap">
@@ -1820,7 +1787,7 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                           min="1"
                         />
                       ) : (
-                        <p className="preset-value">{ciclosTotales}</p>
+                        <p className="preset-value">{pomodoro.ciclosTotales}</p>
                       )}
                     </div>
                   </div>
