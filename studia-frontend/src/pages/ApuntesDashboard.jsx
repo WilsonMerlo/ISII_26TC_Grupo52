@@ -98,6 +98,13 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
         materia?.NombreMateria ||
         'Materia desconocida';
 
+    const descripcionMateria =
+        materia?.descripcion ||
+        materia?.Descripcion ||
+        materia?.descripcionMateria ||
+        materia?.DescripcionMateria ||
+        'Sin descripción';
+
     useEffect(() => {
         if (materia) {
             cargarApuntes();
@@ -453,6 +460,10 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
                             )}
                         </div>
                     </div>
+
+                    <p style={estilos.descripcionMateriaCompleta}>
+                        {descripcionMateria}
+                    </p>
                 </div>
 
                 <button
@@ -669,6 +680,15 @@ const estilos = {
         gap: '20px',
         flexWrap: 'wrap',
         width: '100%'
+    },
+    descripcionMateriaCompleta: {
+        color: '#465365',
+        fontSize: '0.98rem',
+        lineHeight: 1.6,
+        maxWidth: '1120px',
+        margin: '10px 0 0',
+        overflowWrap: 'break-word',
+        wordBreak: 'break-word'
     },
     buscadorWrapper: {
         position: 'relative',

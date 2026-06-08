@@ -194,6 +194,18 @@ const MateriasDashboard = ({ onNavegar }) => {
         return materia?.descripcion || materia?.Descripcion || '';
     };
 
+    const recortarDescripcion = (texto = '', limite = 90) => {
+        const limpio = String(texto || '').trim();
+
+        if (!limpio) return 'Sin descripción';
+
+        if (limpio.length <= limite) {
+            return limpio;
+        }
+
+        return `${limpio.slice(0, limite).trim()}...`;
+    };
+
     const formatearCantidadApuntes = (cantidad = 0) => {
         const total = Number(cantidad) || 0;
         return `${total} ${total === 1 ? 'apunte creado' : 'apuntes creados'}`;
@@ -650,8 +662,11 @@ const MateriasDashboard = ({ onNavegar }) => {
                                 {obtenerNombreMateria(materia)}
                             </h3>
 
-                            <p style={estilos.descMateria}>
-                                {obtenerDescripcionMateria(materia)}
+                            <p
+                                style={estilos.descMateria}
+                                title={obtenerDescripcionMateria(materia) || 'Sin descripción'}
+                            >
+                                {recortarDescripcion(obtenerDescripcionMateria(materia), 90)}
                             </p>
 
                             <div style={estilos.footerTarjeta} onClick={(e) => e.stopPropagation()}>
@@ -1000,7 +1015,9 @@ const estilos = {
         fontSize: '0.9rem',
         color: '#6A7185',
         margin: '0 0 20px 0',
-        lineHeight: '1.4'
+        lineHeight: '1.4',
+        overflowWrap: 'break-word',
+        wordBreak: 'break-word'
     },
 
     footerTarjeta: {
