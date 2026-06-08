@@ -17,18 +17,55 @@ namespace StudIA.Business
         {
             return await _context.Apuntes
                                  .Where(a => a.IdMateria == idMateria)
-                                 .OrderByDescending(a => a.FechaModificacion)
+                                 .OrderByDescending(a => a.FechaModificacion ?? a.FechaCreacion)
                                  .ToListAsync();
         }
 
         public async Task<Apunte> CrearApunteAsync(Apunte apunte)
         {
-            apunte.FechaCreacion = DateTime.UtcNow;
-            apunte.FechaModificacion = null; // Fuerza el nulo en la creación
+            apunte.Titulo = await GenerarTituloDisponibleAsync(
+                apunte.IdMateria,
+                apunte.Titulo
+            );
+
+            apunte.FechaCreacion = DateTime.Now;
+            apunte.FechaModificacion = DateTime.Now;
 
             _context.Apuntes.Add(apunte);
             await _context.SaveChangesAsync();
+
             return apunte;
+        }
+
+        private async Task<string> GenerarTituloDisponibleAsync(int idMateria, string tituloSolicitado)
+        {
+            var tituloBase = (tituloSolicitado ?? string.Empty).Trim();
+
+            if (string.IsNullOrWhiteSpace(tituloBase))
+            {
+                tituloBase = "Sin título";
+            }
+
+            var titulosExistentes = await _context.Apuntes
+                .Where(a => a.IdMateria == idMateria)
+                .Select(a => a.Titulo)
+                .ToListAsync();
+
+            if (!titulosExistentes.Contains(tituloBase))
+            {
+                return tituloBase;
+            }
+
+            var contador = 2;
+            var tituloCandidato = $"{tituloBase} ({contador})";
+
+            while (titulosExistentes.Contains(tituloCandidato))
+            {
+                contador++;
+                tituloCandidato = $"{tituloBase} ({contador})";
+            }
+
+            return tituloCandidato;
         }
 
         public async Task<bool> ActualizarApunteAsync(int id, Apunte apunteActualizado)
@@ -38,7 +75,7 @@ namespace StudIA.Business
 
             apunte.Titulo = apunteActualizado.Titulo;
             apunte.Contenido = apunteActualizado.Contenido;
-            apunte.FechaModificacion = DateTime.UtcNow;
+            apunte.FechaModificacion = DateTime.Now;
 
             await _context.SaveChangesAsync();
             return true;
@@ -49,18 +86,25 @@ namespace StudIA.Business
             var apunte = await _context.Apuntes.FindAsync(id);
             if (apunte == null) return false;
 
-            // --- SOLUCIÓN AL ERROR 500 ---
-            // Le decimos a SQL que ponga el IdApunte en NULL para todos los pomodoros asociados,
-            // ANTES de borrar el apunte de la base de datos.
-            await _context.Pomodoros
-                          .Where(p => p.IdApunte == id)
-                          .ExecuteUpdateAsync(s => s.SetProperty(p => p.IdApunte, (int?)null));
-            // -----------------------------
+            await using var transaction = await _context.Database.BeginTransactionAsync();
 
-            _context.Apuntes.Remove(apunte);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Pomodoros
+                              .Where(p => p.IdApunte == id)
+                              .ExecuteUpdateAsync(s => s.SetProperty(p => p.IdApunte, (int?)null));
 
-            return true;
+                _context.Apuntes.Remove(apunte);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 }

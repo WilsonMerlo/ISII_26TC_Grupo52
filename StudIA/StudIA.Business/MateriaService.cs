@@ -59,9 +59,37 @@ namespace StudIA.Business
             var materia = await _context.Materias.FindAsync(id);
             if (materia == null) return false;
 
-            _context.Materias.Remove(materia);
-            await _context.SaveChangesAsync();
-            return true;
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var idsApuntes = await _context.Apuntes
+                    .Where(a => a.IdMateria == id)
+                    .Select(a => a.IdApunte)
+                    .ToListAsync();
+
+                await _context.Pomodoros
+                    .Where(p => p.IdMateria == id || (p.IdApunte.HasValue && idsApuntes.Contains(p.IdApunte.Value)))
+                    .ExecuteUpdateAsync(s => s
+                        .SetProperty(p => p.IdMateria, (int?)null)
+                        .SetProperty(p => p.IdApunte, (int?)null)
+                    );
+
+                await _context.Apuntes
+                    .Where(a => a.IdMateria == id)
+                    .ExecuteDeleteAsync();
+
+                _context.Materias.Remove(materia);
+                await _context.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 }
