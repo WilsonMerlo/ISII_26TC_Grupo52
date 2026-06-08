@@ -31,14 +31,12 @@ const Registro = ({ onNavegar }) => {
     };
 
     try {
-      // --- CAMBIO APLICADO AQUÍ ---
       const baseUrl = import.meta.env.VITE_API_URL || "https://localhost:7068";
       const response = await fetch(`${baseUrl}/api/Usuarios`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevoUsuario),
       });
-      // ----------------------------
 
       if (response.ok) {
         alert("¡Cuenta creada con éxito! Ya podés ingresar.");
@@ -185,7 +183,7 @@ const Registro = ({ onNavegar }) => {
   );
 };
 
-// --- OBJETO DE ESTILOS ACTUALIZADO PARA LA FORMA DE 2 COLUMNAS ---
+
 const estilos = {
   fullPageWrap: {
     fontFamily: "'Inter', sans-serif",

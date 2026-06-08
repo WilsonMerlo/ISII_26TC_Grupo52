@@ -25,7 +25,7 @@ const VistaEditorApunte = ({ idMateriaActiva = 1, nombreMateria = "Materia Desco
 
         const nuevoApunte = {
             id_materia: idMateriaActiva,
-            titulo: titulo, // Si tu backend no acepta titulo, puedes concatenarlo al contenido como un <h1>
+            titulo: titulo, 
             contenido: contenidoHtml, 
             fecha_creacion: new Date().toISOString()
         };
@@ -61,14 +61,12 @@ const VistaEditorApunte = ({ idMateriaActiva = 1, nombreMateria = "Materia Desco
                 </div>
             </header>
 
-            {/* Zona del Editor y Sidebar Derecho (Split View) */}
+            {/* Zona del Editor y Sidebar Derecho */}
             <div style={estilos.editorSplitView}>
                 
                 {/* 1. LIENZO PRINCIPAL DE ESCRITURA */}
                 <section style={estilos.lienzoPrincipal}>
                     <div style={estilos.contenedorEscritura}>
-                        
-                        {/* Título GIGANTE (Como en el diseño que mandaste) */}
                         <input 
                             type="text" 
                             placeholder="Escribe tu título aquí..." 
@@ -122,7 +120,6 @@ const VistaEditorApunte = ({ idMateriaActiva = 1, nombreMateria = "Materia Desco
     );
 };
 
-// --- ESTILOS INLINE (Traducción del Tailwind y HTML proporcionado) ---
 const estilos = {
     workspaceWrap: { display: 'flex', flexDirection: 'column', height: '100vh', backgroundColor: '#F9FBFF', width: '100%' },
     
@@ -144,14 +141,11 @@ const estilos = {
     contenedorEscritura: { maxWidth: '800px', margin: '0 auto', backgroundColor: 'white', padding: '50px 60px', borderRadius: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', border: '1px solid #E8EBFF', minHeight: '800px' },
     
     inputTitulo: { width: '100%', border: 'none', outline: 'none', fontSize: '2.5rem', fontWeight: '800', color: '#2D3247', marginBottom: '30px', backgroundColor: 'transparent' },
-    
-    // Configuración para sobreescribir los estilos feos por defecto de Quill
     quillWrapper: { 
         width: '100%',
-        /* Truco CSS in JS para Quill: Envolvemos la instancia para que herede nuestras fuentes */
         fontFamily: "'Inter', sans-serif" 
     },
-    quillInstancia: { height: '500px' }, // Altura inicial del editor
+    quillInstancia: { height: '500px' }, 
 
     // Sidebar Derecho (Esquema/Meta)
     sidebarDerecho: { width: '300px', backgroundColor: 'white', borderLeft: '1px solid #E8EBFF', padding: '30px 20px', overflowY: 'auto' },

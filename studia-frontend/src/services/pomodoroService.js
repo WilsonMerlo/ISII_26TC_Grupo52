@@ -1,8 +1,3 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// pomodoroService.js
-// Capa de servicio para la API de Pomodoros — StudIA
-// ─────────────────────────────────────────────────────────────────────────────
-
 const RAW_BASE_URL = import.meta.env.VITE_API_URL || "https://localhost:7068";
 
 const API_BASE_URL = RAW_BASE_URL.endsWith("/api")

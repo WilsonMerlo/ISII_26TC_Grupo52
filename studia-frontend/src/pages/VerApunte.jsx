@@ -336,7 +336,6 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
         if (segundosPomodoro !== 0) return;
 
         avanzarFasePomodoroMini();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [segundosPomodoro]);
 
     const iniciarPomodoroMini = async () => {
@@ -411,9 +410,6 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
                 await actualizarTiemposPomodoro(pomodoroActivoId);
             }
 
-            // Se mantiene la misma lógica visual/local del Pomodoro principal:
-            // saltar fase cambia entre estudio y descanso sin cerrar el registro
-            // hasta que se completan todos los ciclos.
             await avanzarFasePomodoroMini();
         } catch (error) {
             console.error('Error al saltar fase del Pomodoro del apunte:', error);
@@ -432,8 +428,6 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
         setSegundosDescansoAcumulados(0);
         setPomodoroActivoId(null);
 
-        // Reiniciar NO debe guardar el Pomodoro en historial.
-        // Si ya se había creado en la BD para manejar el State, se elimina.
         await eliminarPomodoroSinGuardar(idActual);
     };
 
@@ -509,7 +503,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
         }
     };
 
-    // Cargar datos al montar o cuando cambia el apunte
+
     useEffect(() => {
         if (!apunteSeleccionado) return;
 
@@ -525,7 +519,6 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
         setHayCambiosSinGuardar(false);
     }, [apunteSeleccionado]);
 
-    // Ajustar alto del título cuando ocupa más de una línea
     useEffect(() => {
         const tituloEl = tituloRef.current;
 
@@ -592,7 +585,6 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
     };
 
     const limpiarFontStyleDelFragmento = (fragmento) => {
-        // Sacar font-style inline de cualquier elemento seleccionado
         fragmento.querySelectorAll?.('[style]').forEach((el) => {
             el.style.removeProperty('font-style');
 
@@ -601,7 +593,6 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
             }
         });
 
-        // Convertir <i> y <em> en <span> para que no sigan forzando cursiva
         fragmento.querySelectorAll?.('i, em').forEach((el) => {
             const span = document.createElement('span');
 
@@ -1066,7 +1057,7 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
             <section className="flex-1 overflow-y-auto" style={{ minHeight: 0 }}>
                 <div className="max-w-3xl mx-auto py-16 px-8">
 
-                    {/* Toolbar flotante (Glassmorphism) */}
+                    {/* Toolbar flotante */}
                     <div className="glass-toolbar sticky top-4 mb-12 p-1 rounded-full border border-white/40 shadow-xl flex items-center gap-1 justify-center max-w-fit mx-auto z-30 bg-white/80 backdrop-blur-md">
 
                         {/* Formato básico */}

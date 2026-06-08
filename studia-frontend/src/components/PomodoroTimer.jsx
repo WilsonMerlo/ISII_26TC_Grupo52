@@ -443,13 +443,11 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
         const idUsuarioActual =
           parseInt(localStorage.getItem("idUsuario")) || 1;
 
-        // --- CAMBIO APLICADO AQUÍ ---
         const baseUrl =
           import.meta.env.VITE_API_URL || "https://localhost:7068";
         const response = await fetch(
           `${baseUrl}/api/Pomodoros/usuario/${idUsuarioActual}`,
         );
-        // ----------------------------
 
         if (response.ok) {
           const data = await response.json();
@@ -524,14 +522,12 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
     };
 
     try {
-      // --- CAMBIO APLICADO AQUÍ ---
       const baseUrl = import.meta.env.VITE_API_URL || "https://localhost:7068";
       const response = await fetch(`${baseUrl}/api/Pomodoros`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevoPomodoroDB),
       });
-      // ----------------------------
 
       if (response.ok) {
         const data = await response.json();
@@ -573,12 +569,10 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
 
   const confirmarEliminacion = async () => {
     try {
-      // --- CAMBIO APLICADO AQUÍ ---
       const baseUrl = import.meta.env.VITE_API_URL || "https://localhost:7068";
       const response = await fetch(`${baseUrl}/api/Pomodoros/${itemToDelete}`, {
         method: "DELETE",
       });
-      // ----------------------------
 
       if (response.ok) {
         setHistorial(historial.filter((item) => item.id !== itemToDelete));
@@ -678,22 +672,19 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
 
   const activarModoEdicion = () => {
     if (!isEditing) {
-      // Si entra a editar, copiamos los valores actuales a los borradores
       setDraftSesion(tiempoSesion);
       setDraftDescanso(tiempoDescanso);
       setDraftCiclos(ciclosTotales);
     } else {
-      // Si hace clic en "Confirmar valores", guardamos los borradores como los nuevos valores activos
       setTiempoSesion(draftSesion);
       setTiempoDescanso(draftDescanso);
       setCiclosTotales(draftCiclos);
     }
-    // Invertimos el estado (abre o cierra la edición)
+    //(abre o cierra la edición)
     setIsEditing(!isEditing);
   };
 
   const aplicarConfiguracion = () => {
-    // Ya no importa si estaba en edición o no, usamos los valores principales
     setEstaActivo(false);
     setEsDescanso(false);
     setSegundos(tiempoSesion * 60);

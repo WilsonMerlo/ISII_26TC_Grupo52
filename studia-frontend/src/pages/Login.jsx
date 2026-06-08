@@ -18,14 +18,12 @@ const Login = ({ onNavegar }) => {
     try {
       console.log("1. Enviando datos al servidor:", credenciales);
 
-      // --- CAMBIO APLICADO AQUÍ ---
       const baseUrl = import.meta.env.VITE_API_URL || "https://localhost:7068";
       const response = await fetch(`${baseUrl}/api/Usuarios/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credenciales),
       });
-      // ----------------------------
 
       console.log("2. El servidor respondió con status:", response.status);
 

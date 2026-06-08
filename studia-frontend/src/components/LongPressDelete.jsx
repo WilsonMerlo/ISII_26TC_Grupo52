@@ -15,7 +15,7 @@ const LongPressDelete = ({ onConfirmDelete }) => {
 
     const cancelarPresion = () => {
         setIsPressing(false);
-        // Cortamos el cable rojo: abortamos el borrado
+        //abortamos el borrado
         clearTimeout(timerRef.current);
     };
 

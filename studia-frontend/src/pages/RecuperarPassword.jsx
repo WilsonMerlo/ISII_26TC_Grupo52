@@ -10,18 +10,17 @@ const RecuperarPassword = ({ onNavegar }) => {
             alert("Por favor, ingresa un correo válido.");
             return;
         }
-        // Simulamos la llamada a la API
         setEnviado(true);
     };
 
     return (
         <div style={estilos.fullPageWrap}>
-            {/* Logo superior fuera de la tarjeta */}
+            {/* Logo superior */}
             <h1 style={estilos.logoTop}>StudIA</h1>
 
             <main style={estilos.mainContentArea}>
                 <form style={estilos.card} onSubmit={manejarEnvio}>
-                    {/* Ícono superior (Cuadrado celeste con flecha) */}
+                    {/* Ícono superior */}
                     <div style={estilos.iconWrap}>
                         <span style={estilos.icon}>↺</span>
                     </div>
