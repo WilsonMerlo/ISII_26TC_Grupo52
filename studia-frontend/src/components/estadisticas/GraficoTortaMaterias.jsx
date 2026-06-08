@@ -82,7 +82,7 @@ const GraficoTortaMaterias = ({
             </div>
 
             {datos.length === 0 || total === 0 ? (
-                <div style={estilos.vacio}>Todavía no hay datos para mostrar.</div>
+                <div style={estilos.vacio}>No hay datos para mostrar</div>
             ) : (
                 <div style={estilos.contenido}>
                     <div style={estilos.donutWrap}>

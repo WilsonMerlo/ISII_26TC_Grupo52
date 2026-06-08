@@ -765,9 +765,6 @@ const VerApunte = ({ apunteSeleccionado, onVolver, onGuardar, materiaActiva = nu
 
         const date = new Date(fecha);
 
-        // Ajuste por zona horaria, igual que hiciste con modificación
-        date.setHours(date.getHours() - 3);
-
         if (Number.isNaN(date.getTime())) return 'Creado sin fecha';
 
         const dia = String(date.getDate()).padStart(2, '0');

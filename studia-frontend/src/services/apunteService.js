@@ -1,4 +1,13 @@
-const API_URL = 'https://localhost:7068/api/Apuntes';
+import { obtenerFechaLocalISO } from '../utils/fechaUtils';
+
+const RAW_API_BASE_URL =
+    import.meta.env.VITE_API_URL || 'https://localhost:7068/api';
+
+const API_BASE_URL = RAW_API_BASE_URL.endsWith('/api')
+    ? RAW_API_BASE_URL
+    : `${RAW_API_BASE_URL}/api`;
+
+const API_URL = `${API_BASE_URL}/Apuntes`;
 
 const leerRespuesta = async (response) => {
     const contentType = response.headers.get('content-type');
@@ -11,11 +20,22 @@ const leerRespuesta = async (response) => {
 };
 
 const obtenerIdApunte = (apunte) => {
-    return apunte?.idApunte || apunte?.IdApunte || apunte?.id_apunte || apunte?.id || apunte?.Id;
+    return (
+        apunte?.idApunte ||
+        apunte?.IdApunte ||
+        apunte?.id_apunte ||
+        apunte?.id ||
+        apunte?.Id
+    );
 };
 
 const obtenerIdMateria = (apunte) => {
-    return apunte?.idMateria || apunte?.IdMateria || apunte?.id_materia || apunte?.idMateriaActiva;
+    return (
+        apunte?.idMateria ||
+        apunte?.IdMateria ||
+        apunte?.id_materia ||
+        apunte?.idMateriaActiva
+    );
 };
 
 const obtenerTitulo = (apunte) => {
@@ -26,24 +46,34 @@ const obtenerContenido = (apunte) => {
     return apunte?.contenido || apunte?.Contenido || '<p><br></p>';
 };
 
-const normalizarParaBackend = (apunte) => {
+const obtenerFechaCreacion = (apunte) => {
+    return (
+        apunte?.fechaCreacion ||
+        apunte?.FechaCreacion ||
+        apunte?.fecha_creacion ||
+        obtenerFechaLocalISO()
+    );
+};
+
+const normalizarParaBackend = (apunte, opciones = {}) => {
     const idApunte = obtenerIdApunte(apunte);
     const idMateria = Number(obtenerIdMateria(apunte));
+
+    const esActualizacion = Boolean(idApunte);
 
     const payload = {
         idMateria,
         titulo: obtenerTitulo(apunte),
         contenido: obtenerContenido(apunte),
-        fechaCreacion:
-            apunte?.fechaCreacion ||
-            apunte?.FechaCreacion ||
-            apunte?.fecha_creacion ||
-            new Date().toISOString(),
-        fechaModificacion:
-            apunte?.fechaModificacion ||
-            apunte?.FechaModificacion ||
-            apunte?.fecha_modificacion ||
-            null
+        fechaCreacion: obtenerFechaCreacion(apunte),
+        fechaModificacion: opciones.forzarFechaModificacion
+            ? obtenerFechaLocalISO()
+            : (
+                apunte?.fechaModificacion ||
+                apunte?.FechaModificacion ||
+                apunte?.fecha_modificacion ||
+                (esActualizacion ? obtenerFechaLocalISO() : obtenerFechaLocalISO())
+            )
     };
 
     if (idApunte) {
@@ -73,7 +103,21 @@ export const apunteService = {
     },
 
     crear: async (apunte) => {
-        const payload = normalizarParaBackend(apunte);
+        const fechaActual = obtenerFechaLocalISO();
+
+        const payload = normalizarParaBackend({
+            ...apunte,
+            fechaCreacion:
+                apunte?.fechaCreacion ||
+                apunte?.FechaCreacion ||
+                apunte?.fecha_creacion ||
+                fechaActual,
+            fechaModificacion:
+                apunte?.fechaModificacion ||
+                apunte?.FechaModificacion ||
+                apunte?.fecha_modificacion ||
+                fechaActual
+        });
 
         if (!payload.idMateria) {
             throw new Error('No se encontró idMateria para crear el apunte');
@@ -96,7 +140,7 @@ export const apunteService = {
         if (!response.ok) {
             const errorText = await response.text();
             console.error('Error al crear apunte:', response.status, errorText, payload);
-            throw new Error('Error al crear el apunte');
+            throw new Error(errorText || 'Error al crear el apunte');
         }
 
         return leerRespuesta(response);
@@ -120,10 +164,15 @@ export const apunteService = {
 
     actualizar: async (id, apunteActualizado) => {
         try {
-            const payload = normalizarParaBackend({
-                ...apunteActualizado,
-                idApunte: id
-            });
+            const payload = normalizarParaBackend(
+                {
+                    ...apunteActualizado,
+                    idApunte: id
+                },
+                {
+                    forzarFechaModificacion: true
+                }
+            );
 
             const response = await fetch(`${API_URL}/${id}`, {
                 method: 'PUT',
@@ -152,7 +201,7 @@ export const apunteService = {
         if (!response.ok) {
             const errorText = await response.text();
             console.error('Error eliminando apunte:', response.status, errorText);
-            throw new Error('Error al eliminar el apunte');
+            throw new Error(errorText || 'Error al eliminar el apunte');
         }
 
         return leerRespuesta(response);

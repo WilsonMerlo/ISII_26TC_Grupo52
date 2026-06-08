@@ -398,7 +398,7 @@ const Login = ({ onNavegar }) => {
               no más <span>duro</span>.
             </h2>
             <p className="left-body">
-              Pomodoros, apuntes inteligentes y seguimiento de progreso, todo en
+              Pomodoros, apuntes y seguimiento de progreso, todo en
               un solo lugar diseñado para el enfoque profundo.
             </p>
           </div>

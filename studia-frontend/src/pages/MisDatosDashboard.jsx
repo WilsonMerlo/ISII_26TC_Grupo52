@@ -125,7 +125,7 @@ const MisDatosDashboard = () => {
                     Tu espacio, <span style={estilos.tituloAzul}>tus reglas.</span>
                 </h2>
                 <p style={estilos.descripcion}>
-                    Ajustá tus datos personales y la información básica de tu cuenta.
+                    Ajusta tus datos personales y la información básica de tu cuenta
                 </p>
             </section>
 

@@ -5,6 +5,7 @@ import { obtenerFechaLocalISO } from '../utils/fechaUtils';
 const MantenerPresionadoEliminar = ({ onConfirmar, disabled }) => {
     const [presionando, setPresionando] = useState(false);
     const timerRef = useRef(null);
+    const botonRef = useRef(null);
 
     const limpiarTimer = () => {
         if (timerRef.current) {
@@ -16,7 +17,7 @@ const MantenerPresionadoEliminar = ({ onConfirmar, disabled }) => {
     };
 
     const iniciarPresionado = () => {
-        if (disabled) return;
+        if (disabled || timerRef.current) return;
 
         setPresionando(true);
 
@@ -27,12 +28,29 @@ const MantenerPresionadoEliminar = ({ onConfirmar, disabled }) => {
         }, 1200);
     };
 
+    const manejarKeyDown = (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+
+        event.preventDefault();
+        iniciarPresionado();
+    };
+
+    const manejarKeyUp = (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+
+        event.preventDefault();
+        limpiarTimer();
+    };
+
     useEffect(() => {
+        botonRef.current?.focus();
+
         return () => limpiarTimer();
     }, []);
 
     return (
         <button
+            ref={botonRef}
             type="button"
             style={disabled ? { ...estilos.btnEliminarFinal, ...estilos.btnDisabled } : estilos.btnEliminarFinal}
             onMouseDown={iniciarPresionado}
@@ -41,6 +59,9 @@ const MantenerPresionadoEliminar = ({ onConfirmar, disabled }) => {
             onTouchStart={iniciarPresionado}
             onTouchEnd={limpiarTimer}
             onTouchCancel={limpiarTimer}
+            onKeyDown={manejarKeyDown}
+            onKeyUp={manejarKeyUp}
+            onBlur={limpiarTimer}
             disabled={disabled}
         >
             <span style={estilos.progresoEliminarWrap}>
@@ -69,6 +90,7 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
     const [busqueda, setBusqueda] = useState('');
     const [buscadorActivo, setBuscadorActivo] = useState(false);
     const buscadorRef = useRef(null);
+    const modalEliminarRef = useRef(null);
 
     const nombreMateria =
         materia?.nombre_materia ||
@@ -95,6 +117,39 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
             document.removeEventListener('mousedown', manejarClickFuera);
         };
     }, []);
+
+    useEffect(() => {
+        if (!apunteAEliminar) return;
+
+        const manejarClickFueraModal = (event) => {
+            if (eliminandoApunte) return;
+
+            if (
+                modalEliminarRef.current &&
+                !modalEliminarRef.current.contains(event.target)
+            ) {
+                cerrarModalEliminar();
+            }
+        };
+
+        const manejarTecladoModal = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                cerrarModalEliminar();
+            }
+        };
+
+        document.addEventListener('mousedown', manejarClickFueraModal);
+        document.addEventListener('touchstart', manejarClickFueraModal);
+        document.addEventListener('keydown', manejarTecladoModal);
+
+        return () => {
+            document.removeEventListener('mousedown', manejarClickFueraModal);
+            document.removeEventListener('touchstart', manejarClickFueraModal);
+            document.removeEventListener('keydown', manejarTecladoModal);
+        };
+    }, [apunteAEliminar, eliminandoApunte]);
+
 
     const obtenerIdMateria = () => {
         return materia?.id_materia || materia?.idMateria || materia?.IdMateria || materia?.id || materia?.Id;
@@ -311,7 +366,6 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
         if (!fecha) return 'Sin fecha';
 
         const date = new Date(fecha);
-        date.setHours(date.getHours() - 3);
 
         const hora = date.toLocaleTimeString('es-AR', {
             hour: '2-digit',
@@ -414,9 +468,9 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
                 <div style={estilos.gridApuntes}>
                     {apuntes.length === 0 ? (
                         <div style={estilos.vacio}>
-                            <p style={{ color: '#6A7185' }}>No hay apuntes todavía.</p>
+                            <p style={{ color: '#6A7185' }}>No se regristran apuntes</p>
                             <p style={{ fontSize: '0.9rem', color: '#9EA5BA' }}>
-                                Hacé clic en "+ Nuevo Apunte" para empezar a estudiar.
+                                Haz click en "+ Nuevo Apunte" para empezar a estudiar.
                             </p>
                         </div>
                     ) : (
@@ -523,7 +577,7 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
 
             {apunteAEliminar && (
                 <div style={estilos.overlayModal}>
-                    <div style={estilos.modalEliminar}>
+                    <div style={estilos.modalEliminar} ref={modalEliminarRef}>
                         <h3 style={estilos.tituloModal}>Eliminar apunte</h3>
 
                         <p style={estilos.textoModal}>
@@ -532,7 +586,7 @@ const ApuntesDashboard = ({ materia, onVolver, onVerApunte }) => {
                         </p>
 
                         <p style={estilos.textoAdvertencia}>
-                            Esta acción es irreversible. Para confirmar, mantené presionado el botón eliminar.
+                            Esta acción es irreversible. Para confirmar, mantené presionado el botón eliminar con click, Espacio o Enter.
                         </p>
 
                         <div style={estilos.botonesModal}>

@@ -94,6 +94,7 @@ const MenuDashboard = ({ onNavegar }) => {
         descripcion: ''
     });
     const modalMateriaRef = useRef(null);
+    const inputNombreMateriaRef = useRef(null);
 
     const nombreUsuario = localStorage.getItem('nombreUsuario') || 'Usuario';
 
@@ -204,6 +205,17 @@ const MenuDashboard = ({ onNavegar }) => {
         cargarEstadisticas();
     }, []);
 
+    useEffect(() => {
+        if (!mostrarModalMateria) return;
+
+        const timeoutId = setTimeout(() => {
+            inputNombreMateriaRef.current?.focus();
+            inputNombreMateriaRef.current?.select();
+        }, 0);
+
+        return () => clearTimeout(timeoutId);
+    }, [mostrarModalMateria]);
+
     const materiasVisibles = useMemo(() => materias.slice(0, 3), [materias]);
 
     const diasSemana = estadisticas?.porDia?.length
@@ -243,7 +255,7 @@ const MenuDashboard = ({ onNavegar }) => {
         }
 
         try {
-            await materiaService.crear({
+            const materiaCreada = await materiaService.crear({
                 idUsuario,
                 nombreMateria: nuevaMateria.nombreMateria.trim(),
                 descripcion: nuevaMateria.descripcion.trim()
@@ -251,6 +263,13 @@ const MenuDashboard = ({ onNavegar }) => {
 
             cerrarModalMateria();
             await cargarDatos();
+
+            if (materiaCreada && typeof materiaCreada === 'object') {
+                onNavegar?.('apuntes', materiaCreada);
+                return;
+            }
+
+            onNavegar?.('materias');
         } catch (error) {
             console.error('Error al crear materia:', error);
             alert('Error al crear la materia. Revisá la conexión con el servidor.');
@@ -454,6 +473,7 @@ const MenuDashboard = ({ onNavegar }) => {
 
                         <form onSubmit={manejarCrearMateria} style={estilos.formulario}>
                             <input
+                                ref={inputNombreMateriaRef}
                                 type="text"
                                 placeholder="Nombre de la materia"
                                 value={nuevaMateria.nombreMateria}

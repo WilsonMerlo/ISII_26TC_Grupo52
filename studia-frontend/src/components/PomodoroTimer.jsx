@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { obtenerFechaLocalISO } from "../utils/fechaUtils";
 
 // ── SVG ICONS ──────────────────────────────────────────────────────────────
@@ -225,6 +225,8 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const deleteModalRef = useRef(null);
+  const dayModalRef = useRef(null);
 
   // --- FORMATEADOR DE TIEMPO PARA EL HISTORIAL ---
   const formatearTiempoHistorial = (totalSegundos) => {
@@ -387,6 +389,33 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
   };
 
   const diasCalendario = obtenerDiasCalendario();
+
+  useEffect(() => {
+    if (!modalSesionesDiaAbierto || isDeleteModalOpen) return;
+
+    const manejarClickFuera = (event) => {
+      if (dayModalRef.current && !dayModalRef.current.contains(event.target)) {
+        cerrarModalSesionesDia();
+      }
+    };
+
+    const manejarTeclado = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        cerrarModalSesionesDia();
+      }
+    };
+
+    document.addEventListener("mousedown", manejarClickFuera);
+    document.addEventListener("touchstart", manejarClickFuera);
+    document.addEventListener("keydown", manejarTeclado);
+
+    return () => {
+      document.removeEventListener("mousedown", manejarClickFuera);
+      document.removeEventListener("touchstart", manejarClickFuera);
+      document.removeEventListener("keydown", manejarTeclado);
+    };
+  }, [modalSesionesDiaAbierto, isDeleteModalOpen]);
 
   useEffect(() => {
     const hayPomodoroEnCurso =
@@ -568,6 +597,38 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
     setIsDeleteModalOpen(false);
     setItemToDelete(null);
   };
+
+  useEffect(() => {
+    if (!isDeleteModalOpen) return;
+
+    const manejarClickFuera = (event) => {
+      if (deleteModalRef.current && !deleteModalRef.current.contains(event.target)) {
+        cancelarEliminacion();
+      }
+    };
+
+    const manejarTeclado = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        cancelarEliminacion();
+      }
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+        confirmarEliminacion();
+      }
+    };
+
+    document.addEventListener("mousedown", manejarClickFuera);
+    document.addEventListener("touchstart", manejarClickFuera);
+    document.addEventListener("keydown", manejarTeclado);
+
+    return () => {
+      document.removeEventListener("mousedown", manejarClickFuera);
+      document.removeEventListener("touchstart", manejarClickFuera);
+      document.removeEventListener("keydown", manejarTeclado);
+    };
+  }, [isDeleteModalOpen, itemToDelete]);
 
   // --- LÓGICA DEL RELOJ ---
   useEffect(() => {
@@ -1861,7 +1922,7 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
           {/* ── MODAL SESIONES DEL DÍA ── */}
           {modalSesionesDiaAbierto && (
             <div className="modal-overlay">
-              <div className="day-modal-content">
+              <div className="day-modal-content" ref={dayModalRef}>
                 <div className="day-modal-header">
                   <div>
                     <h3 className="day-modal-title">
@@ -1921,7 +1982,7 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
           {/* ── MODAL BORRADO ── */}
           {isDeleteModalOpen && (
             <div className="modal-overlay">
-              <div className="delete-modal-content">
+              <div className="delete-modal-content" ref={deleteModalRef}>
                 <div className="delete-icon-wrap">
                   <IconWarning />
                 </div>
@@ -1932,12 +1993,14 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                 </p>
                 <div className="delete-modal-actions">
                   <button
+                    type="button"
                     className="btn-cancelar-borrado"
                     onClick={cancelarEliminacion}
                   >
                     Cancelar
                   </button>
                   <button
+                    type="button"
                     className="btn-confirmar-borrado"
                     onClick={confirmarEliminacion}
                   >
