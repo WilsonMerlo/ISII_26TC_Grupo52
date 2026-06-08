@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { obtenerFechaLocalISO } from "../utils/fechaUtils";
 
 // ── SVG ICONS ──────────────────────────────────────────────────────────────
@@ -51,18 +51,18 @@ const IconReset = () => (
 
 const IconConfig = () => (
   <svg
-    viewBox="0 0 20 20"
+    viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    strokeWidth="1.6"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     width="18"
     height="18"
+    aria-hidden="true"
   >
-    <circle cx="10" cy="10" r="2.5" />
-    <path
-      strokeLinecap="round"
-      d="M10 2v1.5M10 16.5V18M2 10h1.5M16.5 10H18M4.1 4.1l1.1 1.1M14.8 14.8l1.1 1.1M4.1 15.9l1.1-1.1M14.8 5.2l1.1-1.1"
-    />
+    <path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z" />
+    <path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.05.05a2.1 2.1 0 1 1-2.97 2.97l-.05-.05a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.65V21.3a2.1 2.1 0 1 1-4.2 0v-.07a1.8 1.8 0 0 0-1.1-1.65 1.8 1.8 0 0 0-1.98.36l-.05.05a2.1 2.1 0 1 1-2.97-2.97l.05-.05A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-1.65-1.1H2.9a2.1 2.1 0 1 1 0-4.2h.07A1.8 1.8 0 0 0 4.6 8.6a1.8 1.8 0 0 0-.36-1.98l-.05-.05a2.1 2.1 0 1 1 2.97-2.97l.05.05a1.8 1.8 0 0 0 1.98.36 1.8 1.8 0 0 0 1.1-1.65V2.3a2.1 2.1 0 1 1 4.2 0v.07a1.8 1.8 0 0 0 1.1 1.65 1.8 1.8 0 0 0 1.98-.36l.05-.05a2.1 2.1 0 1 1 2.97 2.97l-.05.05a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.65 1.1h.07a2.1 2.1 0 1 1 0 4.2h-.07A1.8 1.8 0 0 0 19.4 15Z" />
   </svg>
 );
 
@@ -225,8 +225,6 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const deleteModalRef = useRef(null);
-  const dayModalRef = useRef(null);
 
   // --- FORMATEADOR DE TIEMPO PARA EL HISTORIAL ---
   const formatearTiempoHistorial = (totalSegundos) => {
@@ -389,33 +387,6 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
   };
 
   const diasCalendario = obtenerDiasCalendario();
-
-  useEffect(() => {
-    if (!modalSesionesDiaAbierto || isDeleteModalOpen) return;
-
-    const manejarClickFuera = (event) => {
-      if (dayModalRef.current && !dayModalRef.current.contains(event.target)) {
-        cerrarModalSesionesDia();
-      }
-    };
-
-    const manejarTeclado = (event) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        cerrarModalSesionesDia();
-      }
-    };
-
-    document.addEventListener("mousedown", manejarClickFuera);
-    document.addEventListener("touchstart", manejarClickFuera);
-    document.addEventListener("keydown", manejarTeclado);
-
-    return () => {
-      document.removeEventListener("mousedown", manejarClickFuera);
-      document.removeEventListener("touchstart", manejarClickFuera);
-      document.removeEventListener("keydown", manejarTeclado);
-    };
-  }, [modalSesionesDiaAbierto, isDeleteModalOpen]);
 
   useEffect(() => {
     const hayPomodoroEnCurso =
@@ -591,38 +562,6 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
     setIsDeleteModalOpen(false);
     setItemToDelete(null);
   };
-
-  useEffect(() => {
-    if (!isDeleteModalOpen) return;
-
-    const manejarClickFuera = (event) => {
-      if (deleteModalRef.current && !deleteModalRef.current.contains(event.target)) {
-        cancelarEliminacion();
-      }
-    };
-
-    const manejarTeclado = (event) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        cancelarEliminacion();
-      }
-
-      if (event.key === "Enter") {
-        event.preventDefault();
-        confirmarEliminacion();
-      }
-    };
-
-    document.addEventListener("mousedown", manejarClickFuera);
-    document.addEventListener("touchstart", manejarClickFuera);
-    document.addEventListener("keydown", manejarTeclado);
-
-    return () => {
-      document.removeEventListener("mousedown", manejarClickFuera);
-      document.removeEventListener("touchstart", manejarClickFuera);
-      document.removeEventListener("keydown", manejarTeclado);
-    };
-  }, [isDeleteModalOpen, itemToDelete]);
 
   // --- LÓGICA DEL RELOJ ---
   useEffect(() => {
@@ -1913,7 +1852,7 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
           {/* ── MODAL SESIONES DEL DÍA ── */}
           {modalSesionesDiaAbierto && (
             <div className="modal-overlay">
-              <div className="day-modal-content" ref={dayModalRef}>
+              <div className="day-modal-content">
                 <div className="day-modal-header">
                   <div>
                     <h3 className="day-modal-title">
@@ -1973,7 +1912,7 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
           {/* ── MODAL BORRADO ── */}
           {isDeleteModalOpen && (
             <div className="modal-overlay">
-              <div className="delete-modal-content" ref={deleteModalRef}>
+              <div className="delete-modal-content">
                 <div className="delete-icon-wrap">
                   <IconWarning />
                 </div>
@@ -1984,14 +1923,12 @@ const PomodoroTimer = ({ onEstadoPomodoroChange }) => {
                 </p>
                 <div className="delete-modal-actions">
                   <button
-                    type="button"
                     className="btn-cancelar-borrado"
                     onClick={cancelarEliminacion}
                   >
                     Cancelar
                   </button>
                   <button
-                    type="button"
                     className="btn-confirmar-borrado"
                     onClick={confirmarEliminacion}
                   >
