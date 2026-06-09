@@ -24,48 +24,54 @@ public class StudIAContext : DbContext
         // 1. REGLAS DE RELACIONES Y BORRADO
         // =========================================================
 
+        // Usuarios -> Materias: tiene (CASCADE)
         modelBuilder.Entity<Materia>()
             .HasOne(m => m.Usuario)
             .WithMany(u => u.Materias)
-            .HasForeignKey(m => m.IdUsuario);
+            .HasForeignKey(m => m.IdUsuario)
+            .OnDelete(DeleteBehavior.Cascade);
 
+        // Usuarios -> Progresos: posee (RESTRICT)
         modelBuilder.Entity<Progreso>()
             .HasOne(p => p.Usuario)
             .WithMany()
             .HasForeignKey(p => p.IdUsuario)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // Usuarios -> Pomodoros: registra (RESTRICT)
         modelBuilder.Entity<Pomodoro>()
             .HasOne(p => p.Usuario)
             .WithMany()
             .HasForeignKey(p => p.IdUsuario)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Pomodoro>()
-            .HasOne(p => p.Apunte)
-            .WithMany(a => a.Pomodoros)
-            .HasForeignKey(p => p.IdApunte)
-            .OnDelete(DeleteBehavior.Restrict);
+        // Materias -> Progresos: mide (CASCADE)
+        modelBuilder.Entity<Progreso>()
+            .HasOne(p => p.Materia)
+            .WithMany()
+            .HasForeignKey(p => p.IdMateria)
+            .OnDelete(DeleteBehavior.Cascade);
 
+        // Materias -> Apuntes: contiene (CASCADE)
         modelBuilder.Entity<Apunte>()
             .HasOne(a => a.Materia)
             .WithMany(m => m.Apuntes)
             .HasForeignKey(a => a.IdMateria)
             .OnDelete(DeleteBehavior.Cascade);
 
+        // Materias -> Pomodoros: acumula (SET NULL) - Configurado para múltiples rutas
         modelBuilder.Entity<Pomodoro>()
             .HasOne(p => p.Materia)
             .WithMany()
             .HasForeignKey(p => p.IdMateria)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
-        modelBuilder.Entity<Progreso>()
-            .HasOne(p => p.Materia)
-            .WithMany()
-            .HasForeignKey(p => p.IdMateria)
-            .OnDelete(DeleteBehavior.Restrict);
-
-
+        // Apuntes -> Pomodoros: enfoca (SET NULL) - Configurado para múltiples rutas
+        modelBuilder.Entity<Pomodoro>()
+            .HasOne(p => p.Apunte)
+            .WithMany(a => a.Pomodoros)
+            .HasForeignKey(p => p.IdApunte)
+            .OnDelete(DeleteBehavior.ClientSetNull);
         // =========================================================
         // 2. GENERACIÓN DE SEED DATA
         // =========================================================

@@ -1,18 +1,3 @@
-/**
- * pomodoroTransitions.js
- *
- * Tabla de transiciones declarativa que replica exactamente las reglas
- * del Patrón State implementado en el backend C#.
- *
- * Fuente de verdad: StudIA.Data.Entities.Pomodoro.cs (líneas 96-137)
- *   - EstadoPendiente, EstadoEnCurso, EstadoPausado,
- *     EstadoEnDescanso, EstadoCompletado
- *
- * Convención:
- *   - Valor numérico (FasePomodoro) → transición válida hacia esa fase.
- *   - null → transición inválida (equivale al throw InvalidOperationException del backend).
- */
-
 import { FasePomodoro, AccionPomodoro } from './pomodoroConstants';
 
 // ── Tabla de transiciones ───────────────────────────────────────────────────
@@ -63,9 +48,6 @@ export const TRANSITIONS = new Map([
 // ── Funciones de consulta ───────────────────────────────────────────────────
 
 /**
- * Consulta si una acción es válida en la fase actual.
- * Útil para la UI: deshabilitar botones de acciones ilegales.
- *
  * @param {number} faseActual - FasePomodoro actual
  * @param {string} accion - AccionPomodoro a evaluar
  * @returns {boolean}
@@ -79,9 +61,6 @@ export function esTransicionValida(faseActual, accion) {
 }
 
 /**
- * Obtiene la fase resultante de aplicar una acción al estado actual.
- * Retorna null si la transición es inválida.
- *
  * @param {number} faseActual - FasePomodoro actual
  * @param {string} accion - AccionPomodoro a aplicar
  * @returns {number|null} FasePomodoro destino o null

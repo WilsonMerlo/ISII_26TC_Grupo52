@@ -12,8 +12,8 @@ using StudIA.Data;
 namespace StudIA.Data.Migrations
 {
     [DbContext(typeof(StudIAContext))]
-    [Migration("20260605190503_HugeSeedData")]
-    partial class HugeSeedData
+    [Migration("20260609051110_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -968,5066 +968,6 @@ namespace StudIA.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Pomodoro", b =>
-                {
-                    b.Property<int>("IdPomodoro")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id_pomodoro");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPomodoro"));
-
-                    b.Property<int>("DuracionDescanso")
-                        .HasColumnType("int")
-                        .HasColumnName("duracion_descanso");
-
-                    b.Property<int>("DuracionEstudio")
-                        .HasColumnType("int")
-                        .HasColumnName("duracion_estudio");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit")
-                        .HasColumnName("estado");
-
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("fecha");
-
-                    b.Property<int?>("IdApunte")
-                        .HasColumnType("int")
-                        .HasColumnName("id_apunte");
-
-                    b.Property<int>("IdMateria")
-                        .HasColumnType("int")
-                        .HasColumnName("id_materia");
-
-                    b.Property<int>("IdUsuario")
-                        .HasColumnType("int")
-                        .HasColumnName("id_usuario");
-
-                    b.HasKey("IdPomodoro");
-
-                    b.HasIndex("IdApunte");
-
-                    b.HasIndex("IdMateria");
-
-                    b.HasIndex("IdUsuario");
-
-                    b.ToTable("Pomodoros");
-
-                    b.HasData(
-                        new
-                        {
-                            IdPomodoro = 1,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 2,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 3,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 4,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 5,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 6,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 7,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 8,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 9,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 10,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 11,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 12,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 13,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 14,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 20, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 15,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 16,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 17,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 18,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 19,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 20,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 21,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 22,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 23,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 24,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 25,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 26,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 27,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 28,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 18, 20, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 29,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 30,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 31,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 32,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 33,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 34,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 35,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 36,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 37,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 38,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 39,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 40,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 41,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 42,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 43,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 44,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 45,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 46,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 47,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 48,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 49,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 50,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 19, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 51,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 52,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 53,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 54,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 55,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 56,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 57,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 58,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 59,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 60,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 61,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 62,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 63,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 64,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 20, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 65,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 66,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 67,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 68,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 69,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 70,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 71,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 72,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 73,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 74,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 75,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 76,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 77,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 78,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 20, 20, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 79,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 80,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 81,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 82,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 83,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 84,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 85,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 86,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 87,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 88,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 89,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 90,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 91,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 92,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 93,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 94,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 95,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 96,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 97,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 98,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 99,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 100,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 101,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 102,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 21, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 103,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 104,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 105,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 106,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 107,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 108,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 109,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 110,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 111,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 112,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 113,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 114,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 115,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 116,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 117,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 118,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 119,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 120,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 121,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 122,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 123,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 124,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 125,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 22, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 126,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 127,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 128,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 129,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 130,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 131,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 132,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 133,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 134,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 135,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 136,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 137,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 138,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 139,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 140,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 141,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 142,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 143,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 144,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 145,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 146,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 147,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 148,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 149,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 23, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 150,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 151,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 152,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 153,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 154,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 155,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 156,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 157,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 158,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 159,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 160,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 161,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 162,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 163,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 164,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 165,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 166,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 167,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 168,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 169,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 170,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 171,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 172,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 25, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 173,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 174,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 175,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 176,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 177,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 178,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 179,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 180,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 181,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 182,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 183,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 184,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 185,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 186,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 187,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 188,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 189,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 190,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 191,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 192,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 193,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 26, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 194,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 195,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 196,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 197,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 198,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 199,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 200,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 201,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 202,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 203,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 204,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 205,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 206,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 207,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 208,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 209,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 210,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 211,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 212,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 213,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 214,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 215,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 27, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 216,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 217,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 218,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 219,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 220,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 221,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 222,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 223,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 224,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 225,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 226,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 227,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 228,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 229,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 230,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 231,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 232,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 233,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 234,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 235,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 236,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 237,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 28, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 238,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 239,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 240,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 241,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 242,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 243,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 244,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 245,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 246,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 247,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 248,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 249,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 250,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 251,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 20, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 252,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 253,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 254,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 255,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 256,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 257,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 258,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 259,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 260,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 261,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 262,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 29, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 263,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 264,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 265,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 266,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 267,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 268,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 269,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 270,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 271,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 272,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 273,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 274,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 275,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 276,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 277,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 278,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 279,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 280,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 281,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 282,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 283,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 284,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 285,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 286,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 287,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 288,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 5, 30, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 289,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 290,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 291,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 292,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 293,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 294,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 295,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 296,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 297,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 298,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 299,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 300,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 301,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 302,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 303,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 304,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 305,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 306,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 307,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 308,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 309,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 310,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 311,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 312,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 313,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 1, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 314,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 315,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 316,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 317,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 318,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 319,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 320,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 321,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 322,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 323,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 324,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 325,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 326,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 327,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 328,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 329,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 330,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 331,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 332,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 333,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 334,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 335,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 336,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 2, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 337,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 338,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 339,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 340,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 341,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 342,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 343,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 344,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 345,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 346,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 347,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 348,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 349,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 350,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 351,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 352,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 353,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 354,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 355,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 356,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 357,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 358,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 359,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 360,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 3, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 361,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 362,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 363,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 364,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 365,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 366,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 367,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 368,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 369,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 370,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 371,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 372,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 373,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 374,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 20, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 375,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 376,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 377,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 378,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 379,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 380,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 381,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 382,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 383,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 384,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 385,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 386,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 387,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 388,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 4, 20, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 389,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 390,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 391,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 392,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 393,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 394,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 395,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 396,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 397,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 398,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 399,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 400,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 401,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 402,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 403,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 404,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 405,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 406,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 407,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 408,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 409,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 5, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 410,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 411,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 412,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 413,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 414,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 415,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 416,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 417,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 418,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 419,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 420,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 421,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 422,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 423,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 424,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 425,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 426,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 427,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 428,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 429,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 430,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 431,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 432,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 433,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 6, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 434,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 435,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 436,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 437,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 438,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 439,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 440,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 441,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 442,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 443,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 444,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 445,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 446,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 447,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 448,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 449,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 450,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 451,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 452,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 453,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 454,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 455,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 456,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 8, 20, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 457,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 458,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 459,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 460,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 461,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 462,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 463,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 464,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 465,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 466,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 467,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 468,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 469,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 470,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 471,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 472,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 473,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 474,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 475,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 476,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 477,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 478,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 9, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 479,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 2,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 480,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 481,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 482,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 483,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 484,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 485,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 486,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 487,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 5,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 488,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 1,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 489,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 4,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 490,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 19, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 3,
-                            IdUsuario = 1
-                        },
-                        new
-                        {
-                            IdPomodoro = 491,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 14, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 492,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 14, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 9,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 493,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 15, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 494,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 15, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 495,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 496,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 16, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 7,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 497,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 498,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 499,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 8,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 500,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 18, 30, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 6,
-                            IdUsuario = 2
-                        },
-                        new
-                        {
-                            IdPomodoro = 501,
-                            DuracionDescanso = 300,
-                            DuracionEstudio = 1500,
-                            Estado = true,
-                            Fecha = new DateTime(2026, 6, 10, 19, 0, 0, 0, DateTimeKind.Unspecified),
-                            IdMateria = 10,
-                            IdUsuario = 2
-                        });
-                });
-
             modelBuilder.Entity("Progreso", b =>
                 {
                     b.Property<int>("IdProgreso")
@@ -6061,72 +1001,5181 @@ namespace StudIA.Data.Migrations
                         new
                         {
                             IdProgreso = 1,
-                            IdMateria = 5,
+                            IdMateria = 4,
                             IdUsuario = 1,
-                            SegundosAcumulados = 72000
+                            SegundosAcumulados = 45000
                         },
                         new
                         {
                             IdProgreso = 2,
-                            IdMateria = 4,
+                            IdMateria = 1,
                             IdUsuario = 1,
-                            SegundosAcumulados = 75000
+                            SegundosAcumulados = 70500
                         },
                         new
                         {
                             IdProgreso = 3,
-                            IdMateria = 1,
+                            IdMateria = 5,
                             IdUsuario = 1,
-                            SegundosAcumulados = 93000
+                            SegundosAcumulados = 49500
                         },
                         new
                         {
                             IdProgreso = 4,
                             IdMateria = 3,
                             IdUsuario = 1,
-                            SegundosAcumulados = 75000
+                            SegundosAcumulados = 76500
                         },
                         new
                         {
                             IdProgreso = 5,
-                            IdMateria = 8,
+                            IdMateria = 6,
                             IdUsuario = 2,
-                            SegundosAcumulados = 91500
+                            SegundosAcumulados = 52500
                         },
                         new
                         {
                             IdProgreso = 6,
                             IdMateria = 7,
                             IdUsuario = 2,
-                            SegundosAcumulados = 70500
+                            SegundosAcumulados = 58500
                         },
                         new
                         {
                             IdProgreso = 7,
-                            IdMateria = 6,
+                            IdMateria = 10,
                             IdUsuario = 2,
-                            SegundosAcumulados = 90000
+                            SegundosAcumulados = 46500
                         },
                         new
                         {
                             IdProgreso = 8,
-                            IdMateria = 10,
+                            IdMateria = 9,
                             IdUsuario = 2,
-                            SegundosAcumulados = 51000
+                            SegundosAcumulados = 61500
                         },
                         new
                         {
                             IdProgreso = 9,
-                            IdMateria = 9,
-                            IdUsuario = 2,
-                            SegundosAcumulados = 69000
+                            IdMateria = 2,
+                            IdUsuario = 1,
+                            SegundosAcumulados = 49500
                         },
                         new
                         {
                             IdProgreso = 10,
+                            IdMateria = 8,
+                            IdUsuario = 2,
+                            SegundosAcumulados = 57000
+                        });
+                });
+
+            modelBuilder.Entity("StudIA.Data.Entities.Pomodoro", b =>
+                {
+                    b.Property<int>("IdPomodoro")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id_pomodoro");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPomodoro"));
+
+                    b.Property<int>("DuracionDescanso")
+                        .HasColumnType("int")
+                        .HasColumnName("duracion_descanso");
+
+                    b.Property<int>("DuracionEstudio")
+                        .HasColumnType("int")
+                        .HasColumnName("duracion_estudio");
+
+                    b.Property<int>("EstadoFase")
+                        .HasColumnType("int")
+                        .HasColumnName("estado_fase");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha");
+
+                    b.Property<int?>("IdApunte")
+                        .HasColumnType("int")
+                        .HasColumnName("id_apunte");
+
+                    b.Property<int?>("IdMateria")
+                        .HasColumnType("int")
+                        .HasColumnName("id_materia");
+
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("int")
+                        .HasColumnName("id_usuario");
+
+                    b.HasKey("IdPomodoro");
+
+                    b.HasIndex("IdApunte");
+
+                    b.HasIndex("IdMateria");
+
+                    b.HasIndex("IdUsuario");
+
+                    b.ToTable("Pomodoros");
+
+                    b.HasData(
+                        new
+                        {
+                            IdPomodoro = 1,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 39,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 2,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 1,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 3,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 4,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 5,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 45,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 6,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 7,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 8,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 23,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 9,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 10,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 1,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 11,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 8,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 12,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 39,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 13,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 14,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 20, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 15,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 16,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 17,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 65,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 18,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 99,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 19,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 20,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 52,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 21,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 22,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 23,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 24,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 25,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 26,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 58,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 27,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 18, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 28,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 29,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 1,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 30,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 31,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 9,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 32,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 44,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 33,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 11,
                             IdMateria = 2,
-                            IdUsuario = 1,
-                            SegundosAcumulados = 64500
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 34,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 35,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 36,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 24,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 37,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 5,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 38,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 63,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 39,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 92,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 40,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 41,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 42,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 65,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 43,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 44,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 61,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 45,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 46,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 47,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 48,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 49,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 19, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 50,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 51,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 52,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 53,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 23,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 54,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 55,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 56,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 16,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 57,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 1,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 58,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 59,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 60,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 61,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 25,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 62,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 63,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 64,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 83,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 65,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 66,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 84,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 67,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 68,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 75,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 69,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 53,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 70,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 71,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 20, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 58,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 72,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 73,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 74,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 3,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 75,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 76,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 77,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 78,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 79,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 1,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 80,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 81,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 82,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 63,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 83,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 55,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 84,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 85,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 86,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 94,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 87,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 88,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 89,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 68,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 90,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 91,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 92,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 74,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 93,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 21, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 94,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 95,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 96,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 97,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 39,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 98,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 23,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 99,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 100,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 101,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 8,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 102,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 103,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 104,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 105,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 106,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 107,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 108,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 74,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 109,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 110,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 98,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 111,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 72,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 112,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 113,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 65,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 114,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 115,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 81,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 116,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 22, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 94,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 117,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 118,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 119,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 2,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 120,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 121,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 122,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 123,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 14,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 124,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 125,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 126,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 127,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 128,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 129,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 130,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 81,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 131,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 132,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 133,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 134,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 96,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 135,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 136,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 90,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 137,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 138,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 139,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 23, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 140,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 141,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 142,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 143,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 28,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 144,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 145,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 38,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 146,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 147,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 148,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 31,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 149,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 33,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 150,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 151,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 48,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 152,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 153,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 154,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 86,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 155,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 76,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 156,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 89,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 157,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 158,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 159,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 160,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 63,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 161,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 162,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 163,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 25, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 99,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 164,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 38,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 165,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 2,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 166,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 26,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 167,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 50,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 168,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 15,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 169,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 170,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 171,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 172,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 173,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 174,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 175,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 176,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 177,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 71,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 178,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 90,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 179,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 180,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 97,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 181,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 182,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 89,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 183,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 76,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 184,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 85,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 185,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 186,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 84,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 187,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 188,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 26, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 189,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 41,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 190,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 9,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 191,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 192,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 35,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 193,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 194,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 195,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 16,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 196,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 197,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 8,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 198,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 199,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 200,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 64,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 201,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 65,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 202,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 203,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 204,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 90,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 205,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 206,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 63,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 207,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 208,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 209,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 210,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 211,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 27, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 212,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 213,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 4,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 214,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 23,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 215,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 216,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 217,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 218,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 8,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 219,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 220,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 23,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 221,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 222,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 41,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 223,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 224,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 20,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 225,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 20, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 226,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 227,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 57,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 228,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 97,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 229,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 230,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 231,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 232,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 233,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 234,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 76,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 235,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 95,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 236,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 28, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 57,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 237,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 238,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 19,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 239,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 240,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 241,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 21,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 242,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 41,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 243,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 244,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 27,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 245,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 35,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 246,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 14,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 247,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 248,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 249,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 71,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 250,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 85,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 251,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 252,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 253,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 254,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 255,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 58,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 256,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 257,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 258,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 259,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 29, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 260,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 44,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 261,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 25,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 262,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 263,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 264,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 265,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 4,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 266,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 1,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 267,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 13,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 268,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 30,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 269,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 7,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 270,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 17,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 271,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 22,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 272,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 20,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 273,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 274,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 275,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 98,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 276,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 277,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 278,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 279,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 280,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 51,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 281,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 68,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 282,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 283,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 284,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 285,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 5, 30, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 286,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 29,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 287,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 288,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 289,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 4,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 290,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 291,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 292,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 21,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 293,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 46,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 294,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 295,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 296,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 297,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 298,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 69,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 299,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 58,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 300,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 301,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 302,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 99,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 303,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 87,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 304,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 305,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 306,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 83,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 307,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 308,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 309,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 310,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 1, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 311,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 312,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 28,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 313,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 314,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 315,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 316,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 317,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 318,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 319,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 7,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 320,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 40,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 321,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 322,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 323,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 67,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 324,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 325,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 326,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 73,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 327,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 328,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 329,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 330,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 331,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 93,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 332,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 333,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 334,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 92,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 335,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 2, 20, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 336,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 337,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 338,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 49,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 339,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 24,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 340,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 48,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 341,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 342,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 48,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 343,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 26,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 344,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 345,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 30,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 346,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 347,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 348,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 15,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 349,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 350,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 351,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 352,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 353,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 354,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 72,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 355,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 356,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 83,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 357,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 358,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 3, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 359,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 43,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 360,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 361,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 30,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 362,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 363,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 31,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 364,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 365,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 366,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 25,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 367,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 368,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 369,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 370,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 371,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 372,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 88,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 373,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 60,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 374,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 375,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 376,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 94,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 377,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 378,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 379,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 68,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 380,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 381,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 4, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 67,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 382,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 383,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 384,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 41,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 385,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 386,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 387,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 39,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 388,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 389,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 13,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 390,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 15,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 391,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 31,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 392,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 393,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 394,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 395,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 396,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 55,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 397,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 398,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 399,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 400,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 401,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 74,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 402,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 403,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 404,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 5, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 405,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 406,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 4,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 407,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 42,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 408,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 47,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 409,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 48,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 410,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 411,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 412,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 413,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 414,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 415,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 44,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 416,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 417,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 418,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 20, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 419,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 420,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 95,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 421,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 422,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 52,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 423,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 424,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 425,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 426,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 427,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 68,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 428,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 62,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 429,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 6, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 430,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 431,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 3,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 432,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 433,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 19,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 434,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 30,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 435,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 35,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 436,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 10,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 437,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 438,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 439,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 36,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 440,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 80,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 441,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 88,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 442,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 443,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 444,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 89,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 445,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 446,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 74,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 447,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 98,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 448,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 73,
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 449,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 83,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 450,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 451,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 452,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 8, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 453,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 454,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 455,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 456,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 457,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 48,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 458,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 459,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 21,
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 460,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 461,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 47,
+                            IdMateria = 5,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 462,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 463,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 19,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 464,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 465,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 466,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 8,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 467,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 468,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 89,
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 469,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 470,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 471,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 56,
+                            IdMateria = 6,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 472,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 473,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 474,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 475,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 476,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 20, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 9,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 477,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 9, 20, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 66,
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 478,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 38,
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 479,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 480,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 9,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 481,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 482,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 483,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 484,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 10,
+                            IdMateria = 1,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 485,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 486,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 19,
+                            IdMateria = 2,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 487,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 488,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 19, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 4,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 489,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 19, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 3,
+                            IdUsuario = 1
+                        },
+                        new
+                        {
+                            IdPomodoro = 490,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 491,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 14, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 492,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 15, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 493,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 15, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 494,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 16, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 495,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 496,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 17, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 497,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdApunte = 94,
+                            IdMateria = 10,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 498,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 18, 0, 0, 0, DateTimeKind.Unspecified),
+                            IdMateria = 7,
+                            IdUsuario = 2
+                        },
+                        new
+                        {
+                            IdPomodoro = 499,
+                            DuracionDescanso = 300,
+                            DuracionEstudio = 1500,
+                            EstadoFase = 4,
+                            Fecha = new DateTime(2026, 6, 10, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            IdUsuario = 2
                         });
                 });
 
@@ -6200,13 +6249,8 @@ namespace StudIA.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("Pomodoro", b =>
+            modelBuilder.Entity("Progreso", b =>
                 {
-                    b.HasOne("Apunte", "Apunte")
-                        .WithMany("Pomodoros")
-                        .HasForeignKey("IdApunte")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Materia", "Materia")
                         .WithMany()
                         .HasForeignKey("IdMateria")
@@ -6219,26 +6263,28 @@ namespace StudIA.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Apunte");
-
                     b.Navigation("Materia");
 
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("Progreso", b =>
+            modelBuilder.Entity("StudIA.Data.Entities.Pomodoro", b =>
                 {
+                    b.HasOne("Apunte", "Apunte")
+                        .WithMany("Pomodoros")
+                        .HasForeignKey("IdApunte");
+
                     b.HasOne("Materia", "Materia")
                         .WithMany()
-                        .HasForeignKey("IdMateria")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("IdMateria");
 
                     b.HasOne("StudIA.Data.Entities.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("IdUsuario")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Apunte");
 
                     b.Navigation("Materia");
 

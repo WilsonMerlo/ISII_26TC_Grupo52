@@ -6251,7 +6251,7 @@ namespace StudIA.Data.Migrations
                     b.HasOne("Materia", "Materia")
                         .WithMany()
                         .HasForeignKey("IdMateria")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("StudIA.Data.Entities.Usuario", "Usuario")
@@ -6269,13 +6269,11 @@ namespace StudIA.Data.Migrations
                 {
                     b.HasOne("Apunte", "Apunte")
                         .WithMany("Pomodoros")
-                        .HasForeignKey("IdApunte")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("IdApunte");
 
                     b.HasOne("Materia", "Materia")
                         .WithMany()
-                        .HasForeignKey("IdMateria")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("IdMateria");
 
                     b.HasOne("StudIA.Data.Entities.Usuario", "Usuario")
                         .WithMany()

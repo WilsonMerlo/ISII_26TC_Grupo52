@@ -1,21 +1,3 @@
-/**
- * usePomodoroMachine.js
- *
- * Custom Hook que encapsula toda la lógica de la máquina de estados
- * del Pomodoro. Es la ÚNICA API que el componente de UI necesita consumir.
- *
- * Responsabilidades:
- *   1. Gestiona el reducer (estado + dispatch).
- *   2. Maneja el setInterval para el timer automático.
- *   3. Detecta cuando el timer llega a 0 y avanza la fase/ciclo.
- *   4. Expone acciones nombradas (reanudar, pausar, etc.).
- *   5. Expone validadores booleanos (puedeReanudar, puedePausar, etc.)
- *      para que la UI deshabilite botones de acciones ilegales.
- *
- * Nota: La creación del Pomodoro en el backend se hace AL FINALIZAR,
- * no al iniciar (decisión de negocio confirmada).
- */
-
 import { useReducer, useEffect, useCallback, useRef } from 'react';
 import { FasePomodoro, AccionPomodoro } from './pomodoroConstants';
 import { esTransicionValida } from './pomodoroTransitions';

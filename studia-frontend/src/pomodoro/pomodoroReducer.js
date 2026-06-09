@@ -1,16 +1,3 @@
-/**
- * pomodoroReducer.js
- *
- * Reducer puro que gobierna la máquina de estados del Pomodoro.
- * Toda transición de `fase` pasa obligatoriamente por la tabla TRANSITIONS,
- * garantizando paridad 1:1 con el Patrón State del backend C#.
- *
- * Decisiones de negocio incorporadas (confirmadas por el equipo):
- *   - El Pomodoro se crea en el backend al FINALIZAR, no al iniciar.
- *   - El avance de ciclos es puramente local (frontend).
- *   - El descanso NO se puede pausar (intencional).
- */
-
 import { FasePomodoro } from './pomodoroConstants';
 import { obtenerSiguienteFase } from './pomodoroTransitions';
 
@@ -148,13 +135,11 @@ export function pomodoroReducer(state, action) {
     }
 
     // ── AVANZAR_CICLO ───────────────────────────────────────────────
-    // Se despacha cuando el descanso llega a 0.
-    // Lógica puramente local (confirmado: el backend no se notifica).
     case REDUCER_ACTIONS.AVANZAR_CICLO: {
       const siguienteCiclo = state.cicloActual + 1;
 
       if (siguienteCiclo > state.ciclosTotales) {
-        // Todos los ciclos completados → estado absorbente
+        // Todos los ciclos completados
         return {
           ...state,
           fase: FasePomodoro.Completado,
@@ -173,8 +158,6 @@ export function pomodoroReducer(state, action) {
     }
 
     // ── CONFIGURAR ──────────────────────────────────────────────────
-    // Actualiza duración de sesión, descanso y/o ciclos.
-    // Si está en Pendiente, también actualiza el timer visible.
     case REDUCER_ACTIONS.CONFIGURAR: {
       const {
         duracionSesion   = state.duracionSesion,
@@ -205,8 +188,6 @@ export function pomodoroReducer(state, action) {
     }
 
     // ── SINCRONIZAR_BACKEND ─────────────────────────────────────────
-    // Hidrata el estado local con la respuesta del backend tras crear
-    // o consultar un Pomodoro.
     case REDUCER_ACTIONS.SINCRONIZAR_BACKEND: {
       const { pomodoro } = action.payload;
       return {
