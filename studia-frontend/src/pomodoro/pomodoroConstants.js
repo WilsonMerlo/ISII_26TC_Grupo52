@@ -1,13 +1,3 @@
-/**
- * pomodoroConstants.js
- *
- * Enums y constantes que replican 1:1 el contrato del backend C#.
- * Ver: StudIA.Data.Entities.Pomodoro.cs
- */
-
-// ── FasePomodoro ────────────────────────────────────────────────────────────
-// Espejo del enum FasePomodoro de C#. Los valores numéricos coinciden
-// con los que persiste el backend en la columna `estado_fase`.
 export const FasePomodoro = Object.freeze({
   Pendiente:  0,
   EnCurso:    1,
