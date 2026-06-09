@@ -1,78 +1,90 @@
-using Xunit;
-using StudIA.Data.Entities;
 using System;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Xunit;
+using StudIA.Data;
+using StudIA.Data.Entities;
+using StudIA.Business;
 
 namespace StudIA.Tests
 {
-    public class PomodoroTests
+    public class PomodoroServiceTests
     {
-        // PU-01: Reanudar desde Pendiente
-        [Fact] // [Fact] indica que es un test unitario simple sin parámetros.
-        public void Reanudar_DesdePendiente_CambiaAEnCurso()
+        // Helper para generar una base de datos limpia e independiente por cada test
+        private DbContextOptions<StudIAContext> ObtenerOpcionesBdEnMemoria(string nombreBd)
         {
-            // Arrange: Preparamos la entidad simulando que recién se creó.
-            var pomodoro = new Pomodoro { EstadoFase = FasePomodoro.Pendiente };
-
-            // Act: Disparamos la acción del usuario.
-            pomodoro.Reanudar();
-
-            // Assert: Verificamos que la máquina de estados mutó correctamente.
-            Assert.Equal(FasePomodoro.EnCurso, pomodoro.EstadoFase);
+            return new DbContextOptionsBuilder<StudIAContext>()
+                .UseInMemoryDatabase(databaseName: nombreBd)
+                .Options;
         }
 
-        // PU-02: Pausar desde EnCurso
+        // -------------------------------------------------------------------------
+        // TRAZABILIDAD: Caso de Uso "Crear Pomodoro" -> Post-condiciones (Éxito)
+        // -------------------------------------------------------------------------
         [Fact]
-        public void Pausar_DesdeEnCurso_CambiaAPausado()
+        public async Task CrearPomodoroAsync_IniciaConEstadoCompletado_GuardaCorrectamente()
         {
-            // Arrange
-            var pomodoro = new Pomodoro { EstadoFase = FasePomodoro.EnCurso };
+            // Arrange: Preparamos la BD en memoria y un usuario base
+            var options = new DbContextOptionsBuilder<StudIAContext>()
+                .UseInMemoryDatabase(databaseName: "DB_Pomodoro_Completado")
+                .Options;
 
-            // Act
-            pomodoro.Pausar();
+            using var context = new StudIAContext(options);
+            context.Usuarios.Add(new Usuario { IdUsuario = 1, Nombre = "Estudiante", Correo = "test@test.com", Contrasena = "123" });
+            await context.SaveChangesAsync();
 
-            // Assert
-            Assert.Equal(FasePomodoro.Pausado, pomodoro.EstadoFase);
+            var service = new PomodoroService(context);
+
+            // Configuramos un Pomodoro que ya viene completado (como exige el CU al finalizar el timer)
+            var nuevoPomodoro = new Pomodoro
+            {
+                IdUsuario = 1,
+                Fecha = DateTime.UtcNow,
+                DuracionEstudio = 1500, // 25 min
+                DuracionDescanso = 300, // 5 min
+                EstadoFase = FasePomodoro.Completado
+            };
+
+            // Act: Ejecutamos el servicio
+            var resultado = await service.CrearPomodoroAsync(nuevoPomodoro);
+
+            // Assert: Verificamos que el estado se mantuvo y se guardó
+            var pomodoroEnDb = await context.Pomodoros.FindAsync(resultado.IdPomodoro);
+            Assert.NotNull(pomodoroEnDb);
+            Assert.Equal(FasePomodoro.Completado, pomodoroEnDb.EstadoFase);
         }
 
-        // PU-01 (Alternativo): Error al reanudar algo ya en curso
         [Fact]
-        public void Reanudar_DesdeEnCurso_LanzaExcepcion()
+        public async Task CrearPomodoroAsync_TiemposValidos_PersisteDuracionesCorrectas()
         {
-            // Arrange
-            var pomodoro = new Pomodoro { EstadoFase = FasePomodoro.EnCurso };
+            // Arrange: Preparamos la BD en memoria y un usuario base
+            var options = new DbContextOptionsBuilder<StudIAContext>()
+                .UseInMemoryDatabase(databaseName: "DB_Pomodoro_Tiempos")
+                .Options;
 
-            // Act & Assert: Cuando testeamos excepciones, Assert.Throws captura el error esperado.
-            // Si pomodoro.Reanudar() no "crashea", el test falla.
-            var ex = Assert.Throws<InvalidOperationException>(() => pomodoro.Reanudar());
+            using var context = new StudIAContext(options);
+            context.Usuarios.Add(new Usuario { IdUsuario = 2, Nombre = "Estudiante2", Correo = "test2@test.com", Contrasena = "123" });
+            await context.SaveChangesAsync();
 
-            // Verificamos que el mensaje de error sea exactamente el programado.
-            Assert.Equal("El temporizador ya está corriendo.", ex.Message);
-        }
+            var service = new PomodoroService(context);
 
-        // PU-02 (Alternativo): Error al pausar algo completado
-        [Fact]
-        public void Pausar_DesdeCompletado_LanzaExcepcion()
-        {
-            // Arrange
-            var pomodoro = new Pomodoro { EstadoFase = FasePomodoro.Completado };
+            // Configuramos un Pomodoro con tiempos específicos
+            var nuevoPomodoro = new Pomodoro
+            {
+                IdUsuario = 2,
+                Fecha = DateTime.UtcNow,
+                DuracionEstudio = 3000, // 50 min
+                DuracionDescanso = 600, // 10 min
+                EstadoFase = FasePomodoro.Completado
+            };
 
-            // Act & Assert
-            var ex = Assert.Throws<InvalidOperationException>(() => pomodoro.Pausar());
-            Assert.Equal("El pomodoro ya finalizó.", ex.Message);
-        }
+            // Act: Ejecutamos el servicio
+            var resultado = await service.CrearPomodoroAsync(nuevoPomodoro);
 
-        // PU-03: Saltar Fase
-        [Fact]
-        public void SaltarFase_DesdeEnDescanso_CambiaACompletado()
-        {
-            // Arrange
-            var pomodoro = new Pomodoro { EstadoFase = FasePomodoro.EnDescanso };
-
-            // Act
-            pomodoro.SaltarFase();
-
-            // Assert
-            Assert.Equal(FasePomodoro.Completado, pomodoro.EstadoFase);
+            // Assert: Verificamos que EF Core no truncó ni alteró los enteros
+            var pomodoroEnDb = await context.Pomodoros.FindAsync(resultado.IdPomodoro);
+            Assert.Equal(3000, pomodoroEnDb.DuracionEstudio);
+            Assert.Equal(600, pomodoroEnDb.DuracionDescanso);
         }
     }
 }
